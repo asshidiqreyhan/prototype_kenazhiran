@@ -139,52 +139,39 @@
 
             <!-- 2. Master Aset & Portofolio (ACTIVE) -->
             <li>
-              <a href="nazhir-aset.html"
-                class="flex w-full items-center gap-3 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm duration-300 ease-in-out">
-                <!-- Ikon: bangunan / aset -->
-                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
-                </svg>
-                <span>Master Aset &amp; Portofolio</span>
-              </a>
+              <details id="menuHBW" class="group">
+                <summary class="flex w-full cursor-pointer list-none items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white [&::-webkit-details-marker]:hidden">
+                  <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
+                  </svg>
+                  <span class="flex-1">Master HBW</span>
+                  <svg class="h-4 w-4 shrink-0 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                </summary>
+                <ul class="ml-5 mt-1 space-y-1 border-l border-white/10 pl-4">
+                  <li><a data-hbw="tanah" href="nazhir-aset.html?jenis=tanah" class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-400 duration-300 ease-in-out hover:bg-white/10 hover:text-white">Wakaf Tanah</a></li>
+                  <li><a data-hbw="uang" href="nazhir-aset.html?jenis=uang" class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-400 duration-300 ease-in-out hover:bg-white/10 hover:text-white">Wakaf Uang</a></li>
+                </ul>
+              </details>
             </li>
 
-            <!-- Master Program -->
-            <li>
-              <a href="nazhir-program.html"
-                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
-                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M6.429 9.75 2.25 12l4.179 2.25m0-4.5 5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0 4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0-5.571 3-5.571-3" />
-                </svg>
-                <span>Master Program</span>
-              </a>
-            </li>
 
-            <!-- 3. Pelaporan Mutasi Aset -->
-            <li>
-              <a href="nazhir-laporan.html"
-                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
-                <!-- Ikon: dokumen dengan panah (mutasi) -->
-                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                </svg>
-                <span>Pelaporan Mutasi Aset</span>
-              </a>
-            </li>
 
             <!-- Laporan Program -->
             <li>
-              <a href="nazhir-laporan-program.html"
-                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
-                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605" />
-                </svg>
-                <span>Laporan Program</span>
-              </a>
+              <details id="menuLaporanHBW" class="group">
+                <summary class="flex w-full cursor-pointer list-none items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white [&::-webkit-details-marker]:hidden">
+                  <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605" />
+                  </svg>
+                  <span class="flex-1">Laporan HBW</span>
+                  <svg class="h-4 w-4 shrink-0 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                </summary>
+                <ul class="ml-5 mt-1 space-y-1 border-l border-white/10 pl-4">
+                  <li><a data-lapor="tanah" href="nazhir-laporan-program.html?jenis=tanah" class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-400 duration-300 ease-in-out hover:bg-white/10 hover:text-white">Pelaporan Wakaf Tanah</a></li>
+                  <li><a data-lapor="uang" href="nazhir-laporan-program.html?jenis=uang" class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-400 duration-300 ease-in-out hover:bg-white/10 hover:text-white">Pelaporan Wakaf Uang</a></li>
+                  <li><a data-lapor="mutasi" href="nazhir-laporan.html" class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-400 duration-300 ease-in-out hover:bg-white/10 hover:text-white">Pelaporan Mutasi Aset</a></li>
+                </ul>
+              </details>
             </li>
 
             <!-- 4. Riwayat & Dokumen -->
@@ -456,25 +443,22 @@
             <div
               class="flex flex-col gap-4 border-b border-gray-100 px-5 py-4 md:flex-row md:items-center md:justify-between md:px-6">
               <div>
-                <h3 class="text-base font-bold text-gray-800">Daftar Portofolio Aset Terdaftar</h3>
-                <p class="text-xs text-gray-400">Seluruh Sub-ID aset tidak bergerak (wakaf tanah) di bawah satu NIB lembaga.</p>
+                <h3 id="judulDaftar" class="text-base font-bold text-gray-800">Daftar Portofolio HBW Terdaftar</h3>
+                <p id="subJudulDaftar" class="text-xs text-gray-400">Seluruh Sub-ID aset wakaf (tanah &amp; uang) di bawah satu NIB lembaga.</p>
               </div>
 
-              <!-- Filter jenis & status -->
+              <!-- Pencarian & filter status -->
               <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
 
-                <!-- Filter Jenis / Kategori Wakaf -->
-                <div class="relative">
-                  <select id="filterJenis" onchange="renderPortofolio()"
-                    class="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pl-4 pr-10 text-sm text-gray-700 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 sm:w-40">
-                    <option value="">Semua Jenis</option>
-                    <option value="tanah">Wakaf Tanah</option>
-                  </select>
-                  <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                <!-- Search bar aset -->
+                <div class="relative sm:w-64">
+                  <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                     </svg>
                   </span>
+                  <input id="cariAset" oninput="renderPortofolio()" type="text" placeholder="Cari Sub-ID / nama / lokasi..."
+                    class="w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm text-gray-700 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
                 </div>
 
                 <!-- Filter Status -->
@@ -672,6 +656,17 @@
     const PREFIX_NIB = NIB_LEMBAGA.replace(/-\d+$/, '');   // 'NZHR-BDG'
     const KUNCI_PORTOFOLIO = 'data_portofolio_bwi';
 
+    // Jenis HBW aktif dari submenu (Wakaf Tanah / Wakaf Uang). Kosong = semua.
+    const JENIS_HALAMAN = (function () {
+      const j = (new URLSearchParams(location.search).get('jenis') || '').toLowerCase();
+      return (j === 'uang' || j === 'tanah') ? j : '';
+    })();
+    // Tentukan jenis sebuah aset: pakai field 'jenis' bila ada, else turunkan dari kategoriId.
+    function jenisAset(p) {
+      if (p.jenis === 'uang' || p.jenis === 'tanah') return p.jenis;
+      return (p.kategoriId && String(p.kategoriId).indexOf('uang') === 0) ? 'uang' : 'tanah';
+    }
+
     /* =========================================================
        ALUR STATUS PORTOFOLIO
        Sub-ID baru TIDAK langsung aktif — melewati verifikasi BWI.
@@ -701,6 +696,16 @@
           { key: 'aiw', label: 'AIW (Akta Ikrar Wakaf)', nama: 'AIW-Tanah-Merdeka.pdf', ukuran: '310 KB', tipe: 'application/pdf' },
         ]
       },
+      {
+        subId: PREFIX_NIB + '-002', jenis: 'uang', kategoriId: 'uang', kategori: 'Wakaf Uang',
+        nama: 'BSI KCP Sudirman', lokasi: 'Rek. Wakaf Produktif',
+        satuan: 'Rp', nilai: 250000000, status: 'aktif',
+        dokumen: 2, totalDokumen: 2, tanggal: '20 Februari 2025',
+        dokumenList: [
+          { key: 'lkspwu', label: 'Dokumen Rekomendasi LKS PWU', nama: 'Rekomendasi-LKSPWU-BSI.pdf', ukuran: '280 KB', tipe: 'application/pdf' },
+          { key: 'operasional', label: 'Surat Pernyataan Biaya Operasional', nama: 'Pernyataan-Operasional.pdf', ukuran: '190 KB', tipe: 'application/pdf' },
+        ]
+      },
     ];
 
     let daftarPortofolio = [];
@@ -718,9 +723,8 @@
       const peta = {}; const urut = [];
       DEFAULT_PORTOFOLIO.forEach(p => { if (!(p.subId in peta)) urut.push(p.subId); peta[p.subId] = p; });
       tambahan.forEach(p => { if (!(p.subId in peta)) urut.push(p.subId); peta[p.subId] = p; });
-      // Master Aset hanya menampung aset tidak bergerak. Setiap entri wakaf uang
-      // (baik bawaan lama maupun sisa di localStorage) disaring keluar di sini.
-      return urut.map(id => peta[id]).filter(p => p.kategoriId !== 'uang');
+      // Master HBW kini menampung Wakaf Tanah maupun Wakaf Uang (dipisah lewat submenu).
+      return urut.map(id => peta[id]);
     }
 
     // Nomor Sub-ID berikutnya, mis. 'NZHR-BDG-003'
@@ -744,7 +748,7 @@
     /* Warna kategori sengaja BUKAN hijau/teal agar tidak tertukar dengan
        badge status "Aktif". Wakaf Uang = biru, Wakaf Tanah = ungu. */
     function badgeKategori(p) {
-      const uang = p.kategoriId === 'uang';
+      const uang = jenisAset(p) === 'uang';
       const warna = uang ? 'bg-blue-50 text-blue-700' : 'bg-purple-50 text-purple-700';
       const ikon = uang
         ? '<circle cx="8" cy="8" r="6" /><path stroke-linecap="round" stroke-linejoin="round" d="M18.09 10.37A6 6 0 1 1 10.34 18M7 6h1v4m8.71 3.88.7.71-2.82 2.82" />'
@@ -781,13 +785,18 @@
       return '<div class="inline-flex items-center justify-end gap-1.5">' + lihat + batal + '</div>';
     }
 
-    // Terapkan filter jenis (kategori) & status pada daftar
+    // Terapkan filter jenis (dari submenu/URL), status, & pencarian pada daftar
     function terapkanFilter(list) {
-      const fJenis = document.getElementById('filterJenis') ? document.getElementById('filterJenis').value : '';
+      const fJenis = JENIS_HALAMAN;   // sudah pasti dari submenu (tanah/uang), tanpa dropdown
       const fStatus = document.getElementById('filterStatus') ? document.getElementById('filterStatus').value : '';
+      const q = document.getElementById('cariAset') ? document.getElementById('cariAset').value.trim().toLowerCase() : '';
       return list.filter(p => {
-        if (fJenis && p.kategoriId !== fJenis) return false;
+        if (fJenis && jenisAset(p) !== fJenis) return false;
         if (fStatus && p.status !== fStatus) return false;
+        if (q) {
+          const teks = ((p.subId || '') + ' ' + (p.nama || '') + ' ' + (p.lokasi || '') + ' ' + (p.kategori || '')).toLowerCase();
+          if (teks.indexOf(q) === -1) return false;
+        }
         return true;
       });
     }
@@ -806,7 +815,7 @@
           '<svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">' +
           '<path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" /></svg>' +
           '<span class="text-sm font-medium text-gray-500">Tidak ada portofolio yang cocok</span>' +
-          '<span class="text-xs">Coba ubah pilihan filter jenis atau status.</span>' +
+          '<span class="text-xs">Coba ubah kata kunci pencarian atau filter status.</span>' +
           '</div></td></tr>';
       } else {
         tampil.forEach(p => {
@@ -895,7 +904,26 @@
       showToast('Pengajuan draft berhasil dibatalkan dan dihapus.');
     }
 
-    document.addEventListener('DOMContentLoaded', renderPortofolio);
+    function initAset() {
+      // Buka submenu Master HBW & tandai anak aktif sesuai jenis halaman
+      const det = document.getElementById('menuHBW');
+      if (det) det.setAttribute('open', '');
+      if (JENIS_HALAMAN) {
+        const anak = document.querySelector('#menuHBW a[data-hbw="' + JENIS_HALAMAN + '"]');
+        if (anak) { anak.classList.remove('text-gray-400'); anak.classList.add('bg-brand-600', 'text-white'); }
+      }
+      if (JENIS_HALAMAN) {
+        const judul = document.getElementById('judulDaftar');
+        const sub = document.getElementById('subJudulDaftar');
+        const labelJ = JENIS_HALAMAN === 'uang' ? 'Wakaf Uang' : 'Wakaf Tanah';
+        if (judul) judul.textContent = 'Daftar Portofolio HBW — ' + labelJ;
+        if (sub) sub.textContent = JENIS_HALAMAN === 'uang'
+          ? 'Seluruh Sub-ID wakaf uang (dana & benda bergerak) di bawah satu NIB lembaga.'
+          : 'Seluruh Sub-ID aset tidak bergerak (wakaf tanah) di bawah satu NIB lembaga.';
+      }
+      renderPortofolio();
+    }
+    document.addEventListener('DOMContentLoaded', initAset);
 
     // Tombol "Tambah Portofolio Baru" -> halaman form pendaftaran Sub-ID
     function tambahPortofolio() {
@@ -907,7 +935,9 @@
           subIdBaru: subIdBerikutnya()
         }));
       } catch (e) { /* mode privat */ }
-      window.location.href = 'nazhir-aset-tambah.html';
+      // Bawa konteks jenis (tanah/uang) ke form agar kategori & isian menyesuaikan
+      const jenisTujuan = JENIS_HALAMAN || 'tanah';
+      window.location.href = 'nazhir-aset-tambah.html?jenis=' + encodeURIComponent(jenisTujuan);
     }
 
     function logout() {

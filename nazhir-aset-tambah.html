@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Tambah Portofolio Aset | Modul Kenazhiran BWI Superapps</title>
+  <title>Tambah Portofolio HBW | Modul Kenazhiran BWI Superapps</title>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -177,11 +177,44 @@
       'Penilaian Internal Nazhir',
       'Lainnya',
     ];
+    // Jenis program peruntukan — khusus Wakaf Uang
+    const OPSI_PROGRAM_UANG = [
+      'Wakaf Produktif',
+      'Sosial & Ibadah',
+      'Pendidikan',
+      'Kesehatan',
+      'Infrastruktur',
+    ];
+    // Instrumen investasi/penempatan dana — khusus Wakaf Uang
+    const OPSI_INSTRUMEN = [
+      'Deposito Syariah',
+      'Sukuk (SBSN)',
+      'Saham Syariah',
+      'Reksa Dana Syariah',
+      'Pembiayaan Mikro Syariah',
+      'Emas / Logam Mulia',
+      'Properti / Sewa',
+      'Lainnya',
+    ];
 
-    // Master Aset khusus aset tidak bergerak -> hanya Wakaf Tanah yang dapat
-    // didaftarkan di sini. Wakaf uang dilaporkan lewat Pelaporan Mutasi Aset.
+    // Jenis HBW dipilih dari submenu sidebar (Master HBW -> Wakaf Tanah / Wakaf Uang)
+    const JENIS_HBW = ((new URLSearchParams(location.search).get('jenis') || 'tanah').toLowerCase() === 'uang') ? 'uang' : 'tanah';
+    const JENIS_LABEL = JENIS_HBW === 'uang' ? 'Wakaf Uang' : 'Wakaf Tanah';
+
+    // Kategori HBW dikelompokkan per jenis:
+    //  - jenis 'tanah' : aset tidak bergerak, satuan M², punya detail legalitas & koordinat
+    //  - jenis 'uang'  : dana/benda bergerak, satuan Rp, tanpa koordinat
     const KATEGORI = [
-      { id: 'tanah', nama: 'Wakaf Tanah', ikon: 'tanah', satuan: 'M²', keterangan: 'Tanah wakaf bersertifikat BPN dan ber-AIW.' },
+      // Wakaf Tanah
+      { id: 'tanah', jenis: 'tanah', nama: 'Wakaf Tanah', ikon: 'tanah', satuan: 'M²', keterangan: 'Tanah wakaf permanen/selamanya, bersertifikat BPN & ber-AIW.' },
+      { id: 'tanah-temporer-pendek', jenis: 'tanah', nama: 'Wakaf Temporer Jangka Pendek', ikon: 'tanah', satuan: 'M²', keterangan: 'Tanah wakaf berjangka waktu pendek.' },
+      { id: 'tanah-temporer-panjang', jenis: 'tanah', nama: 'Wakaf Temporer Jangka Panjang', ikon: 'tanah', satuan: 'M²', keterangan: 'Tanah wakaf berjangka waktu panjang.' },
+      // Wakaf Uang
+      { id: 'uang', jenis: 'uang', nama: 'Wakaf Uang', ikon: 'uang', satuan: 'Rp', keterangan: 'Dana wakaf uang tunai yang dikelola nazhir.' },
+      { id: 'uang-melalui', jenis: 'uang', nama: 'Wakaf Melalui Uang', ikon: 'uang', satuan: 'Rp', keterangan: 'Benda wakaf yang diperoleh/dibeli melalui uang.' },
+      { id: 'uang-bergerak', jenis: 'uang', nama: 'Wakaf Bergerak Selain Uang', ikon: 'uang', satuan: 'Rp', keterangan: 'Benda bergerak selain uang (mis. logam mulia, kendaraan, surat berharga).' },
+      { id: 'uang-temporer-pendek', jenis: 'uang', nama: 'Wakaf Uang Temporer Jangka Pendek', ikon: 'uang', satuan: 'Rp', keterangan: 'Wakaf uang berjangka waktu pendek.' },
+      { id: 'uang-temporer-panjang', jenis: 'uang', nama: 'Wakaf Uang Temporer Jangka Panjang', ikon: 'uang', satuan: 'Rp', keterangan: 'Wakaf uang berjangka waktu panjang.' },
     ];
 
     // Alur status pengajuan portofolio — Sub-ID baru TIDAK langsung aktif
@@ -251,10 +284,15 @@
     const Sidebar = ({ terbuka, tutup }) => {
       const menu = [
         { label: 'Dashboard NIB', ikon: 'kartu', href: 'nazhir-dashboard.html', aktif: false },
-        { label: 'Master Aset & Portofolio', ikon: 'bangunan', href: 'nazhir-aset.html', aktif: true },
-        { label: 'Master Program', ikon: 'program', href: 'nazhir-program.html', aktif: false },
-        { label: 'Pelaporan Mutasi Aset', ikon: 'dokumen', href: 'nazhir-laporan.html', aktif: false },
-        { label: 'Laporan Program', ikon: 'grafik', href: 'nazhir-laporan-program.html', aktif: false },
+        { label: 'Master HBW', ikon: 'bangunan', aktif: true, anak: [
+          { label: 'Wakaf Tanah', href: 'nazhir-aset.html?jenis=tanah', jenis: 'tanah' },
+          { label: 'Wakaf Uang', href: 'nazhir-aset.html?jenis=uang', jenis: 'uang' },
+        ] },
+        { label: 'Laporan HBW', ikon: 'grafik', aktif: false, anak: [
+          { label: 'Pelaporan Wakaf Tanah', href: 'nazhir-laporan-program.html?jenis=tanah' },
+          { label: 'Pelaporan Wakaf Uang', href: 'nazhir-laporan-program.html?jenis=uang' },
+          { label: 'Pelaporan Mutasi Aset', href: 'nazhir-laporan.html' },
+        ] },
         { label: 'Riwayat & Dokumen', ikon: 'arsip', href: 'nazhir-dokumen.html', aktif: false },
         { label: 'Permohonan Buka Kunci', ikon: 'gembok', href: 'nazhir-buka-kunci.html', aktif: false },
       ];
@@ -285,15 +323,35 @@
               <ul className="mb-6 flex flex-col gap-1.5">
                 {menu.map((m) => (
                   <li key={m.label}>
-                    <a
-                      href={m.href}
-                      className={`flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium duration-300 ease-in-out ${
-                        m.aktif ? 'bg-brand-600 text-white shadow-sm' : 'text-gray-300 hover:bg-white/10 hover:text-white'
-                      }`}
-                    >
-                      <Icon name={m.ikon} className="h-5 w-5 shrink-0" />
-                      <span>{m.label}</span>
-                    </a>
+                    {m.anak ? (
+                      <details open className="group">
+                        <summary className="flex w-full cursor-pointer list-none items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white [&::-webkit-details-marker]:hidden">
+                          <Icon name={m.ikon} className="h-5 w-5 shrink-0" />
+                          <span className="flex-1">{m.label}</span>
+                          <svg className="h-4 w-4 shrink-0 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                        </summary>
+                        <ul className="ml-5 mt-1 space-y-1 border-l border-white/10 pl-4">
+                          {m.anak.map((a) => (
+                            <li key={a.label}>
+                              <a href={a.href}
+                                className={`block rounded-lg px-4 py-2 text-sm font-medium duration-300 ease-in-out ${
+                                  JENIS_HBW === a.jenis ? 'bg-brand-600 text-white' : 'text-gray-400 hover:bg-white/10 hover:text-white'
+                                }`}>{a.label}</a>
+                            </li>
+                          ))}
+                        </ul>
+                      </details>
+                    ) : (
+                      <a
+                        href={m.href}
+                        className={`flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium duration-300 ease-in-out ${
+                          m.aktif ? 'bg-brand-600 text-white shadow-sm' : 'text-gray-300 hover:bg-white/10 hover:text-white'
+                        }`}
+                      >
+                        <Icon name={m.ikon} className="h-5 w-5 shrink-0" />
+                        <span>{m.label}</span>
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -334,7 +392,7 @@
               <Icon name="menu" className="h-5 w-5" />
             </button>
             <div className="min-w-0">
-              <h1 className="truncate text-lg font-bold leading-tight text-gray-800">Tambah Portofolio Aset</h1>
+              <h1 className="truncate text-lg font-bold leading-tight text-gray-800">Tambah Portofolio HBW &middot; {JENIS_LABEL}</h1>
               <p className="truncate text-xs text-gray-400">Pendaftaran Sub-ID baru di bawah NIB lembaga</p>
             </div>
           </div>
@@ -631,6 +689,15 @@
       const [nama, setNama] = useState(EDIT ? (EDIT.nama || '') : '');
       const [nilai, setNilai] = useState(EDIT ? formatAngka(EDIT.nilai) : '');
       const [kategori, setKategori] = useState(EDIT ? (EDIT.kategoriId || '') : '');
+      const [programUang, setProgramUang] = useState(EDIT ? (EDIT.programUang || '') : '');
+      const [instrumen, setInstrumen] = useState(EDIT ? (EDIT.instrumen || '') : '');
+      const [instrumenCari, setInstrumenCari] = useState('');
+      const [instrumenBuka, setInstrumenBuka] = useState(false);
+      const [instrumenOpsi, setInstrumenOpsi] = useState(
+        (EDIT && EDIT.instrumen && OPSI_INSTRUMEN.indexOf(EDIT.instrumen) === -1)
+          ? OPSI_INSTRUMEN.concat([EDIT.instrumen])
+          : OPSI_INSTRUMEN.slice()
+      );
       const [berkas, setBerkas] = useState({});
       const [syarat, setSyarat] = useState({ laporBulanan: false, bersediaAudit: false });
       // Field detail & legalitas tanah wakaf (nomor AIW, koordinat, peruntukan, dll)
@@ -641,12 +708,13 @@
       const ubahDetail = (k, v) => setDetail((prev) => ({ ...prev, [k]: v }));
 
       const kategoriAktif = KATEGORI.find((k) => k.id === kategori);
-      const dokumenWajib = kategori ? DOKUMEN_WAJIB[kategori] : [];
-      const dokumenOpsional = kategori ? (DOKUMEN_OPSIONAL[kategori] || []) : [];
+      const jenisAktif = kategoriAktif ? kategoriAktif.jenis : '';
+      const dokumenWajib = jenisAktif ? (DOKUMEN_WAJIB[jenisAktif] || []) : [];
+      const dokumenOpsional = jenisAktif ? (DOKUMEN_OPSIONAL[jenisAktif] || []) : [];
       const jumlahDokTerunggah = dokumenWajib.filter((d) => berkas[d.key]).length;
 
-      // Teks isian mengikuti kategori terpilih (fallback saat belum memilih)
-      const label = TEKS_FIELD[kategori] || TEKS_FIELD.kosong;
+      // Teks isian mengikuti jenis wakaf terpilih (fallback saat belum memilih)
+      const label = TEKS_FIELD[jenisAktif] || TEKS_FIELD.kosong;
 
       // Ganti kategori -> isian & berkas lama tidak relevan lagi (konteksnya berbeda).
       // Klik ulang kategori yang sama tidak mereset apa pun.
@@ -658,6 +726,26 @@
         setNilai('');
         setDetail({});
         setSentuh(false);
+      };
+
+      // --- Combobox Instrumen Investasi (searchable + tambah data baru) ---
+      const instrumenTersaring = instrumenOpsi.filter(
+        (o) => o.toLowerCase().indexOf(instrumenCari.trim().toLowerCase()) !== -1
+      );
+      const pilihInstrumen = (o) => {
+        setInstrumen(o);
+        setInstrumenCari('');
+        setInstrumenBuka(false);
+      };
+      const tambahInstrumen = (namaBaru) => {
+        const bersih = String(namaBaru || '').trim();
+        if (!bersih) return;
+        setInstrumenOpsi((prev) =>
+          prev.some((x) => x.toLowerCase() === bersih.toLowerCase()) ? prev : prev.concat([bersih])
+        );
+        setInstrumen(bersih);
+        setInstrumenCari('');
+        setInstrumenBuka(false);
       };
 
       const pilihBerkas = (key, file) => {
@@ -692,7 +780,10 @@
       // --- Aturan validasi ---
       const semuaSyaratDisetujui = syarat.laporBulanan && syarat.bersediaAudit;
       const dokumenLengkap = dokumenWajib.length > 0 && jumlahDokTerunggah === dokumenWajib.length;
-      const dasarLengkap = nama.trim() !== '' && nilai !== '' && kategori !== '';
+      // Wakaf Uang wajib memilih jenis program & instrumen investasi
+      const programOK = JENIS_HBW !== 'uang' || programUang !== '';
+      const instrumenOK = JENIS_HBW !== 'uang' || instrumen !== '';
+      const dasarLengkap = nama.trim() !== '' && nilai !== '' && kategori !== '' && programOK && instrumenOK;
       const bolehSimpan = dasarLengkap && dokumenLengkap && semuaSyaratDisetujui;
 
       // Draft cukup butuh kategori + nama/lokasi; sisanya boleh menyusul
@@ -720,7 +811,10 @@
           lembaga: 'Yayasan Wakaf Nusantara',
           wilayah: 'BWI Prov. Jawa Barat',
           nama: nama.trim(),
-          lokasi: kategori === 'uang' ? 'Rek. Wakaf Produktif' : 'Lokasi aset wakaf',
+          lokasi: jenisAktif === 'uang' ? 'Rek. Wakaf Produktif' : 'Lokasi aset wakaf',
+          jenis: jenisAktif,
+          programUang: jenisAktif === 'uang' ? programUang : '',
+          instrumen: jenisAktif === 'uang' ? instrumen : '',
           kategori: kategoriAktif ? kategoriAktif.nama : '',
           kategoriId: kategori,
           satuan: kategoriAktif ? kategoriAktif.satuan : '',
@@ -728,8 +822,8 @@
           dokumen: dokumenList.length,
           totalDokumen: dokumenWajib.length,
           dokumenList: dokumenList,
-          // Detail & legalitas tanah wakaf (untuk aset tidak bergerak)
-          detailTanah: (kategori === 'tanah') ? { ...detail } : null,
+          // Detail & legalitas tanah wakaf (hanya untuk jenis tanah)
+          detailTanah: (jenisAktif === 'tanah') ? { ...detail } : null,
           status: status,
           tanggal: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
         };
@@ -760,7 +854,7 @@
         if (!bisaDraft) { setSentuh(true); return; }
         tulisRecord('draft');
         setToast(`Draft ${SUB_ID_BARU} ${MODE_UBAH ? 'diperbarui' : 'tersimpan'}. Anda dapat melengkapinya kapan saja.`);
-        setTimeout(() => { window.location.href = 'nazhir-aset.html'; }, 1400);
+        setTimeout(() => { window.location.href = 'nazhir-aset.html?jenis=' + JENIS_HBW; }, 1400);
       };
 
       // Ajukan -> masuk status "Verifikasi Pusat" untuk diverifikasi BWI
@@ -769,10 +863,10 @@
         if (!bolehSimpan) return;
         tulisRecord('review');
         setToast(`Pengajuan ${SUB_ID_BARU} terkirim. Menunggu verifikasi BWI Pusat.`);
-        setTimeout(() => { window.location.href = 'nazhir-aset.html'; }, 1400);
+        setTimeout(() => { window.location.href = 'nazhir-aset.html?jenis=' + JENIS_HBW; }, 1400);
       };
 
-      const kembali = () => { window.location.href = 'nazhir-aset.html'; };
+      const kembali = () => { window.location.href = 'nazhir-aset.html?jenis=' + JENIS_HBW; };
 
       return (
         <div className="flex h-screen overflow-hidden">
@@ -790,7 +884,7 @@
 
                 {/* Breadcrumb */}
                 <nav className="flex items-center gap-2 text-sm text-gray-400">
-                  <a href="nazhir-aset.html" className="hover:text-brand-700">Master Aset &amp; Portofolio</a>
+                  <a href={'nazhir-aset.html?jenis=' + JENIS_HBW} className="hover:text-brand-700">Master HBW</a>
                   <Icon name="chevronKanan" className="h-4 w-4" />
                   <span className="font-medium text-gray-600">Tambah Portofolio</span>
                 </nav>
@@ -807,7 +901,7 @@
                   </button>
                   <div className="min-w-0">
                     <h2 className="text-xl font-bold text-gray-800 md:text-2xl">
-                      {MODE_UBAH ? 'Lanjutkan Pengisian Portofolio' : 'Tambah Portofolio Aset'}
+                      {MODE_UBAH ? 'Lanjutkan Pengisian Portofolio' : ('Tambah Portofolio HBW · ' + JENIS_LABEL)}
                     </h2>
                     <p className="mt-0.5 text-sm text-gray-500">
                       {MODE_UBAH
@@ -823,70 +917,65 @@
                   {/* ============ KOLOM FORM ============ */}
                   <div className="space-y-5 lg:col-span-2">
 
-                    {/* SEKSI 1 — Kategori wakaf (radio card/tile) — penentu konteks seluruh form */}
+                    {/* SEKSI 1 — Kategori wakaf (dropdown) — penentu konteks seluruh form */}
                     <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-card md:p-6">
                       <JudulSeksi nomor="1" judul="Kategori Wakaf" deskripsi="Pilih terlebih dahulu — menentukan label isian, satuan nilai, dan dokumen persyaratan." />
 
-                      <div role="radiogroup" aria-label="Kategori Wakaf" className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        {KATEGORI.map((k) => {
-                          const aktif = kategori === k.id;
-                          return (
-                            <label
-                              key={k.id}
-                              className={`relative flex cursor-pointer flex-col gap-3 rounded-xl border-2 p-5 transition ${
-                                aktif
-                                  ? 'border-brand-500 bg-brand-50 ring-2 ring-brand-100'
-                                  : 'border-gray-200 bg-white hover:border-brand-300 hover:bg-brand-50/40'
-                              }`}
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                          <label className="mb-1.5 block text-sm font-semibold text-gray-700">Kategori {JENIS_LABEL} <span className="text-red-500">*</span></label>
+                          <div className="relative">
+                            <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
+                              <Icon name={JENIS_HBW === 'uang' ? 'uang' : 'tanah'} className="h-5 w-5" />
+                            </span>
+                            <select
+                              value={kategori}
+                              onChange={(e) => pilihKategori(e.target.value)}
+                              className="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pl-11 pr-10 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
                             >
-                              <input
-                                type="radio"
-                                name="kategoriWakaf"
-                                value={k.id}
-                                checked={aktif}
-                                onChange={() => pilihKategori(k.id)}
-                                className="sr-only"
-                              />
+                              <option value="">Pilih kategori {JENIS_LABEL.toLowerCase()}…</option>
+                              {KATEGORI.filter((k) => k.jenis === JENIS_HBW).map((k) => (
+                                <option key={k.id} value={k.id}>{k.nama} — satuan {k.satuan}</option>
+                              ))}
+                            </select>
+                            <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400">
+                              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                            </span>
+                          </div>
+                          {kategoriAktif && (
+                            <p className="mt-2 text-xs text-gray-500">{kategoriAktif.keterangan}</p>
+                          )}
+                          {sentuh && !kategori && (
+                            <p className="mt-2 text-xs font-medium text-red-600">Silakan pilih kategori wakaf terlebih dahulu.</p>
+                          )}
+                        </div>
 
-                              {/* Indikator radio */}
-                              <span
-                                className={`absolute right-4 top-4 flex h-5 w-5 items-center justify-center rounded-full border-2 transition ${
-                                  aktif ? 'border-brand-600 bg-brand-600' : 'border-gray-300 bg-white'
-                                }`}
+                        {JENIS_HBW === 'uang' && (
+                          <div>
+                            <label className="mb-1.5 block text-sm font-semibold text-gray-700">Jenis Program <span className="text-red-500">*</span></label>
+                            <div className="relative">
+                              <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
+                                <Icon name="program" className="h-5 w-5" />
+                              </span>
+                              <select
+                                value={programUang}
+                                onChange={(e) => setProgramUang(e.target.value)}
+                                className="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pl-11 pr-10 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
                               >
-                                {aktif && <span className="h-2 w-2 rounded-full bg-white"></span>}
+                                <option value="">Pilih jenis program…</option>
+                                {OPSI_PROGRAM_UANG.map((o) => <option key={o} value={o}>{o}</option>)}
+                              </select>
+                              <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400">
+                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
                               </span>
-
-                              <span
-                                className={`flex h-12 w-12 items-center justify-center rounded-xl ${
-                                  aktif ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-500'
-                                }`}
-                              >
-                                <Icon name={k.ikon} className="h-6 w-6" />
-                              </span>
-
-                              <span>
-                                <span className={`block text-base font-bold ${aktif ? 'text-brand-800' : 'text-gray-800'}`}>
-                                  {k.nama}
-                                </span>
-                                <span className="mt-1 block text-xs leading-relaxed text-gray-500">{k.keterangan}</span>
-                              </span>
-
-                              <span
-                                className={`inline-flex w-fit items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold ${
-                                  aktif ? 'bg-white text-brand-700' : 'bg-gray-100 text-gray-500'
-                                }`}
-                              >
-                                Satuan: {k.satuan}
-                              </span>
-                            </label>
-                          );
-                        })}
+                            </div>
+                            <p className="mt-2 text-xs text-gray-500">Klasifikasi program peruntukan dana wakaf uang.</p>
+                            {sentuh && kategori && !programUang && (
+                              <p className="mt-2 text-xs font-medium text-red-600">Silakan pilih jenis program terlebih dahulu.</p>
+                            )}
+                          </div>
+                        )}
                       </div>
-
-                      {sentuh && !kategori && (
-                        <p className="mt-3 text-xs font-medium text-red-600">Silakan pilih kategori wakaf terlebih dahulu.</p>
-                      )}
                     </section>
 
                     {/* SEKSI 2 — Data dasar aset (label & satuan mengikuti kategori) */}
@@ -904,30 +993,101 @@
                       )}
 
                       <div className="space-y-4">
-                        <div>
-                          <label htmlFor="namaAset" className="mb-1.5 block text-sm font-semibold text-gray-700">
-                            {label.labelNama} <span className="text-red-500">*</span>
-                          </label>
-                          <input
-                            id="namaAset"
-                            type="text"
-                            value={nama}
-                            disabled={!kategori}
-                            onChange={(e) => setNama(e.target.value)}
-                            placeholder={label.placeholderNama}
-                            className={`w-full rounded-lg border px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-100 ${
-                              !kategori
-                                ? 'cursor-not-allowed border-gray-200 bg-gray-50 text-gray-400'
-                                : sentuh && !nama.trim()
-                                  ? 'border-red-300 bg-white text-gray-800 focus:border-red-500'
-                                  : 'border-gray-200 bg-white text-gray-800 focus:border-brand-500'
-                            }`}
-                          />
-                          {kategori && label.hintNama && (
-                            <p className="mt-1.5 text-xs text-gray-400">{label.hintNama}</p>
-                          )}
-                          {sentuh && kategori && !nama.trim() && (
-                            <p className="mt-1.5 text-xs font-medium text-red-600">{label.wajibNama}</p>
+                        <div className={JENIS_HBW === 'uang' ? 'grid grid-cols-1 gap-4 md:grid-cols-2' : ''}>
+                          <div>
+                            <label htmlFor="namaAset" className="mb-1.5 block text-sm font-semibold text-gray-700">
+                              {label.labelNama} <span className="text-red-500">*</span>
+                            </label>
+                            <input
+                              id="namaAset"
+                              type="text"
+                              value={nama}
+                              disabled={!kategori}
+                              onChange={(e) => setNama(e.target.value)}
+                              placeholder={label.placeholderNama}
+                              className={`w-full rounded-lg border px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-100 ${
+                                !kategori
+                                  ? 'cursor-not-allowed border-gray-200 bg-gray-50 text-gray-400'
+                                  : sentuh && !nama.trim()
+                                    ? 'border-red-300 bg-white text-gray-800 focus:border-red-500'
+                                    : 'border-gray-200 bg-white text-gray-800 focus:border-brand-500'
+                              }`}
+                            />
+                            {kategori && label.hintNama && (
+                              <p className="mt-1.5 text-xs text-gray-400">{label.hintNama}</p>
+                            )}
+                            {sentuh && kategori && !nama.trim() && (
+                              <p className="mt-1.5 text-xs font-medium text-red-600">{label.wajibNama}</p>
+                            )}
+                          </div>
+
+                          {JENIS_HBW === 'uang' && (
+                            <div>
+                              <label htmlFor="instrumenInvestasi" className="mb-1.5 block text-sm font-semibold text-gray-700">
+                                Instrumen Investasi <span className="text-red-500">*</span>
+                              </label>
+                              <div className="relative">
+                                <input
+                                  id="instrumenInvestasi"
+                                  type="text"
+                                  autoComplete="off"
+                                  disabled={!kategori}
+                                  value={instrumenBuka ? instrumenCari : instrumen}
+                                  onFocus={() => { if (kategori) { setInstrumenBuka(true); setInstrumenCari(''); } }}
+                                  onChange={(e) => { setInstrumenCari(e.target.value); setInstrumenBuka(true); }}
+                                  onBlur={() => window.setTimeout(() => setInstrumenBuka(false), 150)}
+                                  placeholder="Cari / pilih instrumen…"
+                                  className={`w-full rounded-lg border py-2.5 pl-4 pr-10 text-sm outline-none focus:ring-2 focus:ring-brand-100 ${
+                                    !kategori
+                                      ? 'cursor-not-allowed border-gray-200 bg-gray-50 text-gray-400'
+                                      : sentuh && !instrumen
+                                        ? 'border-red-300 bg-white text-gray-800 focus:border-red-500'
+                                        : 'border-gray-200 bg-white text-gray-800 focus:border-brand-500'
+                                  }`}
+                                />
+                                <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400">
+                                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                                </span>
+                                {instrumenBuka && (
+                                  <div className="absolute left-0 right-0 z-20 mt-1 max-h-56 overflow-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
+                                    {instrumenTersaring.map((o) => (
+                                      <button
+                                        type="button"
+                                        key={o}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        onClick={() => pilihInstrumen(o)}
+                                        className="flex w-full items-center justify-between gap-2 px-4 py-2 text-left text-sm text-gray-700 transition hover:bg-brand-50"
+                                      >
+                                        <span>{o}</span>
+                                        {instrumen === o && (
+                                          <svg className="h-4 w-4 text-brand-600" fill="none" viewBox="0 0 24 24" strokeWidth="2.2" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                                        )}
+                                      </button>
+                                    ))}
+                                    {instrumenTersaring.length === 0 && instrumenCari.trim() !== '' && (
+                                      <button
+                                        type="button"
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        onClick={() => tambahInstrumen(instrumenCari)}
+                                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm font-semibold text-brand-700 transition hover:bg-brand-50"
+                                      >
+                                        <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                                        <span>Tambahkan "{instrumenCari.trim()}" sebagai data baru</span>
+                                      </button>
+                                    )}
+                                    {instrumenTersaring.length === 0 && instrumenCari.trim() === '' && (
+                                      <p className="px-4 py-2 text-sm text-gray-400">Ketik untuk mencari instrumen…</p>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                              {kategori && (
+                                <p className="mt-1.5 text-xs text-gray-400">Instrumen penempatan/pengembangan dana wakaf uang.</p>
+                              )}
+                              {sentuh && kategori && !instrumen && (
+                                <p className="mt-1.5 text-xs font-medium text-red-600">Instrumen investasi wajib dipilih.</p>
+                              )}
+                            </div>
                           )}
                         </div>
 
@@ -944,7 +1104,7 @@
                               disabled={!kategori}
                               onChange={(e) => setNilai(formatAngka(e.target.value))}
                               placeholder="0"
-                              className={`w-full rounded-lg border py-2.5 pl-4 pr-16 text-sm outline-none focus:ring-2 focus:ring-brand-100 ${
+                              className={`w-full rounded-lg border py-2.5 pl-16 pr-4 text-sm outline-none focus:ring-2 focus:ring-brand-100 ${
                                 !kategori
                                   ? 'cursor-not-allowed border-gray-200 bg-gray-50 text-gray-400'
                                   : sentuh && !nilai
@@ -953,7 +1113,7 @@
                               }`}
                             />
                             <span
-                              className={`pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-xs font-semibold ${
+                              className={`pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-xs font-semibold ${
                                 kategoriAktif ? 'bg-brand-50 text-brand-700' : 'bg-gray-100 text-gray-400'
                               }`}
                             >
@@ -970,7 +1130,8 @@
                       </div>
                     </section>
 
-                    {/* SEKSI 3 — Detail & legalitas tanah wakaf (khusus aset tidak bergerak) */}
+                    {/* SEKSI 3 — Detail & legalitas tanah wakaf (hanya untuk jenis Wakaf Tanah) */}
+                    {JENIS_HBW === 'tanah' && (
                     <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-card md:p-6">
                       <JudulSeksi
                         nomor="3"
@@ -978,10 +1139,10 @@
                         deskripsi="Dicatat sebagai field agar data dapat ditarik langsung tanpa membuka berkas."
                       />
 
-                      {kategori !== 'tanah' ? (
+                      {jenisAktif !== 'tanah' ? (
                         <div className="flex items-start gap-3 rounded-xl border border-dashed border-gray-300 bg-gray-50 px-5 py-8">
                           <Icon name="info" className="mt-0.5 h-5 w-5 shrink-0 text-gray-400" />
-                          <p className="text-sm text-gray-500">Pilih kategori Wakaf Tanah pada langkah 1 untuk mengisi detail legalitas.</p>
+                          <p className="text-sm text-gray-500">Pilih salah satu kategori Wakaf Tanah pada langkah 1 untuk mengisi detail legalitas.</p>
                         </div>
                       ) : (
                         <div className="fade-in grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -1069,11 +1230,12 @@
                         </div>
                       )}
                     </section>
+                    )}
 
                     {/* SEKSI 4 — Dokumen persyaratan (CONDITIONAL RENDERING) */}
                     <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-card md:p-6">
                       <JudulSeksi
-                        nomor="4"
+                        nomor={JENIS_HBW === 'tanah' ? '4' : '3'}
                         judul="Dokumen Persyaratan"
                         deskripsi="Daftar berkas menyesuaikan kategori wakaf yang Anda pilih."
                       />
@@ -1135,7 +1297,7 @@
                     {/* SEKSI 5 — Syarat & ketentuan legal */}
                     <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-card md:p-6">
                       <JudulSeksi
-                        nomor="5"
+                        nomor={JENIS_HBW === 'tanah' ? '5' : '4'}
                         judul="Syarat &amp; Ketentuan Legal"
                         deskripsi="Pernyataan digital ini menggantikan surat pernyataan fisik."
                       />

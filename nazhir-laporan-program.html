@@ -104,50 +104,39 @@
 
             <!-- 2. Master Aset & Portofolio -->
             <li>
-              <a href="nazhir-aset.html"
-                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
-                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
-                </svg>
-                <span>Master Aset &amp; Portofolio</span>
-              </a>
+              <details id="menuHBW" class="group">
+                <summary class="flex w-full cursor-pointer list-none items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white [&::-webkit-details-marker]:hidden">
+                  <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
+                  </svg>
+                  <span class="flex-1">Master HBW</span>
+                  <svg class="h-4 w-4 shrink-0 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                </summary>
+                <ul class="ml-5 mt-1 space-y-1 border-l border-white/10 pl-4">
+                  <li><a data-hbw="tanah" href="nazhir-aset.html?jenis=tanah" class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-400 duration-300 ease-in-out hover:bg-white/10 hover:text-white">Wakaf Tanah</a></li>
+                  <li><a data-hbw="uang" href="nazhir-aset.html?jenis=uang" class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-400 duration-300 ease-in-out hover:bg-white/10 hover:text-white">Wakaf Uang</a></li>
+                </ul>
+              </details>
             </li>
 
-            <!-- 3. Master Program -->
-            <li>
-              <a href="nazhir-program.html"
-                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
-                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M6.429 9.75 2.25 12l4.179 2.25m0-4.5 5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0 4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0-5.571 3-5.571-3" />
-                </svg>
-                <span>Master Program</span>
-              </a>
-            </li>
 
-            <!-- 4. Pelaporan Mutasi Aset -->
-            <li>
-              <a href="nazhir-laporan.html"
-                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
-                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-                </svg>
-                <span>Pelaporan Mutasi Aset</span>
-              </a>
-            </li>
 
             <!-- 5. Laporan Program (ACTIVE) -->
             <li>
-              <a href="nazhir-laporan-program.html"
-                class="flex w-full items-center gap-3 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm duration-300 ease-in-out">
-                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605" />
-                </svg>
-                <span>Laporan Program</span>
-              </a>
+              <details id="menuLaporanHBW" class="group">
+                <summary class="flex w-full cursor-pointer list-none items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white [&::-webkit-details-marker]:hidden">
+                  <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605" />
+                  </svg>
+                  <span class="flex-1">Laporan HBW</span>
+                  <svg class="h-4 w-4 shrink-0 transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                </summary>
+                <ul class="ml-5 mt-1 space-y-1 border-l border-white/10 pl-4">
+                  <li><a data-lapor="tanah" href="nazhir-laporan-program.html?jenis=tanah" class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-400 duration-300 ease-in-out hover:bg-white/10 hover:text-white">Pelaporan Wakaf Tanah</a></li>
+                  <li><a data-lapor="uang" href="nazhir-laporan-program.html?jenis=uang" class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-400 duration-300 ease-in-out hover:bg-white/10 hover:text-white">Pelaporan Wakaf Uang</a></li>
+                  <li><a data-lapor="mutasi" href="nazhir-laporan.html" class="block rounded-lg px-4 py-2 text-sm font-medium text-gray-400 duration-300 ease-in-out hover:bg-white/10 hover:text-white">Pelaporan Mutasi Aset</a></li>
+                </ul>
+              </details>
             </li>
 
             <!-- 6. Riwayat & Dokumen -->
@@ -213,8 +202,8 @@
               </svg>
             </button>
             <div class="min-w-0">
-              <h1 class="truncate text-lg font-bold leading-tight text-gray-800">Laporan Program</h1>
-              <p class="truncate text-xs text-gray-400">Wakaf uang &amp; program berkesinambungan &middot; baseline SSOT</p>
+              <h1 id="judulTopbar" class="truncate text-lg font-bold leading-tight text-gray-800">Laporan HBW</h1>
+              <p id="subTopbar" class="truncate text-xs text-gray-400">Pelaporan progres HBW &middot; baseline SSOT</p>
             </div>
           </div>
 
@@ -303,9 +292,9 @@
 
           <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h2 class="text-xl font-bold text-gray-800 md:text-2xl">Laporan Progres Program</h2>
-              <p class="mt-1 text-sm text-gray-500">Jalur pelaporan <span class="font-semibold text-gray-600">wakaf uang &amp; program berkesinambungan</span>.
-                Nilai awal dikunci dari baseline <span class="font-semibold text-gray-600">SSOT Master Program</span> (nilai berjalan), jadi Anda cukup
+              <h2 id="judulHalaman" class="text-xl font-bold text-gray-800 md:text-2xl">Laporan Progres Program</h2>
+              <p id="subJudulHalaman" class="mt-1 text-sm text-gray-500">Jalur pelaporan <span class="font-semibold text-gray-600">wakaf uang &amp; program berkesinambungan</span>.
+                Nilai terakhir dikunci dari baseline <span class="font-semibold text-gray-600">SSOT Master Program</span> (nilai berjalan), jadi Anda cukup
                 isi nilai aktual — sistem menghitung selisihnya agar nilai tidak terhitung ganda antar-periode.
                 Pelaporan aset tanah ada di menu <span class="font-semibold text-gray-600">Pelaporan Mutasi Aset</span>.</p>
             </div>
@@ -450,11 +439,12 @@
               <table class="w-full text-sm">
                 <thead>
                   <tr class="border-b border-gray-100 bg-gray-50 text-left">
-                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Program /
-                      Periode</th>
-                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Nilai
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Harta Benda
+                      Wakaf</th>
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Periode</th>
+                    <th id="thKol1" class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Nilai
                       Akhir</th>
-                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Perubahan
+                    <th id="thKol2" class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Perubahan
                     </th>
                     <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Status
                     </th>
@@ -523,10 +513,10 @@
   <div id="modalTambah" class="fixed inset-0 z-[70] hidden items-center justify-center p-4">
     <div class="absolute inset-0 bg-black/50" onclick="tutupModalTambah()"></div>
 
-    <div class="modal-in relative flex max-h-[92vh] w-full max-w-lg flex-col rounded-2xl bg-white shadow-2xl">
+    <div class="modal-in relative flex max-h-[92vh] w-full max-w-2xl flex-col rounded-2xl bg-white shadow-2xl">
       <div class="flex items-start justify-between gap-3 border-b border-gray-100 px-6 py-5">
         <div>
-          <h3 class="text-lg font-bold text-gray-800">Tambah Laporan Program</h3>
+          <h3 id="judulModalTambah" class="text-lg font-bold text-gray-800">Tambah Laporan Program</h3>
           <p class="mt-0.5 text-xs text-gray-400">Pilih program yang dilaporkan, lalu catat kenaikan/penyusutannya.</p>
         </div>
         <button onclick="tutupModalTambah()" class="text-gray-400 transition hover:text-gray-600">
@@ -539,7 +529,7 @@
       <div class="space-y-5 overflow-y-auto px-6 py-5">
         <!-- Program -->
         <div>
-          <label for="inProgram" class="mb-1.5 block text-sm font-semibold text-gray-700">Program yang Dilaporkan <span
+          <label id="lblProgram" for="inProgram" class="mb-1.5 block text-sm font-semibold text-gray-700">Program yang Dilaporkan <span
               class="text-red-500">*</span></label>
           <div class="relative">
             <select id="inProgram" onchange="pilihProgram()"
@@ -575,9 +565,9 @@
           </div>
         </div>
 
-        <!-- Nilai Awal / Bulan Lalu — READ-ONLY (Single Source of Truth) -->
+        <!-- Nilai Terakhir — READ-ONLY (Single Source of Truth) -->
         <div>
-          <label for="inNilaiAwal" class="mb-1.5 block text-sm font-semibold text-gray-700">Nilai Awal / Bulan Lalu
+          <label for="inNilaiAwal" class="mb-1.5 block text-sm font-semibold text-gray-700">Nilai Terakhir
             (Rp)</label>
           <div class="relative">
             <input type="text" id="inNilaiAwal" readonly disabled tabindex="-1" placeholder="Pilih program dulu…"
@@ -593,21 +583,84 @@
             Truth). Nazhir tidak perlu mengetik ulang.</p>
         </div>
 
-        <!-- Input faktual: Nilai Aktual & Biaya Operasional -->
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label for="inNilaiAktual" class="mb-1.5 block text-sm font-semibold text-gray-700">Nilai Aktual Saat Ini
-              (Rp) <span class="text-red-500">*</span></label>
-            <input type="text" id="inNilaiAktual" inputmode="numeric" oninput="formatRupiahInput(this); hitungSelisih()"
-              placeholder="mis. 350.000.000"
-              class="w-full rounded-lg border border-gray-200 bg-white py-2.5 px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+        <!-- Input faktual TANAH: hanya penyaluran + jumlah mauquf alaih (tanpa penerimaan/imbal hasil) -->
+        <div id="blokTanah" class="space-y-3">
+          <!-- Field kanonik (tersembunyi) agar simpan & riwayat tetap kompatibel -->
+          <input type="hidden" id="inNilaiAktual">
+          <input type="hidden" id="inBiayaOperasional">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label for="inPenyaluranTanah" class="mb-1.5 block text-sm font-semibold text-gray-700">Penyaluran (Rp) <span class="text-red-500">*</span></label>
+              <input type="text" id="inPenyaluranTanah" inputmode="numeric" oninput="formatRupiahInput(this); hitungTanah()" placeholder="mis. 25.000.000"
+                class="w-full rounded-lg border border-gray-200 bg-white py-2.5 px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+            </div>
+            <div>
+              <label for="inMauqufTanah" class="mb-1.5 block text-sm font-semibold text-gray-700">Jumlah Mauquf Alaih</label>
+              <div class="relative">
+                <input type="text" id="inMauqufTanah" inputmode="numeric" oninput="formatRupiahInput(this); hitungTanah()" placeholder="mis. 50"
+                  class="w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-4 pr-20 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+                <span class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-medium text-gray-400">penerima</span>
+              </div>
+            </div>
           </div>
+          <p class="text-xs text-gray-400">Wakaf tanah: cukup laporkan <span class="font-medium">penyaluran</span> &amp; <span class="font-medium">jumlah mauquf alaih</span> yang menerima. Nilai HBW tidak berubah dari laporan ini.</p>
+        </div>
+
+        <!-- Input faktual UANG: penerimaan, penyaluran, mauquf alaih, operasional nazir -->
+        <div id="blokUang" class="hidden space-y-3">
+          <!-- Nilai Terbaru (input) -> kenaikan/penurunan dihitung dari Nilai Terakhir -->
           <div>
-            <label for="inBiayaOperasional" class="mb-1.5 block text-sm font-semibold text-gray-700">Biaya Operasional
-              (Rp)</label>
-            <input type="text" id="inBiayaOperasional" inputmode="numeric"
-              oninput="formatRupiahInput(this); hitungSelisih()" placeholder="mis. 15.000.000"
+            <label for="inNilaiTerbaru" class="mb-1.5 block text-sm font-semibold text-gray-700">Nilai Terbaru (Rp) <span class="text-red-500">*</span></label>
+            <input type="text" id="inNilaiTerbaru" inputmode="numeric" oninput="formatRupiahInput(this); hitungUang()" placeholder="mis. 362.000.000"
               class="w-full rounded-lg border border-gray-200 bg-white py-2.5 px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+            <p class="mt-1.5 text-xs text-gray-400">Nilai HBW terkini. Kenaikan/penurunan dihitung otomatis dari <span class="font-medium">Nilai Terakhir</span>.</p>
+          </div>
+
+          <!-- Penerimaan: penghimpunan (input) + imbal hasil (otomatis, opsional) -->
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label for="inPenghimpunan" class="mb-1.5 block text-sm font-semibold text-gray-700">Penghimpunan Baru (Rp) <span class="text-red-500">*</span></label>
+              <input type="text" id="inPenghimpunan" inputmode="numeric" oninput="formatRupiahInput(this); hitungUang()" placeholder="mis. 100.000.000"
+                class="w-full rounded-lg border border-gray-200 bg-white py-2.5 px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+            </div>
+            <div>
+              <label for="inImbalHasil" class="mb-1.5 block text-sm font-semibold text-gray-700">Imbal Hasil (Rp) <span class="font-normal text-gray-400">(otomatis)</span></label>
+              <input type="text" id="inImbalHasil" readonly disabled tabindex="-1" placeholder="Otomatis"
+                class="w-full cursor-not-allowed rounded-lg border border-gray-200 bg-gray-100 py-2.5 px-4 text-sm font-semibold text-gray-600 outline-none">
+            </div>
+          </div>
+          <p class="-mt-1 text-xs text-gray-400">Penghimpunan Baru + Imbal Hasil = kenaikan nilai (Nilai Terbaru &minus; Nilai Terakhir). Imbal hasil boleh 0.</p>
+
+          <!-- Penyaluran dari imbal hasil: MAQ, Operasional, Restruktur (masing-masing Rp) -->
+          <div>
+            <p class="mb-1.5 text-sm font-semibold text-gray-700">Penyaluran <span class="font-normal text-gray-400">(dari imbal hasil)</span></p>
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <div>
+                <label for="inMAQ" class="mb-1 block text-xs font-medium text-gray-600">MAQ (Mauquf Alaih) (Rp)</label>
+                <input type="text" id="inMAQ" inputmode="numeric" oninput="formatRupiahInput(this); hitungUang()" placeholder="0"
+                  class="w-full rounded-lg border border-gray-200 bg-white py-2.5 px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+              </div>
+              <div>
+                <label for="inOperasional" class="mb-1 block text-xs font-medium text-gray-600">Operasional (Rp)</label>
+                <input type="text" id="inOperasional" inputmode="numeric" oninput="formatRupiahInput(this); hitungUang()" placeholder="0"
+                  class="w-full rounded-lg border border-gray-200 bg-white py-2.5 px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+              </div>
+              <div>
+                <label for="inRestruktur" class="mb-1 block text-xs font-medium text-gray-600">Pengembangan (Rp)</label>
+                <input type="text" id="inRestruktur" inputmode="numeric" oninput="formatRupiahInput(this); hitungUang()" placeholder="0"
+                  class="w-full rounded-lg border border-gray-200 bg-white py-2.5 px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+              </div>
+            </div>
+            <div id="ketPenyaluran" class="mt-2 hidden rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-600"></div>
+            <div id="warnPenyaluran" class="mt-2 hidden items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700"></div>
+            <div class="mt-3">
+              <label for="inJumlahMAQ" class="mb-1 block text-xs font-medium text-gray-600">Jumlah MAQ <span class="font-normal text-gray-400">(mauquf alaih yang menerima)</span></label>
+              <div class="relative">
+                <input type="text" id="inJumlahMAQ" inputmode="numeric" oninput="formatRupiahInput(this)" placeholder="mis. 120"
+                  class="w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-4 pr-20 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+                <span class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-medium text-gray-400">penerima</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -646,7 +699,7 @@
   <!-- ===== Modal: Detail Laporan ===== -->
   <div id="modalDetail" class="fixed inset-0 z-[70] hidden items-center justify-center p-4">
     <div class="absolute inset-0 bg-black/50" onclick="tutupModalDetail()"></div>
-    <div class="modal-in relative w-full max-w-lg rounded-2xl bg-white shadow-2xl">
+    <div class="modal-in relative w-full max-w-2xl rounded-2xl bg-white shadow-2xl">
       <div class="flex items-start justify-between gap-3 border-b border-gray-100 px-6 py-5">
         <div>
           <h3 id="dtNama" class="text-lg font-bold text-gray-800">—</h3>
@@ -658,21 +711,21 @@
           </svg>
         </button>
       </div>
-      <div class="space-y-4 px-6 py-5">
+      <div class="max-h-[70vh] space-y-4 overflow-y-auto px-6 py-5">
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <p class="text-xs text-gray-400">Nilai Awal</p>
+            <p id="dtLblAwal" class="text-xs text-gray-400">Nilai Awal</p>
             <p id="dtAwal" class="mt-0.5 text-sm font-semibold text-gray-800">—</p>
           </div>
-          <div>
-            <p class="text-xs text-gray-400">Nilai Akhir</p>
+          <div id="cellAkhir">
+            <p id="dtLblAkhir" class="text-xs text-gray-400">Nilai Akhir</p>
             <p id="dtAkhir" class="mt-0.5 text-sm font-semibold text-gray-800">—</p>
           </div>
-          <div>
+          <div id="cellKenaikan">
             <p class="text-xs text-gray-400">Kenaikan</p>
             <p id="dtKenaikan" class="mt-0.5 text-sm font-semibold text-emerald-700">—</p>
           </div>
-          <div>
+          <div id="cellPenyusutan">
             <p class="text-xs text-gray-400">Penyusutan</p>
             <p id="dtPenyusutan" class="mt-0.5 text-sm font-semibold text-red-700">—</p>
           </div>
@@ -685,12 +738,49 @@
             <p id="dtTanggal" class="mt-0.5 text-sm font-semibold text-gray-800">—</p>
           </div>
         </div>
+
+        <!-- Rincian khusus Wakaf Uang -->
+        <div id="dtUang" class="hidden space-y-3">
+          <div class="rounded-xl border border-gray-100 bg-gray-50 p-4">
+            <p class="mb-2.5 text-xs font-semibold uppercase tracking-wide text-gray-500">Penerimaan</p>
+            <div class="grid grid-cols-2 gap-4">
+              <div><p class="text-xs text-gray-400">Penghimpunan Baru</p><p id="dtPenghimpunan" class="mt-0.5 text-sm font-semibold text-gray-800">—</p></div>
+              <div><p class="text-xs text-gray-400">Imbal Hasil</p><p id="dtImbal" class="mt-0.5 text-sm font-semibold text-gray-800">—</p></div>
+            </div>
+          </div>
+          <div class="rounded-xl border border-gray-100 bg-gray-50 p-4">
+            <p class="mb-2.5 text-xs font-semibold uppercase tracking-wide text-gray-500">Penyaluran <span class="font-normal normal-case text-gray-400">(dari imbal hasil)</span></p>
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              <div><p class="text-xs text-gray-400">MAQ (Mauquf Alaih)</p><p id="dtMAQ" class="mt-0.5 text-sm font-semibold text-gray-800">—</p><p id="dtMAQpct" class="text-[11px] text-brand-600"></p></div>
+              <div><p class="text-xs text-gray-400">Operasional</p><p id="dtOp" class="mt-0.5 text-sm font-semibold text-gray-800">—</p><p id="dtOppct" class="text-[11px] text-brand-600"></p></div>
+              <div><p class="text-xs text-gray-400">Pengembangan</p><p id="dtRes" class="mt-0.5 text-sm font-semibold text-gray-800">—</p><p id="dtRespct" class="text-[11px] text-brand-600"></p></div>
+            </div>
+            <div class="mt-3 border-t border-gray-200 pt-2"><p class="text-xs text-gray-400">Jumlah MAQ (penerima)</p><p id="dtJumlahMAQ" class="mt-0.5 text-sm font-semibold text-gray-800">—</p></div>
+          </div>
+        </div>
+
+        <!-- Rincian khusus Wakaf Tanah -->
+        <div id="dtTanah" class="hidden">
+          <div class="rounded-xl border border-gray-100 bg-gray-50 p-4">
+            <p class="mb-2.5 text-xs font-semibold uppercase tracking-wide text-gray-500">Penyaluran</p>
+            <div class="grid grid-cols-2 gap-4">
+              <div><p class="text-xs text-gray-400">Nominal Penyaluran</p><p id="dtSalurTanah" class="mt-0.5 text-sm font-semibold text-gray-800">—</p></div>
+              <div><p class="text-xs text-gray-400">Jumlah Mauquf Alaih</p><p id="dtMauqufTanah" class="mt-0.5 text-sm font-semibold text-gray-800">—</p></div>
+            </div>
+          </div>
+        </div>
+
         <div>
           <p class="text-xs text-gray-400">Catatan</p>
           <p id="dtCatatan" class="mt-0.5 text-sm leading-relaxed text-gray-600">—</p>
         </div>
       </div>
       <div class="flex justify-end gap-2 border-t border-gray-100 px-6 py-4">
+        <button id="btnEditLaporan" type="button" onclick="editDariDetail()"
+          class="hidden items-center gap-2 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125" /></svg>
+          Edit Draft
+        </button>
         <button type="button" onclick="tutupModalDetail()"
           class="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-600 transition hover:bg-gray-50">Tutup</button>
       </div>
@@ -789,6 +879,116 @@
       input.value = v ? Number(v).toLocaleString('id-ID') : '';
     }
     function angkaDariInput(str) { return Number(String(str).replace(/[^\d]/g, '')) || 0; }
+    function nilaiEl(id) { const e = document.getElementById(id); return e ? e.value : ''; }
+
+    // Jenis pelaporan HBW dari submenu (tanah/uang). Default 'uang' (halaman pelaporan program wakaf uang).
+    const JENIS_LAPOR = ((new URLSearchParams(location.search).get('jenis') || 'uang').toLowerCase() === 'tanah') ? 'tanah' : 'uang';
+
+    // Kalkulasi khusus Wakaf Uang: Nilai Aktual otomatis + sisa yang belum disalurkan.
+    function hitungUang() {
+      const v0 = angkaDariInput(nilaiEl('inNilaiAwal'));          // Nilai Terakhir (baseline)
+      const v1str = nilaiEl('inNilaiTerbaru');
+      const v1 = angkaDariInput(v1str);                            // Nilai Terbaru (input)
+      const himpun = angkaDariInput(nilaiEl('inPenghimpunan'));    // Penghimpunan Baru
+      const maq = angkaDariInput(nilaiEl('inMAQ'));
+      const op = angkaDariInput(nilaiEl('inOperasional'));
+      const res = angkaDariInput(nilaiEl('inRestruktur'));
+      const inAktual = document.getElementById('inNilaiAktual');
+      const inOpex = document.getElementById('inBiayaOperasional');
+      const inImbal = document.getElementById('inImbalHasil');
+      const ket = document.getElementById('ketPenyaluran');
+      const warn = document.getElementById('warnPenyaluran');
+
+      // Imbal Hasil = kenaikan − penghimpunan = (Nilai Terbaru − Nilai Terakhir) − Penghimpunan Baru
+      const kenaikan = v1 - v0;
+      const imbal = kenaikan - himpun;
+      const kosong = (v1str.trim() === '');
+
+      // Field kanonik agar hitungSelisih() & simpanLaporan() tetap kompatibel (pakai format ribuan)
+      if (inAktual) inAktual.value = kosong ? '' : formatAngka(v1 > 0 ? v1 : 0);
+      if (inOpex) inOpex.value = op ? formatAngka(op) : '';     // "operasional" penyaluran -> biayaOperasional lama
+      if (inImbal) inImbal.value = kosong ? '' : (imbal < 0 ? '−' + nilaiRp(-imbal) : nilaiRp(imbal));
+
+      // Keterangan % penyaluran terhadap imbal hasil
+      const totalSalur = maq + op + res;
+      const adaSalur = ['inMAQ', 'inOperasional', 'inRestruktur'].some(id => nilaiEl(id).trim() !== '');
+      if (ket) {
+        if (adaSalur && imbal > 0) {
+          const pct = (x) => (Math.round((x / imbal) * 1000) / 10);
+          ket.classList.remove('hidden');
+          ket.innerHTML =
+            'MAQ: <span class="font-semibold text-gray-800">' + pct(maq) + '%</span> · ' +
+            'Operasional: <span class="font-semibold text-gray-800">' + pct(op) + '%</span> · ' +
+            'Restruktur: <span class="font-semibold text-gray-800">' + pct(res) + '%</span> dari imbal hasil ' +
+            '(total ' + nilaiRp(totalSalur) + ' dari ' + nilaiRp(imbal) + ').';
+        } else if (adaSalur) {
+          ket.classList.remove('hidden');
+          ket.innerHTML = 'Imbal hasil belum tersedia (0 atau negatif) — persentase penyaluran belum dapat dihitung.';
+        } else {
+          ket.classList.add('hidden');
+        }
+      }
+      // Peringatan bila total penyaluran melebihi imbal hasil
+      if (warn) {
+        if (totalSalur > imbal && imbal > 0) {
+          warn.classList.remove('hidden'); warn.classList.add('flex');
+          warn.innerHTML = '<svg class="mt-0.5 h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>' +
+            '<span>Total penyaluran (' + nilaiRp(totalSalur) + ') melebihi imbal hasil (' + nilaiRp(imbal) + '). Kurangi salah satu kolom.</span>';
+        } else {
+          warn.classList.add('hidden'); warn.classList.remove('flex');
+        }
+      }
+      hitungSelisih();
+    }
+
+    // Wakaf Tanah: nilai HBW tidak berubah -> Nilai Aktual = Nilai Terakhir (selisih 0).
+    function hitungTanah() {
+      const awal = angkaDariInput(nilaiEl('inNilaiAwal'));
+      const inAktual = document.getElementById('inNilaiAktual');
+      const inOpex = document.getElementById('inBiayaOperasional');
+      if (inAktual) inAktual.value = awal ? String(awal) : '';
+      if (inOpex) inOpex.value = '0';
+    }
+
+    // Set periode ke periode aktif (dari cut-off) dan kunci dropdown-nya.
+    function setPeriodeAktif(periodeVal) {
+      const sel = document.getElementById('inPeriode');
+      if (!sel) return;
+      const c = bacaCutoff();
+      const target = periodeVal || (c && c.periode) || '';
+      let ada = false;
+      Array.from(sel.options).forEach(o => { if (o.value === target) ada = true; });
+      if (target && !ada) { const opt = document.createElement('option'); opt.value = target; opt.textContent = target; sel.appendChild(opt); }
+      sel.value = target;
+      sel.disabled = true;
+      sel.classList.add('cursor-not-allowed', 'bg-gray-100', 'text-gray-500');
+    }
+
+    // Terapkan konteks jenis: tampilkan blok yang sesuai, judul, submenu aktif.
+    function terapkanJenisLapor() {
+      const uang = JENIS_LAPOR === 'uang';
+      const bt = document.getElementById('blokTanah'); if (bt) bt.classList.toggle('hidden', uang);
+      const bu = document.getElementById('blokUang'); if (bu) bu.classList.toggle('hidden', !uang);
+      // Badge selisih hanya relevan untuk uang (tanah tak mengubah nilai)
+      const badge = document.getElementById('badgeSelisih'); if (badge) badge.classList.toggle('hidden', !uang);
+      // Label dropdown: HBW untuk kedua jenis
+      const lbl = document.getElementById('lblProgram');
+      if (lbl) lbl.innerHTML = (uang ? 'HBW yang Dilaporkan' : 'HBW yang Ingin Dilaporkan') + ' <span class="text-red-500">*</span>';
+      const topH = document.getElementById('judulTopbar');
+      const topSub = document.getElementById('subTopbar');
+      if (topH) topH.textContent = uang ? 'Pelaporan Wakaf Uang' : 'Pelaporan Wakaf Tanah';
+      if (topSub) topSub.textContent = uang ? 'Penghimpunan, imbal hasil, penyaluran & operasional nazir' : 'Penyaluran & mauquf alaih HBW wakaf tanah';
+      const h2 = document.getElementById('judulHalaman');
+      const sub = document.getElementById('subJudulHalaman');
+      if (h2) h2.textContent = uang ? 'Laporan Progres Wakaf Uang' : 'Laporan Progres Wakaf Tanah';
+      if (sub) sub.textContent = uang
+        ? 'Jalur pelaporan wakaf uang: penghimpunan, imbal hasil, penyaluran ke mauquf alaih, dan operasional nazir. Nilai terakhir dikunci dari baseline SSOT Master Program.'
+        : 'Jalur pelaporan wakaf tanah: penyaluran & jumlah mauquf alaih. Nilai terakhir dikunci dari nilai HBW yang dipilih.';
+      // Submenu Laporan HBW: buka & tandai anak aktif
+      const det = document.getElementById('menuLaporanHBW'); if (det) det.setAttribute('open', '');
+      const anak = document.querySelector('#menuLaporanHBW a[data-lapor="' + JENIS_LAPOR + '"]');
+      if (anak) { anak.classList.remove('text-gray-400'); anak.classList.add('bg-brand-600', 'text-white'); }
+    }
 
     /* ---------- Konteks & kunci storage ---------- */
     const NIB_LEMBAGA = 'NZHR-BDG-170';
@@ -910,13 +1110,20 @@
     function barisLaporan(d) {
       const tr = document.createElement('tr');
       tr.className = 'transition hover:bg-gray-50';
+      const uang = d.jenis === 'uang';
+      // Wakaf tanah: tanpa perubahan nilai -> tampilkan Penyaluran & Jumlah MAQ
+      const kol1 = uang ? nilaiRp(d.nilaiAkhir) : nilaiRp(Number(d.penyaluran) || 0);
+      const kol2 = uang
+        ? badgePerubahan(d)
+        : '<span class="text-sm text-gray-700">' + (Number(d.mauqufAlaih) || 0).toLocaleString('id-ID') + ' <span class="text-gray-400">penerima</span></span>';
       tr.innerHTML =
         '<td class="px-5 py-4 md:px-6">' +
         '<p class="font-medium text-gray-800">' + amankan(d.namaProgram) + '</p>' +
-        '<span class="mt-0.5 block text-xs font-normal text-gray-400"><span class="font-mono">' + amankan(d.kodeProgram) + '</span> · ' + amankan(d.periode) + '</span>' +
+        '<span class="mt-0.5 block font-mono text-xs font-normal text-gray-400">' + amankan(d.kodeProgram) + '</span>' +
         '</td>' +
-        '<td class="whitespace-nowrap px-5 py-4 font-semibold text-gray-800 md:px-6">' + nilaiRp(d.nilaiAkhir) + '</td>' +
-        '<td class="px-5 py-4 md:px-6">' + badgePerubahan(d) + '</td>' +
+        '<td class="whitespace-nowrap px-5 py-4 text-gray-600 md:px-6">' + amankan(d.periode) + '</td>' +
+        '<td class="whitespace-nowrap px-5 py-4 font-semibold text-gray-800 md:px-6">' + kol1 + '</td>' +
+        '<td class="px-5 py-4 md:px-6">' + kol2 + '</td>' +
         '<td class="px-5 py-4 md:px-6">' + badgeStatus(d) + '</td>' +
         '<td class="px-5 py-4 text-right md:px-6">' + selAksi(d) + '</td>';
       return tr;
@@ -945,14 +1152,19 @@
     function renderRiwayat() {
       const body = document.getElementById('riwayatBody');
       if (!body) return;
-      daftarLaporan = bacaLaporan();
+      // Relabel header kolom sesuai jenis (uang: Nilai Akhir/Perubahan; tanah: Penyaluran/Jumlah MAQ)
+      const k1 = document.getElementById('thKol1'), k2 = document.getElementById('thKol2');
+      if (k1) k1.textContent = JENIS_LAPOR === 'uang' ? 'Nilai Akhir' : 'Penyaluran';
+      if (k2) k2.textContent = JENIS_LAPOR === 'uang' ? 'Perubahan' : 'Jumlah MAQ';
+      // Hanya tampilkan laporan dengan jenis EKSPLISIT sesuai halaman — contoh/seed lama (tanpa jenis) tidak ditampilkan
+      daftarLaporan = bacaLaporan().filter(d => d.jenis === JENIS_LAPOR);
       const tampil = terapkanFilter(daftarLaporan);
 
       body.innerHTML = '';
       if (tampil.length === 0) {
         const tr = document.createElement('tr');
         tr.innerHTML =
-          '<td colspan="5" class="px-6 py-12 text-center">' +
+          '<td colspan="6" class="px-6 py-12 text-center">' +
           '<div class="flex flex-col items-center gap-2 text-gray-400">' +
           '<svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">' +
           '<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>' +
@@ -978,6 +1190,7 @@
 
     /* ---------- Delegasi klik tabel ---------- */
     document.addEventListener('DOMContentLoaded', () => {
+      terapkanJenisLapor();
       renderRiwayat();
       renderBannerCutoff();
       const body = document.getElementById('riwayatBody');
@@ -1111,17 +1324,47 @@
 
     /* ---------- Modal Tambah ---------- */
     let PROGRAM_MAP = {};
+    let HBW_MAP = {};
+
+    // HBW dari Master HBW (localStorage) + seed bawaan agar dropdown tidak kosong.
+    const DEFAULT_HBW = {
+      uang: [{ subId: 'NZHR-BDG-002', nama: 'BSI KCP Sudirman', nilai: 250000000 }],
+      tanah: [{ subId: 'NZHR-BDG-001', nama: 'Tanah Jl. Merdeka', nilai: 2500000000 }],
+    };
+    function bacaHBW(jenis) {
+      let arr = [];
+      try { arr = JSON.parse(localStorage.getItem('data_portofolio_bwi')) || []; } catch (e) { }
+      if (!Array.isArray(arr)) arr = [];
+      const peta = {}; const urut = [];
+      (DEFAULT_HBW[jenis] || []).forEach(h => { peta[h.subId] = h; urut.push(h.subId); });
+      arr.forEach(p => {
+        const j = ((p.jenis === 'uang') || (p.kategoriId && String(p.kategoriId).indexOf('uang') === 0)) ? 'uang' : 'tanah';
+        if (j !== jenis) return;
+        if (p.status && p.status !== 'aktif') return;   // hanya HBW aktif yang dapat dilaporkan
+        // Nilai (Rp): uang -> nilai; tanah -> NILAI PENILAIAN (Rp) dari detailTanah.nilaiAset,
+        // bukan luas (M²). nilaiAset tersimpan sbg string berformat -> strip pemisah ribuan dulu.
+        let nilai = Number(p.nilai) || 0;
+        if (jenis === 'tanah' && p.detailTanah) {
+          const na = Number(String(p.detailTanah.nilaiAset || '').replace(/[^\d]/g, ''));
+          if (na > 0) nilai = na;
+        }
+        if (!(p.subId in peta)) urut.push(p.subId);
+        peta[p.subId] = { subId: p.subId, nama: p.nama || p.subId, nilai: nilai };
+      });
+      return urut.map(id => peta[id]);
+    }
 
     function muatProgramAktif() {
-      const list = bacaProgramAktif();
-      PROGRAM_MAP = {};
+      // Dropdown berisi HBW (Sub-ID) dari Master HBW — untuk tanah maupun uang.
       const sel = document.getElementById('inProgram');
-      let opsi = '<option value="">Pilih Program</option>';
-      list.forEach(p => {
-        PROGRAM_MAP[p.kode] = p;
-        opsi += '<option value="' + amankan(p.kode) + '">' + amankan(p.kode) + ' · ' + amankan(p.nama) + '</option>';
+      HBW_MAP = {};
+      const list = bacaHBW(JENIS_LAPOR);
+      let opsi = '<option value="">Pilih HBW</option>';
+      list.forEach(h => {
+        HBW_MAP[h.subId] = h;
+        opsi += '<option value="' + amankan(h.subId) + '">' + amankan(h.subId) + ' · ' + amankan(h.nama) + '</option>';
       });
-      if (list.length === 0) opsi = '<option value="">Belum ada program aktif</option>';
+      if (list.length === 0) opsi = '<option value="">Belum ada HBW ' + (JENIS_LAPOR === 'uang' ? 'wakaf uang' : 'wakaf tanah') + '</option>';
       sel.innerHTML = opsi;
     }
 
@@ -1140,24 +1383,25 @@
     function pilihProgram() {
       const kode = document.getElementById('inProgram').value;
       const info = document.getElementById('infoAsetProgram');
-      const p = PROGRAM_MAP[kode];
-      if (p) {
-        // SSOT: nilai awal ditarik & DIKUNCI dari nilai BERJALAN program.
-        document.getElementById('inNilaiAwal').value = nilaiRp(baselineSSOT(kode, p));
-        const jml = Array.isArray(p.asetSumber) ? p.asetSumber.length : 0;
-        info.textContent = 'Program ini melebur ' + jml + ' aset sumber. Nilai awal dikunci otomatis dari nilai berjalan program (laporan terakhir / nilai asal bila belum ada).';
+      // Nilai Terakhir dikunci dari nilai HBW terpilih (laporan terakhir / nilai terdaftar).
+      const h = HBW_MAP[kode];
+      if (h) {
+        document.getElementById('inNilaiAwal').value = nilaiRp(baselineSSOT(kode, h));
+        info.textContent = 'Nilai Terakhir dikunci otomatis dari nilai HBW ' + kode + ' (laporan terakhir / nilai terdaftar bila belum ada).';
         info.classList.remove('hidden');
       } else {
         document.getElementById('inNilaiAwal').value = '';
         info.classList.add('hidden');
       }
-      hitungSelisih();
+      if (JENIS_LAPOR === 'uang') hitungUang(); else hitungTanah();
     }
 
     // Smart calculation: selisih = Nilai Aktual − Nilai Awal (baseline SSOT).
     // Bukan input; hasilnya dirender sebagai badge/alert otomatis.
     function hitungSelisih() {
       const badge = document.getElementById('badgeSelisih');
+      // Wakaf Tanah tidak melacak perubahan nilai -> badge disembunyikan.
+      if (JENIS_LAPOR !== 'uang') { if (badge) badge.classList.add('hidden'); return; }
       const adaProgram = !!document.getElementById('inProgram').value;
       const aktualStr = document.getElementById('inNilaiAktual').value;
 
@@ -1185,24 +1429,56 @@
         '<div class="flex items-center justify-between gap-3">' +
         '<span class="text-sm font-semibold">' + judul + '</span>' +
         '<span class="text-lg font-bold">' + tanda + nilaiRp(Math.abs(selisih)) + '</span>' +
-        '</div>' +
-        '<div class="mt-2 border-t border-current/10 pt-2 text-xs opacity-90">' +
-        'Biaya operasional: <span class="font-semibold">' + nilaiRp(opex) + '</span> · ' +
-        'Nilai bersih: <span class="font-semibold">' + (bersih >= 0 ? '+' : '−') + nilaiRp(Math.abs(bersih)) + '</span>' +
         '</div>';
     }
 
+    let idEdit = null;
+    function setVal(id, v) { const e = document.getElementById(id); if (e) e.value = v; }
     function bukaModalTambah() {
       if (!bolehLapor()) { showToast('Periode terkunci. Ajukan buka kunci ke BWI Pusat terlebih dahulu.'); return; }
+      idEdit = null;
+      const jt = document.getElementById('judulModalTambah'); if (jt) jt.textContent = 'Tambah Laporan Program';
       muatProgramAktif();
       document.getElementById('inProgram').selectedIndex = 0;
-      document.getElementById('inPeriode').selectedIndex = 0;
+      setPeriodeAktif();                                   // periode aktif otomatis + terkunci
       document.getElementById('inNilaiAwal').value = '';
       document.getElementById('inNilaiAktual').value = '';
       document.getElementById('inBiayaOperasional').value = '';
       document.getElementById('inCatatan').value = '';
+      // Reset field faktual (uang & tanah)
+      ['inNilaiTerbaru', 'inPenghimpunan', 'inImbalHasil', 'inMAQ', 'inOperasional', 'inRestruktur', 'inJumlahMAQ', 'inPenyaluranTanah', 'inMauqufTanah']
+        .forEach(id => { const e = document.getElementById(id); if (e) e.value = ''; });
+      const ket = document.getElementById('ketPenyaluran'); if (ket) ket.classList.add('hidden');
+      const warn = document.getElementById('warnPenyaluran'); if (warn) { warn.classList.add('hidden'); warn.classList.remove('flex'); }
       document.getElementById('infoAsetProgram').classList.add('hidden');
       hitungSelisih();
+      const m = document.getElementById('modalTambah');
+      m.classList.remove('hidden'); m.classList.add('flex');
+    }
+    // Edit draft: buka modal tambah dalam mode ubah, prefill dari record.
+    function editLaporan(d) {
+      if (!bolehLapor()) { showToast('Periode terkunci. Ajukan buka kunci ke BWI Pusat terlebih dahulu.'); return; }
+      idEdit = d.id;
+      const jt = document.getElementById('judulModalTambah'); if (jt) jt.textContent = 'Edit Draft Laporan';
+      muatProgramAktif();
+      const sel = document.getElementById('inProgram'); if (sel) sel.value = d.kodeProgram;
+      pilihProgram();                                   // set Nilai Terakhir dari baseline
+      setVal('inNilaiAwal', nilaiRp(d.nilaiAwal));      // kunci ke nilai laporan ini (stabil)
+      setPeriodeAktif(d.periode);                        // periode laporan ini + terkunci
+      setVal('inCatatan', d.catatan || '');
+      if (JENIS_LAPOR === 'uang') {
+        setVal('inNilaiTerbaru', formatAngka(Number(d.nilaiAktual) || 0));
+        setVal('inPenghimpunan', formatAngka(Number(d.penghimpunan) || 0));
+        setVal('inMAQ', formatAngka(Number(d.salurMAQ) || 0));
+        setVal('inOperasional', formatAngka(Number(d.salurOperasional) || 0));
+        setVal('inRestruktur', formatAngka(Number(d.salurRestruktur) || 0));
+        setVal('inJumlahMAQ', formatAngka(Number(d.mauqufAlaih) || 0));
+        hitungUang();
+      } else {
+        setVal('inPenyaluranTanah', formatAngka(Number(d.penyaluran) || 0));
+        setVal('inMauqufTanah', formatAngka(Number(d.mauqufAlaih) || 0));
+        hitungTanah();
+      }
       const m = document.getElementById('modalTambah');
       m.classList.remove('hidden'); m.classList.add('flex');
     }
@@ -1222,16 +1498,30 @@
     function simpanLaporan(mode) {
       const kode = document.getElementById('inProgram').value;
       const periode = document.getElementById('inPeriode').value;
-      if (!kode) { showToast('Silakan pilih program terlebih dahulu.'); return; }
-      if (!periode) { showToast('Silakan pilih periode laporan terlebih dahulu.'); return; }
+      if (!kode) { showToast('Silakan pilih HBW terlebih dahulu.'); return; }
+      if (!periode) { showToast('Periode aktif belum tersedia.'); return; }
 
-      const p = PROGRAM_MAP[kode];
+      // Sinkronkan field kanonik & validasi per jenis
+      if (JENIS_LAPOR === 'uang') {
+        hitungUang();
+        if (angkaDariInput(nilaiEl('inNilaiTerbaru')) <= 0) { showToast('Isi Nilai Terbaru terlebih dahulu.'); return; }
+        if (angkaDariInput(nilaiEl('inPenghimpunan')) <= 0) { showToast('Isi Penghimpunan Baru terlebih dahulu.'); return; }
+        const v0u = angkaDariInput(nilaiEl('inNilaiAwal'));
+        const imbalU = (angkaDariInput(nilaiEl('inNilaiTerbaru')) - v0u) - angkaDariInput(nilaiEl('inPenghimpunan'));
+        const totalSalurU = angkaDariInput(nilaiEl('inMAQ')) + angkaDariInput(nilaiEl('inOperasional')) + angkaDariInput(nilaiEl('inRestruktur'));
+        if (totalSalurU > 0 && totalSalurU > imbalU) { showToast('Total penyaluran tidak boleh melebihi imbal hasil.'); return; }
+      } else {
+        hitungTanah();
+        if (angkaDariInput(nilaiEl('inPenyaluranTanah')) <= 0) { showToast('Isi nominal Penyaluran terlebih dahulu.'); return; }
+      }
+
+      const p = HBW_MAP[kode];
       const awal = angkaDariInput(document.getElementById('inNilaiAwal').value);
       const aktual = angkaDariInput(document.getElementById('inNilaiAktual').value);
       const opex = angkaDariInput(document.getElementById('inBiayaOperasional').value);
 
       if (aktual <= 0) {
-        showToast('Isi Nilai Aktual Saat Ini terlebih dahulu.');
+        showToast('Nilai Terakhir HBW belum tersedia — pilih HBW yang benar.');
         return;
       }
 
@@ -1254,8 +1544,34 @@
         catatan: document.getElementById('inCatatan').value.trim()
       };
 
+      // Field khusus Wakaf Uang
+      if (JENIS_LAPOR === 'uang') {
+        const penghimpunan = angkaDariInput(nilaiEl('inPenghimpunan'));
+        const imbalHasil = (aktual - awal) - penghimpunan;   // (Nilai Terbaru − Nilai Terakhir) − Penghimpunan
+        baru.jenis = 'uang';
+        baru.nilaiTerbaru = aktual;
+        baru.penghimpunan = penghimpunan;
+        baru.imbalHasil = imbalHasil;
+        baru.salurMAQ = angkaDariInput(nilaiEl('inMAQ'));
+        baru.salurOperasional = angkaDariInput(nilaiEl('inOperasional'));
+        baru.salurRestruktur = angkaDariInput(nilaiEl('inRestruktur'));
+        baru.mauqufAlaih = angkaDariInput(nilaiEl('inJumlahMAQ'));
+      } else {
+        // Field khusus Wakaf Tanah: hanya penyaluran + jumlah mauquf alaih
+        baru.jenis = 'tanah';
+        baru.penyaluran = angkaDariInput(nilaiEl('inPenyaluranTanah'));
+        baru.mauqufAlaih = angkaDariInput(nilaiEl('inMauqufTanah'));
+      }
+
       const list = ambilLaporanTersimpan();
-      list.unshift(baru);
+      if (idEdit != null) {
+        baru.id = idEdit;                                 // pertahankan id -> update, bukan buat baru
+        const i = list.findIndex(x => String(x.id) === String(idEdit));
+        if (i >= 0) list[i] = baru; else list.unshift(baru);
+        idEdit = null;
+      } else {
+        list.unshift(baru);
+      }
       try { localStorage.setItem(KUNCI_LAPORAN, JSON.stringify(list)); } catch (e) { }
 
       tutupModalTambah();
@@ -1266,11 +1582,20 @@
     }
 
     /* ---------- Modal Detail ---------- */
+    let idDetail = null;
     function bukaModalDetail(id) {
       const d = daftarLaporan.find(x => String(x.id) === String(id));
       if (!d) return;
+      idDetail = id;
       document.getElementById('dtNama').textContent = d.namaProgram;
       document.getElementById('dtSub').textContent = d.kodeProgram + ' · ' + d.periode;
+      const uang = (d.jenis === 'uang') || (d.jenis !== 'tanah' && JENIS_LAPOR === 'uang');
+      document.getElementById('dtLblAwal').textContent = uang ? 'Nilai Terakhir' : 'Nilai HBW';
+      document.getElementById('dtLblAkhir').textContent = uang ? 'Nilai Terbaru' : 'Nilai HBW';
+      // Wakaf tanah: tanpa perubahan nilai -> sembunyikan Nilai Terbaru duplikat, Kenaikan & Penyusutan
+      ['cellAkhir', 'cellKenaikan', 'cellPenyusutan'].forEach(id => {
+        const e = document.getElementById(id); if (e) e.classList.toggle('hidden', !uang);
+      });
       document.getElementById('dtAwal').textContent = nilaiRp(d.nilaiAwal);
       document.getElementById('dtAkhir').textContent = nilaiRp(d.nilaiAkhir);
       document.getElementById('dtKenaikan').textContent = '+' + nilaiRp(d.kenaikan);
@@ -1278,8 +1603,55 @@
       document.getElementById('dtStatus').innerHTML = badgeStatus(d);
       document.getElementById('dtTanggal').textContent = d.tanggal || '—';
       document.getElementById('dtCatatan').textContent = d.catatan || '—';
+
+      // Rincian khusus Wakaf Uang
+      const bu = document.getElementById('dtUang');
+      if (uang && bu) {
+        bu.classList.remove('hidden');
+        const imbal = Number(d.imbalHasil) || 0;
+        const maq = Number(d.salurMAQ) || 0, op = Number(d.salurOperasional) || 0, res = Number(d.salurRestruktur) || 0;
+        document.getElementById('dtPenghimpunan').textContent = nilaiRp(Number(d.penghimpunan) || 0);
+        document.getElementById('dtImbal').textContent = (imbal < 0 ? '−' + nilaiRp(-imbal) : nilaiRp(imbal));
+        document.getElementById('dtMAQ').textContent = nilaiRp(maq);
+        document.getElementById('dtOp').textContent = nilaiRp(op);
+        document.getElementById('dtRes').textContent = nilaiRp(res);
+        const pct = (x) => (imbal > 0 ? (Math.round((x / imbal) * 1000) / 10) + '% dari imbal hasil' : '');
+        document.getElementById('dtMAQpct').textContent = pct(maq);
+        document.getElementById('dtOppct').textContent = pct(op);
+        document.getElementById('dtRespct').textContent = pct(res);
+        document.getElementById('dtJumlahMAQ').textContent = (Number(d.mauqufAlaih) || 0).toLocaleString('id-ID') + ' penerima';
+      } else if (bu) {
+        bu.classList.add('hidden');
+      }
+
+      // Rincian khusus Wakaf Tanah
+      const btn = document.getElementById('dtTanah');
+      if (btn) {
+        if (!uang) {
+          btn.classList.remove('hidden');
+          document.getElementById('dtSalurTanah').textContent = nilaiRp(Number(d.penyaluran) || 0);
+          document.getElementById('dtMauqufTanah').textContent = (Number(d.mauqufAlaih) || 0).toLocaleString('id-ID') + ' penerima';
+        } else {
+          btn.classList.add('hidden');
+        }
+      }
+
+      // Tombol Edit hanya untuk status Draft
+      const btnEdit = document.getElementById('btnEditLaporan');
+      if (btnEdit) {
+        const editable = statusKategori(d.status) === 'draft';
+        btnEdit.classList.toggle('hidden', !editable);
+        btnEdit.classList.toggle('inline-flex', editable);
+      }
+
       const m = document.getElementById('modalDetail');
       m.classList.remove('hidden'); m.classList.add('flex');
+    }
+    function editDariDetail() {
+      if (idDetail == null) return;
+      const d = daftarLaporan.find(x => String(x.id) === String(idDetail));
+      tutupModalDetail();
+      if (d) editLaporan(d);
     }
     function tutupModalDetail() {
       const m = document.getElementById('modalDetail');
