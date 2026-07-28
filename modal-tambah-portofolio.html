@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tambah Portofolio Aset (Sub-ID) | Modul Kenazhiran BWI Superapps</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- React + ReactDOM + Babel -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tipografi Outfit (Google Fonts) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Outfit', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+          // Identitas eksklusif Modul Kenazhiran = DEEP TEAL
+          colors: {
+            brand: {
+              50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 300: '#5eead4', 400: '#2dd4bf',
+              500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a',
+            }
+          },
+          maxWidth: { 'screen-2xl': '1536px' },
+          boxShadow: {
+            'default': '0px 8px 13px -3px rgba(0, 0, 0, 0.07)',
+            'card': '0px 1px 3px rgba(0, 0, 0, 0.06), 0px 1px 2px rgba(0, 0, 0, 0.04)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body, html { font-family: 'Outfit', sans-serif !important; }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    #sidebar ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .18); }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(12px) scale(.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .modal-in { animation: modalIn .22s cubic-bezier(.4, 0, .2, 1); }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .fade-in { animation: fadeIn .18s ease-out; }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useMemo, useEffect } = React;
+
+    /* =========================================================
+       IKON — inline SVG (tanpa emoji)
+       ========================================================= */
+    const Icon = ({ name, className = "h-5 w-5" }) => {
+      const paths = {
+        sertifikat: <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 0 0 2.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 0 1 2.916.52 6.003 6.003 0 0 1-5.395 4.972m0 0a6.726 6.726 0 0 1-2.749 1.35m0 0a6.772 6.772 0 0 1-3.044 0" />,
+        kartu: <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm.375 0h.007v.008h-.007V12Zm-3.75 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z" />,
+        bangunan: <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />,
+        dokumen: <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />,
+        arsip: <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />,
+        keluar: <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />,
+        menu: <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />,
+        silang: <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />,
+        cari: <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />,
+        lonceng: <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />,
+        chevron: <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />,
+        tambah: <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />,
+        centang: <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />,
+        centangLingkaran: <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />,
+        uang: <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />,
+        tanah: <path strokeLinecap="round" strokeLinejoin="round" d="m17 14 3 3.3a1 1 0 0 1-.7 1.7H4.7a1 1 0 0 1-.7-1.7L7 14h-.3a1 1 0 0 1-.7-1.7L9 9h-.2A1 1 0 0 1 8 7.3L12 3l4 4.3a1 1 0 0 1-.8 1.7H15l3 3.3a1 1 0 0 1-.7 1.7H17Z" />,
+        unggah: <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />,
+        info: <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />,
+        peringatan: <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />,
+        sampah: <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916" />,
+        kembali: <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />,
+        berkas: <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m6.75 12H8.25m6.75-3H8.25m2.25-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />,
+        gembok: <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />,
+      };
+      return (
+        <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth="1.7" stroke="currentColor">
+          {paths[name]}
+        </svg>
+      );
+    };
+
+    /* =========================================================
+       KONFIGURASI DOMAIN
+       ========================================================= */
+    const NIB_LEMBAGA = 'NZHR-BDG-170';
+    const PREFIX_NIB = NIB_LEMBAGA.replace(/-\d+$/, '');   // 'NZHR-BDG'
+
+    // Dokumen wajib per kategori — dasar conditional rendering
+    const DOKUMEN_WAJIB = {
+      uang: [
+        { key: 'lkspwu', label: 'Dokumen Rekomendasi LKS PWU', hint: 'Surat rekomendasi dari Lembaga Keuangan Syariah Penerima Wakaf Uang' },
+        { key: 'operasional', label: 'Surat Pernyataan Memiliki Biaya Operasional', hint: 'Pernyataan kesanggupan menanggung biaya operasional pengelolaan' },
+      ],
+      tanah: [
+        { key: 'bpn', label: 'Sertifikat BPN', hint: 'Sertifikat hak atas tanah yang diterbitkan Badan Pertanahan Nasional' },
+        { key: 'aiw', label: 'AIW (Akta Ikrar Wakaf)', hint: 'Akta Ikrar Wakaf yang dibuat di hadapan PPAIW' },
+      ],
+    };
+
+    const KATEGORI = [
+      { id: 'uang', nama: 'Wakaf Uang', ikon: 'uang', satuan: 'Rp', keterangan: 'Setoran wakaf tunai melalui LKS PWU' },
+      { id: 'tanah', nama: 'Wakaf Tanah', ikon: 'tanah', satuan: 'M²', keterangan: 'Tanah wakaf bersertifikat & ber-AIW' },
+    ];
+
+    const SYARAT_LEGAL = [
+      { key: 'laporRutin', teks: 'Saya bersedia menyampaikan laporan mutasi wakaf secara rutin/bulanan.' },
+      { key: 'bersediaAudit', teks: 'Saya bersedia diaudit terkait laporan pengelolaan portofolio wakaf ini.' },
+    ];
+
+    const formatAngka = (n) => {
+      const angka = Number(String(n).replace(/[^\d]/g, ''));
+      return isNaN(angka) ? '' : angka.toLocaleString('id-ID');
+    };
+
+    /* =========================================================
+       KOMPONEN: Sidebar (layout eksisting — dipertahankan)
+       ========================================================= */
+    const Sidebar = ({ terbuka, tutup }) => {
+      const menu = [
+        { label: 'Dashboard NIB', ikon: 'kartu', aktif: false },
+        { label: 'Master Aset & Portofolio', ikon: 'bangunan', aktif: true },
+        { label: 'Pelaporan Mutasi Aset', ikon: 'dokumen', aktif: false },
+        { label: 'Riwayat & Dokumen', ikon: 'arsip', aktif: false },
+      ];
+
+      return (
+        <aside
+          id="sidebar"
+          className={`absolute left-0 top-0 z-50 flex h-screen w-[290px] flex-col overflow-y-hidden bg-brand-900 duration-300 ease-linear lg:static lg:translate-x-0 ${terbuka ? 'translate-x-0' : '-translate-x-full'}`}
+        >
+          {/* Header sidebar */}
+          <div className="flex h-[72px] items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
+            <a href="#" className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
+                <Icon name="sertifikat" className="h-6 w-6 text-white" />
+              </span>
+              <span className="leading-tight">
+                <span className="block text-base font-bold text-white">BWI Superapps</span>
+                <span className="block text-[11px] font-medium text-brand-300">Modul Kenazhiran</span>
+              </span>
+            </a>
+            <button onClick={tutup} className="block text-white/70 hover:text-white lg:hidden">
+              <Icon name="silang" className="h-6 w-6" />
+            </button>
+          </div>
+
+          {/* Menu */}
+          <div className="flex flex-col overflow-y-auto duration-300 ease-linear">
+            <nav className="mt-1 px-4 py-4 lg:px-6">
+              <h3 className="mb-4 ml-3 text-xs font-semibold uppercase tracking-wider text-brand-400">Menu Nazhir</h3>
+              <ul className="mb-6 flex flex-col gap-1.5">
+                {menu.map((m) => (
+                  <li key={m.label}>
+                    <a
+                      href="#"
+                      className={`flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium duration-300 ease-in-out ${
+                        m.aktif
+                          ? 'bg-brand-600 text-white shadow-sm'
+                          : 'text-gray-300 hover:bg-white/10 hover:text-white'
+                      }`}
+                    >
+                      <Icon name={m.ikon} className="h-5 w-5 shrink-0" />
+                      <span>{m.label}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+
+          {/* Footer sidebar */}
+          <div className="mt-auto border-t border-white/10 p-4 lg:p-6">
+            <div className="mb-3 flex items-center gap-3 rounded-lg bg-white/5 px-3 py-2.5">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">YN</span>
+              <span className="min-w-0">
+                <span className="block truncate text-sm font-semibold text-white">Yayasan Wakaf Nusantara</span>
+                <span className="block truncate text-[11px] text-gray-400">Nazhir Aktif</span>
+              </span>
+            </div>
+            <button className="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
+              <Icon name="keluar" className="h-5 w-5 shrink-0" />
+              Keluar
+            </button>
+          </div>
+        </aside>
+      );
+    };
+
+    /* =========================================================
+       KOMPONEN: Header (layout eksisting — dipertahankan)
+       ========================================================= */
+    const Header = ({ bukaSidebar }) => (
+      <header className="sticky top-0 z-30 flex w-full border-b border-gray-200 bg-white">
+        <div className="flex flex-grow items-center justify-between gap-3 px-4 py-4 md:px-6 2xl:px-11">
+          <div className="flex min-w-0 items-center gap-3">
+            <button
+              onClick={bukaSidebar}
+              className="z-50 block rounded-lg border border-gray-200 bg-white p-2 text-gray-500 hover:text-brand-700 lg:hidden"
+            >
+              <Icon name="menu" className="h-5 w-5" />
+            </button>
+            <div className="min-w-0">
+              <h1 className="truncate text-lg font-bold leading-tight text-gray-800">Master Aset &amp; Portofolio</h1>
+              <p className="truncate text-xs text-gray-400">Pilar NIB Tunggal — satu identitas, banyak aset</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 2xsm:gap-5">
+            <div className="hidden xl:block">
+              <div className="relative">
+                <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                  <Icon name="cari" className="h-5 w-5" />
+                </span>
+                <input
+                  type="text"
+                  placeholder="Cari Sub-ID / aset..."
+                  className="w-64 rounded-lg border border-gray-200 bg-gray-50 py-2.5 pl-10 pr-4 text-sm outline-none focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-100"
+                />
+              </div>
+            </div>
+
+            <button className="relative flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-gray-500 hover:text-brand-700">
+              <span className="absolute -top-0.5 right-0 z-10 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white"></span>
+              <Icon name="lonceng" className="h-5 w-5" />
+            </button>
+
+            <div className="flex items-center gap-3">
+              <span className="hidden text-right lg:block">
+                <span className="block text-sm font-semibold leading-tight text-gray-800">Yayasan Wakaf Nusantara</span>
+                <span className="block text-xs font-medium text-brand-600">Nazhir Aktif</span>
+              </span>
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 text-sm font-bold text-brand-700">YN</span>
+              <Icon name="chevron" className="hidden h-4 w-4 text-gray-400 sm:block" />
+            </div>
+          </div>
+        </div>
+      </header>
+    );
+
+    /* =========================================================
+       KOMPONEN: Field unggah dokumen (conditional)
+       ========================================================= */
+    const FieldUnggah = ({ dok, berkas, onPilih, onHapus }) => (
+      <div className="fade-in">
+        <label className="mb-1.5 block text-sm font-semibold text-gray-700">
+          {dok.label} <span className="text-red-500">*</span>
+        </label>
+
+        {!berkas ? (
+          <label
+            htmlFor={`file-${dok.key}`}
+            className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 px-4 py-6 text-center transition hover:border-brand-400 hover:bg-brand-50/40"
+          >
+            <Icon name="unggah" className="h-7 w-7 text-gray-400" />
+            <span className="text-sm text-gray-500">
+              Drag &amp; Drop berkas atau <span className="font-semibold text-brand-700">Browse</span>
+            </span>
+            <span className="text-xs text-gray-400">Format .pdf / .jpg / .png &middot; maks. 5 MB</span>
+            <input
+              id={`file-${dok.key}`}
+              type="file"
+              className="hidden"
+              accept=".pdf,.jpg,.jpeg,.png"
+              onChange={(e) => onPilih(dok.key, e.target.files && e.target.files[0])}
+            />
+          </label>
+        ) : (
+          <div className="flex items-center justify-between gap-3 rounded-xl border border-brand-200 bg-brand-50 px-4 py-3">
+            <div className="flex min-w-0 items-center gap-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-brand-600">
+                <Icon name="berkas" className="h-5 w-5" />
+              </span>
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold text-gray-800">{berkas.nama}</p>
+                <p className="text-xs text-brand-700">{berkas.ukuran} &middot; Siap diunggah</p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => onHapus(dok.key)}
+              title="Hapus berkas"
+              className="inline-flex shrink-0 items-center justify-center rounded-lg border border-gray-300 bg-white p-2 text-gray-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-600"
+            >
+              <Icon name="sampah" className="h-4 w-4" />
+            </button>
+          </div>
+        )}
+
+        <p className="mt-1.5 text-xs text-gray-400">{dok.hint}</p>
+      </div>
+    );
+
+    /* =========================================================
+       KOMPONEN: Modal Tambah Portofolio Aset (Sub-ID)
+       ========================================================= */
+    const ModalTambahPortofolio = ({ terbuka, tutup, onSimpan, subIdBerikutnya }) => {
+      const [nama, setNama] = useState('');
+      const [nilai, setNilai] = useState('');
+      const [kategori, setKategori] = useState('');
+      const [berkas, setBerkas] = useState({});
+      const [syarat, setSyarat] = useState({ laporRutin: false, bersediaAudit: false });
+      const [sentuh, setSentuh] = useState(false);
+
+      // Reset form setiap kali modal dibuka
+      useEffect(() => {
+        if (terbuka) {
+          setNama(''); setNilai(''); setKategori('');
+          setBerkas({}); setSyarat({ laporRutin: false, bersediaAudit: false });
+          setSentuh(false);
+        }
+      }, [terbuka]);
+
+      const kategoriAktif = KATEGORI.find((k) => k.id === kategori);
+      const dokumenWajib = kategori ? DOKUMEN_WAJIB[kategori] : [];
+
+      // Ganti kategori -> berkas lama tidak relevan lagi
+      const pilihKategori = (id) => {
+        setKategori(id);
+        setBerkas({});
+      };
+
+      const pilihBerkas = (key, file) => {
+        if (!file) return;
+        setBerkas((prev) => ({
+          ...prev,
+          [key]: { nama: file.name, ukuran: (file.size / 1024).toFixed(0) + ' KB' },
+        }));
+      };
+
+      const hapusBerkas = (key) => {
+        setBerkas((prev) => {
+          const salinan = { ...prev };
+          delete salinan[key];
+          return salinan;
+        });
+      };
+
+      const toggleSyarat = (key) =>
+        setSyarat((prev) => ({ ...prev, [key]: !prev[key] }));
+
+      // Kedua checkbox legal WAJIB dicentang
+      const semuaSyaratDisetujui = syarat.laporRutin && syarat.bersediaAudit;
+      const dokumenLengkap = dokumenWajib.length > 0 && dokumenWajib.every((d) => berkas[d.key]);
+      const dasarLengkap = nama.trim() !== '' && nilai !== '' && kategori !== '';
+
+      const bolehSimpan = dasarLengkap && dokumenLengkap && semuaSyaratDisetujui;
+
+      const simpan = () => {
+        setSentuh(true);
+        if (!bolehSimpan) return;
+        onSimpan({
+          subId: subIdBerikutnya,
+          nama: nama.trim(),
+          kategori: kategoriAktif.nama,
+          kategoriId: kategori,
+          satuan: kategoriAktif.satuan,
+          nilai: Number(String(nilai).replace(/[^\d]/g, '')) || 0,
+          dokumen: Object.keys(berkas).length,
+        });
+      };
+
+      if (!terbuka) return null;
+
+      return (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/50" onClick={tutup}></div>
+
+          <div className="modal-in relative flex max-h-[92vh] w-full max-w-2xl flex-col rounded-2xl bg-white shadow-2xl">
+
+            {/* Header modal */}
+            <div className="flex items-start justify-between gap-3 border-b border-gray-100 px-6 py-5">
+              <div>
+                <h3 className="text-lg font-bold text-gray-800">Tambah Portofolio Aset (Sub-ID)</h3>
+                <p className="mt-0.5 text-xs text-gray-400">
+                  Aset baru akan terdaftar sebagai{' '}
+                  <span className="font-mono font-semibold text-brand-700">{subIdBerikutnya}</span> di bawah NIB{' '}
+                  <span className="font-mono font-semibold text-gray-500">{NIB_LEMBAGA}</span>.
+                </p>
+              </div>
+              <button onClick={tutup} className="text-gray-400 transition hover:text-gray-600">
+                <Icon name="silang" className="h-6 w-6" />
+              </button>
+            </div>
+
+            {/* Body modal (scrollable) */}
+            <div className="space-y-6 overflow-y-auto px-6 py-5">
+
+              {/* SECTION 1 — Data dasar aset */}
+              <div>
+                <h4 className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-gray-500">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-50 text-[11px] font-bold text-brand-700">1</span>
+                  Data Dasar Aset
+                </h4>
+
+                <div className="grid grid-cols-1 gap-x-5 gap-y-4 md:grid-cols-2">
+                  <div className="md:col-span-2">
+                    <label className="mb-1.5 block text-sm font-semibold text-gray-700">
+                      Nama / Lokasi Aset <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={nama}
+                      onChange={(e) => setNama(e.target.value)}
+                      placeholder="mis. Tanah Wakaf Jl. Merdeka, Semarang"
+                      className={`w-full rounded-lg border bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-brand-100 ${
+                        sentuh && !nama.trim() ? 'border-red-300 focus:border-red-500' : 'border-gray-200 focus:border-brand-500'
+                      }`}
+                    />
+                    {sentuh && !nama.trim() && (
+                      <p className="mt-1.5 text-xs font-medium text-red-600">Nama / lokasi aset wajib diisi.</p>
+                    )}
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="mb-1.5 block text-sm font-semibold text-gray-700">
+                      Nilai / Luas Dasar <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        value={nilai}
+                        onChange={(e) => setNilai(formatAngka(e.target.value))}
+                        placeholder="0"
+                        className={`w-full rounded-lg border bg-white py-2.5 pl-4 pr-16 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-brand-100 ${
+                          sentuh && !nilai ? 'border-red-300 focus:border-red-500' : 'border-gray-200 focus:border-brand-500'
+                        }`}
+                      />
+                      <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 rounded-md bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-500">
+                        {kategoriAktif ? kategoriAktif.satuan : '—'}
+                      </span>
+                    </div>
+                    <p className="mt-1.5 text-xs text-gray-400">
+                      Satuan menyesuaikan kategori wakaf yang dipilih (Rupiah untuk Wakaf Uang, M² untuk Wakaf Tanah).
+                    </p>
+                    {sentuh && !nilai && (
+                      <p className="mt-1 text-xs font-medium text-red-600">Nilai / luas dasar wajib diisi.</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* SECTION 2 — Kategori wakaf */}
+              <div>
+                <h4 className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-gray-500">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-50 text-[11px] font-bold text-brand-700">2</span>
+                  Kategori Wakaf
+                </h4>
+
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {KATEGORI.map((k) => {
+                    const aktif = kategori === k.id;
+                    return (
+                      <button
+                        key={k.id}
+                        type="button"
+                        onClick={() => pilihKategori(k.id)}
+                        className={`flex items-start gap-3 rounded-xl border-2 p-4 text-left transition ${
+                          aktif
+                            ? 'border-brand-500 bg-brand-50 ring-2 ring-brand-100'
+                            : 'border-gray-200 bg-white hover:border-brand-300 hover:bg-brand-50/40'
+                        }`}
+                      >
+                        <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${aktif ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-500'}`}>
+                          <Icon name={k.ikon} className="h-5 w-5" />
+                        </span>
+                        <span className="min-w-0">
+                          <span className="flex items-center gap-1.5">
+                            <span className={`text-sm font-bold ${aktif ? 'text-brand-800' : 'text-gray-800'}`}>{k.nama}</span>
+                            {aktif && <Icon name="centangLingkaran" className="h-4 w-4 text-brand-600" />}
+                          </span>
+                          <span className="mt-0.5 block text-xs text-gray-500">{k.keterangan}</span>
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {sentuh && !kategori && (
+                  <p className="mt-2 text-xs font-medium text-red-600">Silakan pilih kategori wakaf terlebih dahulu.</p>
+                )}
+              </div>
+
+              {/* SECTION 3 — Dokumen wajib (CONDITIONAL RENDERING) */}
+              <div>
+                <h4 className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-gray-500">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-50 text-[11px] font-bold text-brand-700">3</span>
+                  Dokumen Persyaratan
+                </h4>
+
+                {!kategori ? (
+                  <div className="flex items-start gap-3 rounded-xl border border-dashed border-gray-300 bg-gray-50 px-4 py-6">
+                    <Icon name="info" className="mt-0.5 h-5 w-5 shrink-0 text-gray-400" />
+                    <p className="text-sm text-gray-500">
+                      Pilih kategori wakaf di atas untuk menampilkan dokumen persyaratan yang harus diunggah.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="fade-in space-y-4">
+                    <div className="flex items-start gap-3 rounded-xl border border-brand-100 bg-brand-50 px-4 py-3">
+                      <Icon name="info" className="mt-0.5 h-5 w-5 shrink-0 text-brand-600" />
+                      <p className="text-xs leading-relaxed text-brand-800">
+                        Kategori <span className="font-semibold">{kategoriAktif.nama}</span> mensyaratkan{' '}
+                        <span className="font-semibold">{dokumenWajib.length} dokumen</span> berikut. Seluruh berkas wajib
+                        diunggah sebelum portofolio dapat disimpan.
+                      </p>
+                    </div>
+
+                    {dokumenWajib.map((dok) => (
+                      <FieldUnggah
+                        key={dok.key}
+                        dok={dok}
+                        berkas={berkas[dok.key]}
+                        onPilih={pilihBerkas}
+                        onHapus={hapusBerkas}
+                      />
+                    ))}
+
+                    {sentuh && !dokumenLengkap && (
+                      <p className="text-xs font-medium text-red-600">
+                        Seluruh dokumen persyaratan wajib diunggah.
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* SECTION 4 — Syarat & ketentuan legal (pengganti dokumen fisik) */}
+              <div>
+                <h4 className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-gray-500">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-50 text-[11px] font-bold text-brand-700">4</span>
+                  Syarat &amp; Ketentuan Legal
+                </h4>
+
+                <div className="space-y-2.5 rounded-xl border border-amber-200 bg-amber-50 p-4">
+                  <div className="flex items-start gap-2.5 pb-1">
+                    <Icon name="peringatan" className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+                    <p className="text-xs leading-relaxed text-amber-800">
+                      Pernyataan digital berikut menggantikan surat pernyataan fisik dan mengikat secara hukum.
+                      Keduanya <span className="font-semibold">wajib disetujui</span> untuk melanjutkan.
+                    </p>
+                  </div>
+
+                  {SYARAT_LEGAL.map((s) => (
+                    <label
+                      key={s.key}
+                      className={`flex cursor-pointer items-start gap-3 rounded-lg border bg-white p-3.5 transition ${
+                        syarat[s.key] ? 'border-brand-300 ring-1 ring-brand-100' : 'border-gray-200 hover:border-brand-300'
+                      }`}
+                    >
+                      <span className="relative flex h-5 w-5 shrink-0 items-center justify-center pt-0.5">
+                        <input
+                          type="checkbox"
+                          checked={syarat[s.key]}
+                          onChange={() => toggleSyarat(s.key)}
+                          className="peer sr-only"
+                        />
+                        <span
+                          className={`flex h-5 w-5 items-center justify-center rounded border-2 transition ${
+                            syarat[s.key] ? 'border-brand-600 bg-brand-600' : 'border-gray-300 bg-white'
+                          }`}
+                        >
+                          {syarat[s.key] && (
+                            <svg className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="3.5" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+                          )}
+                        </span>
+                      </span>
+                      <span className={`text-sm leading-relaxed ${syarat[s.key] ? 'font-medium text-gray-800' : 'text-gray-600'}`}>
+                        {s.teks}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+
+                {sentuh && !semuaSyaratDisetujui && (
+                  <p className="mt-2 text-xs font-medium text-red-600">
+                    Kedua pernyataan legal wajib disetujui sebelum menyimpan.
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Footer modal */}
+            <div className="flex flex-col-reverse items-stretch gap-2 border-t border-gray-100 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+              <p className="flex items-center gap-1.5 text-xs text-gray-400">
+                <Icon name="gembok" className="h-4 w-4 shrink-0" />
+                {bolehSimpan ? 'Semua persyaratan terpenuhi.' : 'Lengkapi seluruh isian & pernyataan legal.'}
+              </p>
+
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={tutup}
+                  className="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-600 transition hover:bg-gray-50"
+                >
+                  Batal
+                </button>
+                <button
+                  type="button"
+                  onClick={simpan}
+                  disabled={!bolehSimpan}
+                  className={`inline-flex items-center gap-2 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition ${
+                    bolehSimpan ? 'hover:bg-brand-700' : 'cursor-not-allowed opacity-50'
+                  }`}
+                >
+                  <Icon name="centang" className="h-5 w-5" />
+                  Simpan Portofolio
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    /* =========================================================
+       KOMPONEN: Toast
+       ========================================================= */
+    const Toast = ({ pesan }) => {
+      if (!pesan) return null;
+      return (
+        <div className="fixed bottom-6 right-6 z-[80] flex max-w-sm items-center gap-3 rounded-xl bg-gray-900 px-5 py-3 text-sm font-medium text-white shadow-2xl">
+          <Icon name="centangLingkaran" className="h-5 w-5 shrink-0 text-brand-400" />
+          <span>{pesan}</span>
+        </div>
+      );
+    };
+
+    /* =========================================================
+       KOMPONEN UTAMA
+       ========================================================= */
+    const App = () => {
+      const [sidebarTerbuka, setSidebarTerbuka] = useState(false);
+      const [modalTerbuka, setModalTerbuka] = useState(false);
+      const [toast, setToast] = useState('');
+
+      const [portofolio, setPortofolio] = useState([
+        { subId: PREFIX_NIB + '-001', nama: 'Tanah Jl. Merdeka', lokasi: 'Semarang, Jawa Tengah', kategori: 'Wakaf Tanah', kategoriId: 'tanah', satuan: 'M²', nilai: 500, status: 'Aktif' },
+        { subId: PREFIX_NIB + '-002', nama: 'BSI KCP Sudirman', lokasi: 'Rek. Wakaf Produktif', kategori: 'Wakaf Uang', kategoriId: 'uang', satuan: 'Rp', nilai: 1000000000, status: 'Aktif' },
+      ]);
+
+      // Sub-ID selalu diturunkan dari prefix NIB lembaga
+      const subIdBerikutnya = useMemo(
+        () => PREFIX_NIB + '-' + String(portofolio.length + 1).padStart(3, '0'),
+        [portofolio.length]
+      );
+
+      const tampilkanToast = (pesan) => {
+        setToast(pesan);
+        setTimeout(() => setToast(''), 3600);
+      };
+
+      const simpanPortofolio = (data) => {
+        setPortofolio((prev) => [
+          ...prev,
+          {
+            subId: data.subId,
+            nama: data.nama,
+            lokasi: data.kategoriId === 'uang' ? 'Rek. Wakaf Produktif' : 'Lokasi aset wakaf',
+            kategori: data.kategori,
+            kategoriId: data.kategoriId,
+            satuan: data.satuan,
+            nilai: data.nilai,
+            status: 'Menunggu Validasi',
+          },
+        ]);
+        setModalTerbuka(false);
+        tampilkanToast(`Portofolio ${data.subId} berhasil ditambahkan dengan ${data.dokumen} dokumen persyaratan.`);
+      };
+
+      const tampilNilai = (p) =>
+        p.satuan === 'Rp' ? 'Rp ' + p.nilai.toLocaleString('id-ID') : p.nilai.toLocaleString('id-ID') + ' M²';
+
+      return (
+        <div className="flex h-screen overflow-hidden">
+          <Sidebar terbuka={sidebarTerbuka} tutup={() => setSidebarTerbuka(false)} />
+
+          {/* Overlay mobile */}
+          {sidebarTerbuka && (
+            <div
+              onClick={() => setSidebarTerbuka(false)}
+              className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+            ></div>
+          )}
+
+          <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+            <Header bukaSidebar={() => setSidebarTerbuka(true)} />
+
+            <main>
+              <div className="mx-auto max-w-screen-2xl space-y-6 p-4 md:p-6">
+
+                {/* Judul halaman */}
+                <div>
+                  <h2 className="text-xl font-bold text-gray-800 md:text-2xl">Master Data Aset &amp; Portofolio Wakaf</h2>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Seluruh aset wakaf lembaga Anda terkonsolidasi dalam satu Nomor Induk BWI (NIB) — tanpa perlu mendaftar akun lembaga baru.
+                  </p>
+                </div>
+
+                {/* Kartu NIB */}
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-800 to-brand-600 p-6 shadow-default md:p-8">
+                  <div className="relative z-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                    <div>
+                      <div className="flex items-center gap-2.5">
+                        <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/15">
+                          <Icon name="kartu" className="h-5 w-5 text-white" />
+                        </span>
+                        <span className="text-sm font-semibold text-brand-100">Nomor Induk BWI (NIB)</span>
+                      </div>
+                      <h2 className="mt-3 font-mono text-3xl font-bold tracking-wider text-white md:text-4xl">{NIB_LEMBAGA}</h2>
+                      <p className="mt-1 text-sm text-brand-100">Satu Identitas untuk Seluruh Pengelolaan Aset Wakaf Anda.</p>
+                    </div>
+
+                    <div className="flex items-center gap-3 rounded-xl bg-white/10 px-5 py-4 backdrop-blur-sm">
+                      <Icon name="bangunan" className="h-7 w-7 text-white" />
+                      <div>
+                        <p className="text-2xl font-bold text-white">{portofolio.length} Sub-ID</p>
+                        <p className="text-xs text-brand-100">Portofolio Aktif</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute -right-10 -top-10 h-48 w-48 rounded-full bg-white/5"></div>
+                  <div className="absolute -bottom-16 right-24 h-56 w-56 rounded-full bg-white/5"></div>
+                </div>
+
+                {/* Card tabel portofolio */}
+                <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+                  <div className="flex flex-col gap-3 border-b border-gray-100 px-5 py-4 md:flex-row md:items-center md:justify-between md:px-6">
+                    <div>
+                      <h3 className="text-base font-bold text-gray-800">Daftar Portofolio Aset Terdaftar</h3>
+                      <p className="text-xs text-gray-400">Seluruh Sub-ID aset yang berada di bawah satu NIB lembaga.</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setModalTerbuka(true)}
+                      className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-brand-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-200"
+                    >
+                      <Icon name="tambah" className="h-5 w-5" />
+                      Tambah Portofolio Baru
+                    </button>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full min-w-[880px] text-sm">
+                      <thead>
+                        <tr className="border-b border-gray-100 bg-gray-50 text-left">
+                          <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Sub-ID Aset</th>
+                          <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Kategori Wakaf</th>
+                          <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Nama / Lokasi Aset</th>
+                          <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Nilai / Luas Dasar</th>
+                          <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100">
+                        {portofolio.map((p) => {
+                          const uang = p.kategoriId === 'uang';
+                          const aktif = p.status === 'Aktif';
+                          return (
+                            <tr key={p.subId} className="transition hover:bg-gray-50">
+                              <td className="whitespace-nowrap px-5 py-4 font-mono text-xs font-semibold text-gray-700 md:px-6">{p.subId}</td>
+                              <td className="px-5 py-4 md:px-6">
+                                <span className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium ${uang ? 'bg-blue-50 text-blue-700' : 'bg-purple-50 text-purple-700'}`}>
+                                  <Icon name={uang ? 'uang' : 'tanah'} className="h-3.5 w-3.5" />
+                                  {p.kategori}
+                                </span>
+                              </td>
+                              <td className="px-5 py-4 md:px-6">
+                                <p className="font-medium text-gray-800">{p.nama}</p>
+                                <p className="text-xs text-gray-400">{p.lokasi}</p>
+                              </td>
+                              <td className="whitespace-nowrap px-5 py-4 font-semibold text-gray-800 md:px-6">{tampilNilai(p)}</td>
+                              <td className="px-5 py-4 md:px-6">
+                                <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${aktif ? 'bg-brand-50 text-brand-700' : 'bg-amber-50 text-amber-700'}`}>
+                                  <span className={`h-1.5 w-1.5 rounded-full ${aktif ? 'bg-brand-500' : 'bg-amber-500'}`}></span>
+                                  {p.status}
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="flex items-start gap-3 border-t border-gray-100 bg-gray-50 px-5 py-4 md:px-6">
+                    <Icon name="info" className="mt-0.5 h-5 w-5 shrink-0 text-gray-400" />
+                    <p className="text-xs text-gray-500">
+                      Setiap penambahan aset baru akan didaftarkan sebagai <span className="font-semibold text-gray-600">Sub-ID</span> di
+                      bawah NIB yang sama — bukan sebagai lembaga Nazhir baru. Nomor Sub-ID diturunkan otomatis dari NIB lembaga
+                      (<span className="font-mono font-semibold text-gray-600">{PREFIX_NIB}</span> + nomor urut), sehingga portofolio
+                      berikutnya menjadi <span className="font-mono font-semibold text-gray-600">{subIdBerikutnya}</span>.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </main>
+
+            <footer className="border-t border-gray-200 bg-white py-4 text-center text-xs text-gray-400">
+              Badan Wakaf Indonesia &copy; 2026 &middot; Titik Terang OS &middot; Modul Kenazhiran
+            </footer>
+          </div>
+
+          <ModalTambahPortofolio
+            terbuka={modalTerbuka}
+            tutup={() => setModalTerbuka(false)}
+            onSimpan={simpanPortofolio}
+            subIdBerikutnya={subIdBerikutnya}
+          />
+
+          <Toast pesan={toast} />
+        </div>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+
+</html>

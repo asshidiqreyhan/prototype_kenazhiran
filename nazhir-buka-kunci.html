@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Permohonan Buka Kunci | Modul Kenazhiran BWI Superapps</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Outfit', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+          colors: {
+            brand: {
+              50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 300: '#5eead4', 400: '#2dd4bf',
+              500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a',
+            }
+          },
+          maxWidth: { 'screen-2xl': '1536px' },
+          boxShadow: {
+            'default': '0px 8px 13px -3px rgba(0, 0, 0, 0.07)',
+            'card': '0px 1px 3px rgba(0, 0, 0, 0.06), 0px 1px 2px rgba(0, 0, 0, 0.04)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body, html { font-family: 'Outfit', sans-serif !important; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    #sidebar ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .18); }
+    @keyframes modalIn { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .modal-in { animation: modalIn .22s cubic-bezier(.4, 0, .2, 1); }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+  <div class="flex h-screen overflow-hidden">
+
+    <!-- ===== Sidebar ===== -->
+    <aside id="sidebar"
+      class="absolute left-0 top-0 z-50 flex h-screen w-[290px] flex-col overflow-y-hidden bg-brand-900 duration-300 ease-linear lg:static lg:translate-x-0 -translate-x-full">
+      <div class="flex items-center justify-between gap-2 px-6 py-5.5 h-[72px] lg:py-6.5">
+        <a href="nazhir-dashboard.html" class="flex items-center gap-3">
+          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
+            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 0 0 2.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 0 1 2.916.52 6.003 6.003 0 0 1-5.395 4.972m0 0a6.726 6.726 0 0 1-2.749 1.35m0 0a6.772 6.772 0 0 1-3.044 0" />
+            </svg>
+          </span>
+          <span class="leading-tight">
+            <span class="block text-base font-bold text-white">BWI Superapps</span>
+            <span class="block text-[11px] font-medium text-brand-300">Modul Kenazhiran</span>
+          </span>
+        </a>
+        <button onclick="tutupSidebar()" class="block lg:hidden text-white/70 hover:text-white">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
+        <nav class="mt-1 px-4 py-4 lg:px-6">
+          <h3 class="mb-4 ml-3 text-xs font-semibold uppercase tracking-wider text-brand-400">Menu Nazhir</h3>
+          <ul class="mb-6 flex flex-col gap-1.5">
+            <li>
+              <a href="nazhir-dashboard.html"
+                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
+                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm.375 0h.007v.008h-.007V12Zm-3.75 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z" />
+                </svg>
+                <span>Dashboard NIB</span>
+              </a>
+            </li>
+            <li>
+              <a href="nazhir-aset.html"
+                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
+                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
+                </svg>
+                <span>Master Aset &amp; Portofolio</span>
+              </a>
+            </li>
+            <li>
+              <a href="nazhir-program.html"
+                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
+                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M6.429 9.75 2.25 12l4.179 2.25m0-4.5 5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0 4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0-5.571 3-5.571-3" />
+                </svg>
+                <span>Master Program</span>
+              </a>
+            </li>
+            <li>
+              <a href="nazhir-laporan.html"
+                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
+                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                </svg>
+                <span>Pelaporan Mutasi Aset</span>
+              </a>
+            </li>
+            <li>
+              <a href="nazhir-laporan-program.html"
+                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
+                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605" />
+                </svg>
+                <span>Laporan Program</span>
+              </a>
+            </li>
+            <li>
+              <a href="nazhir-dokumen.html"
+                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
+                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M20.25 7.5l-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                </svg>
+                <span>Riwayat &amp; Dokumen</span>
+              </a>
+            </li>
+            <!-- Permohonan Buka Kunci (ACTIVE) -->
+            <li>
+              <a href="nazhir-buka-kunci.html"
+                class="flex w-full items-center gap-3 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm duration-300 ease-in-out">
+                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 0 1 15.75 5.25Z" />
+                </svg>
+                <span>Permohonan Buka Kunci</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="mt-auto border-t border-white/10 p-4 lg:p-6">
+        <div class="mb-3 flex items-center gap-3 rounded-lg bg-white/5 px-3 py-2.5">
+          <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">YN</span>
+          <span class="min-w-0">
+            <span class="block truncate text-sm font-semibold text-white">Yayasan Wakaf Nusantara</span>
+            <span class="block truncate text-[11px] text-gray-400">Nazhir Aktif</span>
+          </span>
+        </div>
+        <button onclick="logout()"
+          class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
+          <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+          </svg>
+          Keluar
+        </button>
+      </div>
+    </aside>
+
+    <!-- Overlay (mobile) -->
+    <div id="overlay" onclick="tutupSidebar()" class="fixed inset-0 z-40 hidden bg-black/40 lg:hidden"></div>
+
+    <!-- ===== Content Area ===== -->
+    <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+
+      <!-- Header -->
+      <header class="sticky top-0 z-30 flex h-[72px] items-center gap-3 border-b border-gray-200 bg-white px-4 md:px-6">
+        <button onclick="toggleSidebar()" class="text-gray-500 hover:text-gray-700 lg:hidden">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
+        <div class="min-w-0">
+          <h1 class="truncate text-lg font-bold leading-tight text-gray-800">Permohonan Buka Kunci</h1>
+          <p class="truncate text-xs text-gray-400">Ajukan pembukaan akses pelaporan yang telah terkunci (cut-off)</p>
+        </div>
+        <div class="ml-auto flex items-center gap-3">
+          <span class="hidden text-right sm:block">
+            <span class="block text-sm font-semibold text-gray-700">Yayasan Wakaf Nusantara</span>
+            <span class="block text-xs text-gray-400">Nazhir Aktif</span>
+          </span>
+          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">YN</span>
+        </div>
+      </header>
+
+      <!-- Main -->
+      <main>
+        <div class="mx-auto max-w-screen-2xl space-y-6 p-4 md:p-6">
+
+          <!-- Kartu status cut-off -->
+          <div class="rounded-2xl border border-gray-200 bg-white shadow-card">
+            <div class="border-b border-gray-100 px-5 py-4 md:px-6">
+              <h3 class="text-base font-bold text-gray-800">Status Periode Pelaporan</h3>
+              <p class="text-xs text-gray-400">Ringkasan cut-off periode aktif dan status permohonan Anda.</p>
+            </div>
+            <div class="grid grid-cols-1 gap-x-8 gap-y-5 p-5 sm:grid-cols-2 lg:grid-cols-4 md:p-6">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Periode Aktif</p>
+                <p id="scPeriode" class="mt-1 text-sm font-semibold text-gray-800">&mdash;</p>
+              </div>
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Batas Akhir (Deadline)</p>
+                <p id="scDeadline" class="mt-1 text-sm font-semibold text-gray-800">&mdash;</p>
+              </div>
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Status Kunci</p>
+                <div id="scKunci" class="mt-1.5"></div>
+              </div>
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Status Permohonan</p>
+                <div id="scPermohonan" class="mt-1.5"></div>
+              </div>
+            </div>
+            <!-- Area aksi (dinamis) -->
+            <div id="areaAksi" class="border-t border-gray-100 px-5 py-4 md:px-6"></div>
+          </div>
+
+          <!-- Riwayat permohonan saya -->
+          <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+            <div class="border-b border-gray-100 px-5 py-4 md:px-6">
+              <h3 class="text-base font-bold text-gray-800">Riwayat Permohonan Saya</h3>
+              <p class="text-xs text-gray-400">Seluruh pengajuan buka kunci yang pernah Anda kirim ke BWI Pusat.</p>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[720px] text-sm">
+                <thead>
+                  <tr class="border-b border-gray-100 bg-gray-50 text-left">
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Periode</th>
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Alasan</th>
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Diajukan</th>
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="riwayatBody" class="divide-y divide-gray-100"></tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </main>
+
+      <footer class="border-t border-gray-200 bg-white py-4 text-center text-xs text-gray-400">
+        Badan Wakaf Indonesia &copy; 2026 &middot; Titik Terang OS &middot; Modul Kenazhiran
+      </footer>
+    </div>
+  </div>
+
+  <!-- ===== Modal: Ajukan Buka Kunci ===== -->
+  <div id="modalBukaKunci" class="fixed inset-0 z-[75] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/50" onclick="tutupModalBukaKunci()"></div>
+    <div class="modal-in relative w-full max-w-md rounded-2xl bg-white shadow-2xl">
+      <div class="flex items-start justify-between gap-3 border-b border-gray-100 px-6 py-5">
+        <div>
+          <h3 class="text-lg font-bold text-gray-800">Ajukan Buka Kunci</h3>
+          <p class="mt-0.5 text-xs text-gray-400">Periode <span id="bkPeriode" class="font-semibold text-gray-600">&mdash;</span> telah terkunci. Ajukan pembukaan ke BWI Pusat disertai alasan.</p>
+        </div>
+        <button onclick="tutupModalBukaKunci()" class="text-gray-400 transition hover:text-gray-600">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+      <div class="px-6 py-5">
+        <label for="bkAlasan" class="mb-1.5 block text-sm font-semibold text-gray-700">Alasan Keterlambatan <span class="text-red-500">*</span></label>
+        <textarea id="bkAlasan" rows="4" placeholder="mis. Konsolidasi data keuangan terlambat karena proses audit internal."
+          class="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"></textarea>
+        <p class="mt-1.5 text-xs text-gray-400">Permohonan akan ditinjau BWI Pusat sebelum akses dibuka.</p>
+      </div>
+      <div class="flex justify-end gap-2 border-t border-gray-100 px-6 py-4">
+        <button type="button" onclick="tutupModalBukaKunci()"
+          class="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-600 transition hover:bg-gray-50">Batal</button>
+        <button type="button" onclick="kirimPermohonanBuka()"
+          class="rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">Kirim Permohonan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast"
+    class="fixed bottom-6 right-6 z-[80] hidden max-w-md items-center gap-3 rounded-xl bg-gray-900 px-5 py-3 text-sm font-medium text-white shadow-2xl">
+    <svg class="h-5 w-5 shrink-0 text-brand-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+    </svg>
+    <span id="toastMsg"></span>
+  </div>
+
+  <script>
+    /* ===== Shell ===== */
+    function toggleSidebar() {
+      const sb = document.getElementById('sidebar');
+      const ov = document.getElementById('overlay');
+      const tertutup = sb.classList.contains('-translate-x-full');
+      sb.classList.toggle('-translate-x-full', !tertutup);
+      ov.classList.toggle('hidden', !tertutup);
+    }
+    function tutupSidebar() {
+      document.getElementById('sidebar').classList.add('-translate-x-full');
+      document.getElementById('overlay').classList.add('hidden');
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { tutupSidebar(); tutupModalBukaKunci(); } });
+    function logout() {
+      showToast('Anda telah keluar dari sistem. Mengalihkan halaman...');
+      setTimeout(() => { window.location.href = 'kenazhiran-login.html'; }, 900);
+    }
+    let toastTimer = null;
+    function showToast(pesan) {
+      const t = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = pesan;
+      t.classList.remove('hidden'); t.classList.add('flex');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { t.classList.add('hidden'); t.classList.remove('flex'); }, 3600);
+    }
+    function amankan(teks) { const d = document.createElement('div'); d.textContent = teks == null ? '' : String(teks); return d.innerHTML; }
+
+    /* ===== Cut-Off + Permohonan Buka Kunci ===== */
+    const KUNCI_CUTOFF = 'cutoff_bwi';
+    const KUNCI_BUKA = 'buka_kunci_bwi';
+    const NAZHIR_INI = { nazhir: 'Yayasan Wakaf Nusantara', lembaga: 'NZHR-BDG-170' };
+
+    function bacaCutoff() {
+      let o = null;
+      try { o = JSON.parse(localStorage.getItem(KUNCI_CUTOFF)); } catch (e) { /* */ }
+      // Shape baru (per-periode): kembalikan tampilan periode aktif
+      if (o && o.items && typeof o.items === 'object') {
+        const per = o.periodeAktif || 'Semester 1 - 2025';
+        const it = o.items[per] || {};
+        return { periode: per, deadline: it.deadline || '', terkunci: !!it.terkunci };
+      }
+      if (o && o.periode) return o;   // kompat shape lama
+      return { periode: 'Semester 1 - 2025', deadline: '', terkunci: false };
+    }
+    function bacaPermohonanBuka() {
+      try { const a = JSON.parse(localStorage.getItem(KUNCI_BUKA)); if (Array.isArray(a)) return a; } catch (e) { /* */ }
+      return [];
+    }
+    function simpanPermohonanBuka(a) { try { localStorage.setItem(KUNCI_BUKA, JSON.stringify(a)); } catch (e) { /* */ } }
+
+    function permohonanSaya() {
+      return bacaPermohonanBuka().filter(p => p.lembaga === NAZHIR_INI.lembaga);
+    }
+    function statusBukaSaya(periode) {
+      const mine = permohonanSaya().filter(p => p.periode === periode);
+      if (mine.some(p => p.status === 'disetujui')) return 'disetujui';
+      if (mine.some(p => p.status === 'menunggu')) return 'menunggu';
+      if (mine.some(p => p.status === 'ditolak')) return 'ditolak';
+      return null;
+    }
+
+    function badge(warna, teks) {
+      const map = {
+        red: 'bg-red-50 text-red-600', amber: 'bg-amber-50 text-amber-700',
+        brand: 'bg-brand-50 text-brand-700', gray: 'bg-gray-100 text-gray-600', emerald: 'bg-emerald-50 text-emerald-700',
+      };
+      return '<span class="inline-flex items-center gap-1.5 rounded-full ' + map[warna] + ' px-2.5 py-1 text-xs font-semibold">' + amankan(teks) + '</span>';
+    }
+    function tglSingkat(iso) {
+      if (!iso) return '—';
+      const b = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+      const p = String(iso).split('-');
+      if (p.length !== 3) return iso;
+      return parseInt(p[2], 10) + ' ' + (b[parseInt(p[1], 10) - 1] || '') + ' ' + p[0];
+    }
+    function tanggalHariIni() {
+      const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+      const d = new Date();
+      return d.getDate() + ' ' + bulan[d.getMonth()] + ' ' + d.getFullYear();
+    }
+
+    function render() {
+      const c = bacaCutoff();
+      document.getElementById('scPeriode').textContent = c.periode || '—';
+      document.getElementById('scDeadline').textContent = tglSingkat(c.deadline);
+      document.getElementById('scKunci').innerHTML = c.terkunci ? badge('red', 'Terkunci') : badge('emerald', 'Terbuka');
+
+      const st = statusBukaSaya(c.periode);
+      const petaStatus = { disetujui: ['brand', 'Disetujui'], menunggu: ['amber', 'Menunggu'], ditolak: ['red', 'Ditolak'] };
+      document.getElementById('scPermohonan').innerHTML = st ? badge(petaStatus[st][0], petaStatus[st][1]) : badge('gray', 'Belum Ada');
+
+      // Area aksi
+      const area = document.getElementById('areaAksi');
+      if (!c.terkunci) {
+        area.innerHTML = kotakInfo('emerald', 'Periode terbuka', 'Anda dapat melengkapi & mengirim laporan secara normal — tidak perlu permohonan buka kunci.', false);
+      } else if (st === 'disetujui') {
+        area.innerHTML = kotakInfo('brand', 'Akses buka kunci disetujui', 'BWI Pusat telah membuka akses untuk periode ini. Silakan lanjutkan pelaporan Anda.', false);
+      } else if (st === 'menunggu') {
+        area.innerHTML = kotakInfo('amber', 'Permohonan sedang ditinjau', 'Permohonan buka kunci Anda sedang diproses BWI Pusat. Mohon tunggu keputusan.', false);
+      } else {
+        const judul = (st === 'ditolak') ? 'Permohonan sebelumnya ditolak' : 'Periode pelaporan terkunci';
+        const teks = (st === 'ditolak')
+          ? 'Permohonan terakhir Anda ditolak. Anda dapat mengajukan ulang dengan alasan yang lebih lengkap.'
+          : 'Periode ini telah melewati batas (cut-off). Ajukan buka kunci ke BWI Pusat untuk dapat melapor kembali.';
+        area.innerHTML = kotakInfo('red', judul, teks, true);
+      }
+
+      renderRiwayat();
+    }
+
+    function kotakInfo(warna, judul, teks, adaTombol) {
+      const skema = {
+        red: ['text-red-600', 'text-red-800'], amber: ['text-amber-600', 'text-amber-800'],
+        brand: ['text-brand-600', 'text-brand-800'], emerald: ['text-emerald-600', 'text-emerald-800'],
+      }[warna];
+      const tombol = adaTombol
+        ? '<button type="button" onclick="bukaModalBukaKunci()" class="shrink-0 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700">Ajukan Buka Kunci</button>'
+        : '';
+      return '<div class="flex flex-wrap items-center justify-between gap-3">' +
+        '<div class="flex items-start gap-3">' +
+        '<svg class="mt-0.5 h-5 w-5 shrink-0 ' + skema[0] + '" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>' +
+        '<div><p class="text-sm font-bold ' + skema[1] + '">' + amankan(judul) + '</p><p class="mt-0.5 text-xs ' + skema[1] + '">' + amankan(teks) + '</p></div>' +
+        '</div>' + tombol + '</div>';
+    }
+
+    function renderRiwayat() {
+      const body = document.getElementById('riwayatBody');
+      if (!body) return;
+      const list = permohonanSaya();
+      body.innerHTML = '';
+      if (list.length === 0) {
+        body.innerHTML = '<tr><td colspan="4" class="px-6 py-10 text-center text-sm text-gray-400">Belum ada permohonan buka kunci.</td></tr>';
+        return;
+      }
+      const petaStatus = { disetujui: ['brand', 'Disetujui'], menunggu: ['amber', 'Menunggu'], ditolak: ['red', 'Ditolak'] };
+      list.forEach(p => {
+        const s = petaStatus[p.status] || petaStatus.menunggu;
+        const tr = document.createElement('tr');
+        tr.className = 'transition hover:bg-gray-50';
+        tr.innerHTML =
+          '<td class="whitespace-nowrap px-5 py-4 font-semibold text-gray-800 md:px-6">' + amankan(p.periode) + '</td>' +
+          '<td class="px-5 py-4 md:px-6"><p class="max-w-md text-xs text-gray-600">' + amankan(p.alasan) + '</p></td>' +
+          '<td class="whitespace-nowrap px-5 py-4 text-gray-600 md:px-6">' + amankan(p.tanggal) + '</td>' +
+          '<td class="px-5 py-4 md:px-6">' + badge(s[0], s[1]) + '</td>';
+        body.appendChild(tr);
+      });
+    }
+
+    function bukaModalBukaKunci() {
+      const c = bacaCutoff();
+      document.getElementById('bkPeriode').textContent = c.periode;
+      document.getElementById('bkAlasan').value = '';
+      const m = document.getElementById('modalBukaKunci');
+      m.classList.remove('hidden'); m.classList.add('flex');
+    }
+    function tutupModalBukaKunci() {
+      const m = document.getElementById('modalBukaKunci');
+      if (!m) return;
+      m.classList.add('hidden'); m.classList.remove('flex');
+    }
+    function kirimPermohonanBuka() {
+      const alasan = (document.getElementById('bkAlasan').value || '').trim();
+      if (!alasan) { showToast('Mohon isi alasan keterlambatan.'); return; }
+      const c = bacaCutoff();
+      const list = bacaPermohonanBuka();
+      list.unshift({
+        id: 'BK-' + Date.now(),
+        nazhir: NAZHIR_INI.nazhir, lembaga: NAZHIR_INI.lembaga,
+        periode: c.periode, alasan: alasan,
+        tanggal: tanggalHariIni(), status: 'menunggu', catatan: ''
+      });
+      simpanPermohonanBuka(list);
+      tutupModalBukaKunci();
+      render();
+      showToast('Permohonan buka kunci terkirim ke BWI Pusat.');
+    }
+
+    document.addEventListener('DOMContentLoaded', render);
+  </script>
+  <!-- Penjaga akun dibekukan: read-only global (blokir aksi CUD) -->
+  <script>
+    (function () {
+      var LEMBAGA = 'NZHR-BDG-170';
+      function beku() { try { var o = JSON.parse(localStorage.getItem('status_nazhir_bwi')); return !!(o && o[LEMBAGA] === 'dibekukan'); } catch (e) { return false; } }
+      if (!beku()) return;
+
+      // Aksi baca / tutup modal / navigasi -> tetap diizinkan
+      var ALLOW = /(lihat|kembali|keluar|template|unduh|cari|tutup|detail|sebelumnya|berikutnya|logout|masuk)/i;
+      // Aksi ubah data (Create/Update/Delete) -> diblokir
+      var CUD = /(tambah|buat|simpan|ajukan|kirim|hapus|batalkan|lengkapi|ubah|edit|unggah|upload|setuju|tolak|perbaiki)/i;
+
+      function aksiCUD(el) {
+        if (!el || !el.getAttribute) return false;
+        if (el.hasAttribute('data-lengkapi') || el.hasAttribute('data-hapus')) return true;
+        var da = el.getAttribute('data-aksi');
+        if (da && /batal|hapus|ubah|edit/i.test(da)) return true;
+        var teks = (el.textContent || '') + ' ' + (el.getAttribute('onclick') || '');
+        if (ALLOW.test(teks)) return false;
+        return CUD.test(teks);
+      }
+
+      // Interseptor klik fase-capture: hentikan sebelum handler CUD berjalan
+      document.addEventListener('click', function (e) {
+        var el = e.target.closest('button,a,[data-lengkapi],[data-hapus],[data-aksi]');
+        if (!el) return;
+        if (aksiCUD(el)) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          if (window.showToast) showToast('Akun dibekukan — aksi ini dinonaktifkan. Hubungi BWI Pusat.');
+        }
+      }, true);
+
+      document.addEventListener('DOMContentLoaded', function () {
+        // Redupkan tombol CUD statis sebagai penanda read-only
+        document.querySelectorAll('button').forEach(function (b) {
+          if (aksiCUD(b)) b.classList.add('opacity-50', 'cursor-not-allowed');
+        });
+        // Banner read-only (lewati halaman yang sudah punya #bannerCutoff sendiri)
+        if (document.getElementById('bannerCutoff')) return;
+        var host = document.querySelector('main .mx-auto') || document.querySelector('main');
+        if (!host) return;
+        var b = document.createElement('div');
+        b.className = 'mb-4 flex items-start gap-3 rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4';
+        b.innerHTML = '<svg class="mt-0.5 h-5 w-5 shrink-0 text-rose-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg><div><p class="text-sm font-bold text-rose-800">Akun Anda dibekukan</p><p class="mt-0.5 text-xs text-rose-800">Anda hanya dapat melihat data (read-only) &mdash; menambah, mengubah, dan menghapus dinonaktifkan. Hubungi BWI Pusat untuk pengaktifan kembali.</p></div>';
+        host.insertBefore(b, host.firstChild);
+      });
+    })();
+  </script>
+
+
+  <!-- Mode Calon Nazhir: shell penuh, read-only, banner status-aware (aktif bila sesi=calon) -->
+  <script>
+    (function () {
+      var sesi = {};
+      try { sesi = JSON.parse(localStorage.getItem('sesi_kenazhiran')) || {}; } catch (e) { sesi = {}; }
+      // Pasca-aktivasi (khusus dashboard): kartu akses SK (persisten) + banner "Selamat" (sekali)
+      document.addEventListener('DOMContentLoaded', function () {
+        var path = (location.pathname.split('/').pop() || '').toLowerCase();
+        if (path !== 'nazhir-dashboard.html') return;
+        var r = {}; try { r = JSON.parse(localStorage.getItem('pendaftaran_nazhir_bwi')) || {}; } catch (e) { }
+        if (r.status !== 'aktif' || !r.nib || sesi.nama !== r.namaBadanHukum) return;
+        var main = document.querySelector('main'); if (!main) return;
+        var host = main.querySelector('.max-w-screen-2xl') || main;
+        function esc2(t) { var e = document.createElement('div'); e.textContent = t == null ? '' : String(t); return e.innerHTML; }
+        var kartu = document.createElement('div');
+        kartu.className = 'mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-gray-200 bg-white px-5 py-4 shadow-card';
+        kartu.innerHTML = '<div class="flex items-center gap-3"><span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg></span><div><p class="text-sm font-bold text-gray-800">Sertifikat Keputusan (SK) Nazhir</p><p class="text-xs text-gray-400">NIB ' + esc2(r.nib) + ' \u00b7 Terbit ' + esc2(r.tglSertifikat || '-') + '</p></div></div>' +
+          '<a href="nazhir-sk.html" class="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-brand-700"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>Preview / Download SK</a>';
+        host.insertBefore(kartu, host.firstChild);
+        var flag = null; try { flag = localStorage.getItem('graduasi_baru_bwi'); } catch (e) { }
+        if (flag) {
+          try { localStorage.removeItem('graduasi_baru_bwi'); } catch (e) { }
+          var div = document.createElement('div');
+          div.className = 'mb-6 flex flex-wrap items-start gap-3 rounded-2xl border border-brand-200 bg-brand-50 px-5 py-4';
+          div.innerHTML = '<svg class="mt-0.5 h-6 w-6 shrink-0 text-brand-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>' +
+            '<div><p class="text-sm font-bold text-brand-800">Selamat! Akun Anda kini aktif sebagai Nazhir</p><p class="mt-0.5 text-xs text-brand-700">Pendaftaran Anda telah disetujui BWI Pusat. NIB &amp; Sertifikat Keputusan (SK) telah terbit dan seluruh menu kini dapat diakses.</p></div>';
+          host.insertBefore(div, host.firstChild);
+        }
+      });
+
+      if (sesi.mode !== 'calon') return;
+
+
+      var reg = {};
+      try { reg = JSON.parse(localStorage.getItem('pendaftaran_nazhir_bwi')) || {}; } catch (e) { reg = {}; }
+      var STATUS = reg.status || 'draft';
+
+      // Graduasi: pendaftaran disetujui -> menjadi Nazhir Aktif (akses penuh, guard nonaktif)
+      if (STATUS === 'aktif') {
+        try { localStorage.setItem('sesi_kenazhiran', JSON.stringify({ mode: 'aktif', nama: reg.namaBadanHukum })); } catch (e) { }
+        try { localStorage.setItem('graduasi_baru_bwi', '1'); } catch (e) { }
+        return;
+      }
+
+      var NAMA = reg.namaBadanHukum || sesi.nama || 'Calon Nazhir';
+      function esc(t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; }
+      function inisial(n) { var p = String(n || 'CN').trim().split(/\s+/); return ((p[0] || 'C')[0] + ((p[1] || p[0] || 'N')[0] || 'N')).toUpperCase().slice(0, 2); }
+      function progres() { var ada = 0; try { ada = Object.keys(reg.berkas || {}).length; } catch (e) { } return { ada: ada, total: 16, persen: Math.round((ada / 16) * 100) }; }
+      var CEK = '<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>';
+
+      var editable = ['draft', 'revisi', 'ditolak'].indexOf(STATUS) !== -1;
+      var CTA = editable ? (STATUS === 'ditolak' ? 'Daftar Ulang' : (STATUS === 'revisi' ? 'Perbaiki Berkas' : 'Lanjutkan Pendaftaran')) : 'Lihat Detail Pendaftaran';
+
+      function bannerConf() {
+        var cat = reg.catatanPusat ? ' <span class="font-semibold">Catatan Pusat:</span> ' + esc(reg.catatanPusat) : '';
+        if (STATUS === 'revisi') return ['orange', 'Berkas perlu diperbaiki (Revisi)', 'BWI Pusat meminta perbaikan berkas.' + cat + ' Klik <b>Perbaiki Berkas</b> untuk memperbaiki lalu ajukan ulang.'];
+        if (STATUS === 'ditolak') return ['red', 'Pendaftaran ditolak', 'Maaf, pengajuan Anda tidak disetujui.' + cat + ' Anda dapat mendaftar ulang dari awal.'];
+        if (STATUS === 'diajukan') return ['amber', 'Berkas sedang diverifikasi BWI Pusat', 'Pengajuan Anda diterima & sedang diperiksa. Klik <b>Lihat Detail</b> untuk memantau.'];
+        if (STATUS === 'diverifikasi') return ['emerald', 'Dokumen terverifikasi BWI Pusat', 'Berkas Anda lengkap & terverifikasi. Menunggu penjadwalan presentasi/wawancara. Klik untuk detail.'];
+        if (STATUS === 'terjadwal') return ['blue', 'Disetujui verifikasi &mdash; jadwal presentasi ditetapkan', 'BWI Pusat menetapkan jadwal presentasi/wawancara Anda: <b>' + esc(reg.jadwalPresentasi || '-') + '</b>. Klik <b>Lihat Detail</b> untuk jadwal &amp; link lengkap.'];
+        if (STATUS === 'persetujuan') return ['violet', 'Lulus presentasi &mdash; menunggu persetujuan akhir', 'Selangkah lagi. Pengajuan Anda menunggu persetujuan akhir &amp; penerbitan sertifikat. Klik untuk detail.'];
+        return ['amber', 'Anda berstatus Calon Nazhir', 'Lengkapi berkas pendaftaran &rarr; menunggu verifikasi BWI Pusat &rarr; akun menjadi <b>Nazhir Aktif</b>. Menu lain read-only hingga akun aktif.'];
+      }
+      function warnaMap(w) {
+        return {
+          amber: ['border-amber-200 bg-amber-50', 'text-amber-600', 'text-amber-800'],
+          orange: ['border-orange-200 bg-orange-50', 'text-orange-600', 'text-orange-800'],
+          red: ['border-red-200 bg-red-50', 'text-red-600', 'text-red-800'],
+          emerald: ['border-emerald-200 bg-emerald-50', 'text-emerald-600', 'text-emerald-800'],
+          blue: ['border-blue-200 bg-blue-50', 'text-blue-600', 'text-blue-800'],
+          violet: ['border-violet-200 bg-violet-50', 'text-violet-600', 'text-violet-800']
+        }[w];
+      }
+      function banner() {
+        var b = bannerConf(), c = warnaMap(b[0]);
+        return '<div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl border ' + c[0] + ' px-5 py-4">' +
+          '<div class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 ' + c[1] + '" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>' +
+          '<div><p class="text-sm font-bold ' + c[2] + '">' + b[1] + '</p><p class="mt-0.5 text-xs ' + c[2] + '">' + b[2] + '</p></div></div>' +
+          '<a href="nazhir-pendaftaran.html" class="shrink-0 rounded-lg bg-brand-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-brand-700">' + CTA + '</a></div>';
+      }
+      function barProgres(p) {
+        return '<div><div class="flex items-center justify-between text-sm"><span class="font-semibold text-gray-700">' + p.ada + ' dari ' + p.total + ' berkas terunggah</span><span class="font-bold text-brand-700">' + p.persen + '%</span></div>' +
+          '<div class="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-gray-100"><div class="h-full rounded-full bg-brand-500" style="width:' + p.persen + '%"></div></div></div>';
+      }
+      function idxDash() {
+        if (STATUS === 'persetujuan') return 3;
+        if (STATUS === 'diverifikasi' || STATUS === 'terjadwal') return 2;
+        if (STATUS === 'diajukan' || STATUS === 'revisi' || STATUS === 'ditolak') return 1;
+        return 0;
+      }
+      function stepsDash() {
+        var cur = idxDash();
+        return ['Lengkapi Berkas', 'Verifikasi Pusat', 'Presentasi/Wawancara', 'Keputusan', 'Sertifikat Terbit'].map(function (s, i) {
+          var done = i < cur, act = i === cur;
+          var lingk = done ? 'bg-brand-600 text-white' : act ? 'bg-brand-100 text-brand-700 ring-2 ring-brand-500' : 'bg-gray-100 text-gray-400';
+          return '<li class="flex items-center gap-2 rounded-lg border ' + (act ? 'border-brand-200 bg-brand-50' : 'border-gray-100 bg-gray-50') + ' px-3 py-2"><span class="flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ' + lingk + '">' + (done ? CEK : (i + 1)) + '</span><span class="' + (done || act ? 'text-gray-700' : 'text-gray-400') + '">' + s + '</span></li>';
+        }).join('');
+      }
+      function isiDashboard(p) {
+        return '<div class="mx-auto max-w-screen-2xl space-y-6 p-4 md:p-6">' + banner() +
+          '<div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-card">' +
+          '<p class="text-sm text-gray-400">Selamat datang,</p><h2 class="text-xl font-bold text-gray-800">' + esc(NAMA) + '</h2>' +
+          '<div class="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2">' +
+          '<div class="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-4"><p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Nomor Induk BWI (NIB)</p><p class="mt-1 font-mono text-lg font-bold text-gray-400">Belum Terbit</p><p class="mt-0.5 text-xs text-gray-400">NIB terbit otomatis setelah pendaftaran disetujui BWI Pusat.</p></div>' +
+          '<div class="rounded-xl border border-gray-200 p-4">' + barProgres(p) + '<a href="nazhir-pendaftaran.html" class="mt-3 inline-flex rounded-lg bg-brand-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-brand-700">' + CTA + '</a></div>' +
+          '</div></div>' +
+          '<div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-card"><h3 class="text-base font-bold text-gray-800">Tahapan menuju Nazhir Aktif</h3>' +
+          '<ol class="mt-4 grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-5">' + stepsDash() + '</ol></div></div>';
+      }
+      function isiKosong(p) {
+        return '<div class="mx-auto max-w-screen-2xl space-y-6 p-4 md:p-6">' + banner() +
+          '<div class="flex flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white px-6 py-16 text-center shadow-card">' +
+          '<span class="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 text-gray-400"><svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg></span>' +
+          '<h3 class="mt-4 text-lg font-bold text-gray-800">Fitur tersedia setelah akun aktif</h3>' +
+          '<p class="mt-1 max-w-md text-sm text-gray-500">Menu ini akan berisi data setelah pendaftaran Anda disetujui BWI Pusat dan akun menjadi Nazhir Aktif.</p>' +
+          '<div class="mt-5 w-full max-w-sm">' + barProgres(p) + '</div>' +
+          '<a href="nazhir-pendaftaran.html" class="mt-5 inline-flex rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700">' + CTA + '</a>' +
+          '</div></div>';
+      }
+      function gantiTeks(dari, ke) {
+        var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null), t = [];
+        while (w.nextNode()) { if (w.currentNode.nodeValue.indexOf(dari) !== -1) t.push(w.currentNode); }
+        t.forEach(function (n) { n.nodeValue = n.nodeValue.split(dari).join(ke); });
+      }
+      function gantiTeksExact(dari, ke) {
+        var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null), t = [];
+        while (w.nextNode()) { if (w.currentNode.nodeValue.trim() === dari) t.push(w.currentNode); }
+        t.forEach(function (n) { n.nodeValue = n.nodeValue.replace(dari, ke); });
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        gantiTeks('Yayasan Wakaf Nusantara', NAMA);
+        gantiTeks('Nazhir Aktif', 'Calon Nazhir');
+        gantiTeksExact('YN', inisial(NAMA));
+
+        var path = (location.pathname.split('/').pop() || '').toLowerCase();
+        if (path === 'nazhir-pendaftaran.html') return;
+        var main = document.querySelector('main');
+        if (!main) return;
+        var p = progres();
+        main.innerHTML = (path === 'nazhir-dashboard.html') ? isiDashboard(p) : isiKosong(p);
+      });
+    })();
+  </script>
+
+</body>
+
+</html>

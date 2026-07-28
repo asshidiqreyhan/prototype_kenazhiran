@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tambah Portofolio Aset | Modul Kenazhiran BWI Superapps</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- React + ReactDOM + Babel -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tipografi Outfit (Google Fonts) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Outfit', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+          // Identitas eksklusif Modul Kenazhiran = DEEP TEAL
+          colors: {
+            brand: {
+              50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 300: '#5eead4', 400: '#2dd4bf',
+              500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a',
+            }
+          },
+          maxWidth: { 'screen-2xl': '1536px' },
+          boxShadow: {
+            'default': '0px 8px 13px -3px rgba(0, 0, 0, 0.07)',
+            'card': '0px 1px 3px rgba(0, 0, 0, 0.06), 0px 1px 2px rgba(0, 0, 0, 0.04)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body, html { font-family: 'Outfit', sans-serif !important; }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    #sidebar ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .18); }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { animation: fadeIn .2s ease-out; }
+    /* Leaflet map picker: pastikan kontrol peta di bawah header/sidebar app */
+    .leaflet-container { z-index: 0; }
+  </style>
+
+  <!-- Leaflet (map picker koordinat) — gratis, tanpa API key -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useMemo, useEffect, useRef } = React;
+
+    /* =========================================================
+       IKON — inline SVG (tanpa emoji)
+       ========================================================= */
+    const Icon = ({ name, className = "h-5 w-5" }) => {
+      const paths = {
+        sertifikat: <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 0 0 2.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 0 1 2.916.52 6.003 6.003 0 0 1-5.395 4.972m0 0a6.726 6.726 0 0 1-2.749 1.35m0 0a6.772 6.772 0 0 1-3.044 0" />,
+        kartu: <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm.375 0h.007v.008h-.007V12Zm-3.75 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z" />,
+        bangunan: <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />,
+        dokumen: <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />,
+        arsip: <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />,
+        program: <path strokeLinecap="round" strokeLinejoin="round" d="M6.429 9.75 2.25 12l4.179 2.25m0-4.5 5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0 4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0-5.571 3-5.571-3" />,
+        grafik: <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605" />,
+        keluar: <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />,
+        menu: <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />,
+        silang: <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />,
+        cari: <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />,
+        lonceng: <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />,
+        chevron: <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />,
+        chevronKanan: <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />,
+        centang: <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />,
+        centangLingkaran: <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />,
+        uang: <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />,
+        tanah: <path strokeLinecap="round" strokeLinejoin="round" d="m17 14 3 3.3a1 1 0 0 1-.7 1.7H4.7a1 1 0 0 1-.7-1.7L7 14h-.3a1 1 0 0 1-.7-1.7L9 9h-.2A1 1 0 0 1 8 7.3L12 3l4 4.3a1 1 0 0 1-.8 1.7H15l3 3.3a1 1 0 0 1-.7 1.7H17Z" />,
+        unggah: <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />,
+        info: <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />,
+        peringatan: <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />,
+        sampah: <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916" />,
+        kembali: <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />,
+        berkas: <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m6.75 12H8.25m6.75-3H8.25m2.25-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />,
+        gembok: <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />,
+        daftarPeriksa: <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />,
+      };
+      return (
+        <svg className={className} fill="none" viewBox="0 0 24 24" strokeWidth="1.7" stroke="currentColor">
+          {paths[name]}
+        </svg>
+      );
+    };
+
+    /* =========================================================
+       KONFIGURASI DOMAIN
+       ========================================================= */
+    // Konteks dititipkan dari nazhir-aset.html lewat localStorage.
+    // Fallback dipakai bila halaman ini dibuka langsung tanpa melalui tombol "Tambah Portofolio Baru".
+    const KONTEKS = (() => {
+      const bawaan = { nib: 'NZHR-BDG-170', prefix: 'NZHR-BDG', subIdBaru: 'NZHR-BDG-003' };
+      try {
+        const isi = JSON.parse(localStorage.getItem('active_nazhir_portofolio_baru'));
+        return (isi && isi.nib && isi.subIdBaru) ? isi : bawaan;
+      } catch (e) {
+        return bawaan;
+      }
+    })();
+
+    const NIB_LEMBAGA = KONTEKS.nib;
+    const PREFIX_NIB = KONTEKS.prefix || NIB_LEMBAGA.replace(/-\d+$/, '');
+
+    // Mode UBAH: bila konteks membawa record 'edit', form melanjutkan draft/perbaikan
+    // yang sudah ada — Sub-ID dipertahankan dan record di-update di tempat (bukan baru).
+    const EDIT = (KONTEKS.edit && KONTEKS.edit.subId) ? KONTEKS.edit : null;
+    const SUB_ID_BARU = EDIT ? EDIT.subId : KONTEKS.subIdBaru;
+    const MODE_UBAH = !!EDIT;
+
+    // Dokumen wajib per kategori — dasar conditional rendering
+    const DOKUMEN_WAJIB = {
+      uang: [
+        { key: 'lkspwu', label: 'Dokumen Rekomendasi LKS PWU', hint: 'Surat rekomendasi dari Lembaga Keuangan Syariah Penerima Wakaf Uang' },
+        { key: 'operasional', label: 'Surat Pernyataan Biaya Operasional', hint: 'Pernyataan kesanggupan menanggung biaya operasional pengelolaan' },
+      ],
+      tanah: [
+        { key: 'bpn', label: 'Sertifikat / Bukti Legalitas Tanah', hint: 'Sertifikat BPN, AIW, girik, atau bukti legalitas lain sesuai status legalitas di atas' },
+        { key: 'aiw', label: 'AIW (Akta Ikrar Wakaf)', hint: 'Akta Ikrar Wakaf yang dibuat di hadapan PPAIW' },
+      ],
+    };
+
+    // Dokumen tambahan yang TIDAK wajib (tidak menghalangi simpan/ajukan).
+    const DOKUMEN_OPSIONAL = {
+      tanah: [
+        { key: 'sertifikatBpn', label: 'Sertifikat Sudah Balik BPN (opsional)', hint: 'Bila tanah sudah bersertifikat wakaf atas nama nadzir di BPN' },
+        { key: 'fotoLokasi', label: 'Foto Lokasi Tanah (opsional)', hint: 'Foto kondisi terkini lokasi tanah wakaf' },
+      ],
+    };
+
+    // Pilihan untuk field detail tanah wakaf
+    const OPSI_LEGALITAS = [
+      'Sudah Sertifikat Wakaf (BPN)',
+      'Sertifikat Hak Milik (belum balik nama wakaf)',
+      'AIW / APAIW',
+      'Girik / Letter C / Petok D',
+      'Belum Bersertifikat',
+    ];
+    const OPSI_PERUNTUKAN = [
+      'Tempat Ibadah (Masjid/Musholla)',
+      'Pendidikan (Sekolah/Pesantren)',
+      'Sosial & Kesehatan',
+      'Pemakaman',
+      'Pertanian / Perkebunan',
+      'Ekonomi Produktif',
+      'Lainnya',
+    ];
+    // Sumber penilaian nilai aset tanah (nominal Rp) — dari data eksternal
+    const OPSI_PENILAIAN = [
+      'NJOP (SPPT PBB)',
+      'DJKN',
+      'KJPP (Penilai Publik)',
+      'Penilaian Internal Nazhir',
+      'Lainnya',
+    ];
+
+    // Master Aset khusus aset tidak bergerak -> hanya Wakaf Tanah yang dapat
+    // didaftarkan di sini. Wakaf uang dilaporkan lewat Pelaporan Mutasi Aset.
+    const KATEGORI = [
+      { id: 'tanah', nama: 'Wakaf Tanah', ikon: 'tanah', satuan: 'M²', keterangan: 'Tanah wakaf bersertifikat BPN dan ber-AIW.' },
+    ];
+
+    // Alur status pengajuan portofolio — Sub-ID baru TIDAK langsung aktif
+    const STATUS = {
+      draft:   { label: 'Draft',         warna: 'bg-gray-100 text-gray-600',   titik: 'bg-gray-400',  ket: 'Belum diajukan — masih dapat diedit kapan saja.' },
+      review:  { label: 'Verifikasi Pusat', warna: 'bg-amber-50 text-amber-700',  titik: 'bg-amber-500', ket: 'Sedang diverifikasi BWI Pusat.' },
+      ditolak: { label: 'Ditolak',       warna: 'bg-red-50 text-red-600',      titik: 'bg-red-500',   ket: 'Berkas dikembalikan — perbaiki lalu ajukan ulang.' },
+      aktif:   { label: 'Aktif',         warna: 'bg-brand-50 text-brand-700',  titik: 'bg-brand-500', ket: 'Disetujui Pusat — Sub-ID resmi terdaftar.' },
+    };
+
+    // Label & placeholder isian menyesuaikan kategori wakaf yang dipilih
+    const TEKS_FIELD = {
+      uang: {
+        judul: 'Data Dasar Rekening Wakaf',
+        deskripsi: 'Identitas rekening dan saldo awal dana wakaf uang.',
+        labelNama: 'Nama Rekening Wakaf',
+        placeholderNama: 'mis. BSI KCP Sudirman',
+        hintNama: 'Nama bank / LKS PWU tempat dana wakaf ditempatkan.',
+        labelNilai: 'Nilai Dasar',
+        hintNilai: 'Saldo awal dana wakaf, dicatat dalam Rupiah.',
+        ringkasNama: 'Nama Rekening',
+        ringkasNilai: 'Nilai Dasar',
+        wajibNama: 'Nama rekening wakaf wajib diisi.',
+        wajibNilai: 'Nilai dasar wajib diisi.',
+      },
+      tanah: {
+        judul: 'Data Dasar Tanah Wakaf',
+        deskripsi: 'Lokasi dan luas tanah wakaf yang akan didaftarkan.',
+        labelNama: 'Lokasi Aset',
+        placeholderNama: 'mis. Jl. Merdeka No. 45, Semarang',
+        hintNama: 'Alamat lengkap lokasi tanah wakaf sesuai sertifikat BPN.',
+        labelNilai: 'Luas Dasar',
+        hintNilai: 'Luas tanah wakaf, dicatat dalam meter persegi (M²).',
+        ringkasNama: 'Lokasi Aset',
+        ringkasNilai: 'Luas Dasar',
+        wajibNama: 'Lokasi aset wajib diisi.',
+        wajibNilai: 'Luas dasar wajib diisi.',
+      },
+      kosong: {
+        judul: 'Data Dasar Aset',
+        deskripsi: 'Label isian menyesuaikan kategori wakaf yang dipilih pada langkah 1.',
+        labelNama: 'Nama / Lokasi Aset',
+        placeholderNama: 'Pilih kategori wakaf terlebih dahulu',
+        hintNama: '',
+        labelNilai: 'Nilai / Luas Dasar',
+        hintNilai: '',
+        ringkasNama: 'Nama / Lokasi',
+        ringkasNilai: 'Nilai / Luas',
+        wajibNama: 'Isian ini wajib diisi.',
+        wajibNilai: 'Isian ini wajib diisi.',
+      },
+    };
+
+    const SYARAT_LEGAL = [
+      { key: 'laporBulanan', judul: 'Bersedia lapor bulanan', teks: 'Saya bersedia menyampaikan laporan mutasi wakaf secara rutin/bulanan sesuai periode yang ditetapkan BWI.' },
+      { key: 'bersediaAudit', judul: 'Bersedia diaudit', teks: 'Saya bersedia diaudit terkait laporan pengelolaan portofolio wakaf ini oleh BWI Wilayah maupun BWI Pusat.' },
+    ];
+
+    const formatAngka = (n) => {
+      const angka = Number(String(n).replace(/[^\d]/g, ''));
+      return isNaN(angka) ? '' : angka.toLocaleString('id-ID');
+    };
+
+    /* =========================================================
+       KOMPONEN: Sidebar (layout TailAdmin — dipertahankan)
+       ========================================================= */
+    const Sidebar = ({ terbuka, tutup }) => {
+      const menu = [
+        { label: 'Dashboard NIB', ikon: 'kartu', href: 'nazhir-dashboard.html', aktif: false },
+        { label: 'Master Aset & Portofolio', ikon: 'bangunan', href: 'nazhir-aset.html', aktif: true },
+        { label: 'Master Program', ikon: 'program', href: 'nazhir-program.html', aktif: false },
+        { label: 'Pelaporan Mutasi Aset', ikon: 'dokumen', href: 'nazhir-laporan.html', aktif: false },
+        { label: 'Laporan Program', ikon: 'grafik', href: 'nazhir-laporan-program.html', aktif: false },
+        { label: 'Riwayat & Dokumen', ikon: 'arsip', href: 'nazhir-dokumen.html', aktif: false },
+        { label: 'Permohonan Buka Kunci', ikon: 'gembok', href: 'nazhir-buka-kunci.html', aktif: false },
+      ];
+
+      return (
+        <aside
+          id="sidebar"
+          className={`absolute left-0 top-0 z-50 flex h-screen w-[290px] flex-col overflow-y-hidden bg-brand-900 duration-300 ease-linear lg:static lg:translate-x-0 ${terbuka ? 'translate-x-0' : '-translate-x-full'}`}
+        >
+          <div className="flex h-[72px] items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
+            <a href="nazhir-dashboard.html" className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
+                <Icon name="sertifikat" className="h-6 w-6 text-white" />
+              </span>
+              <span className="leading-tight">
+                <span className="block text-base font-bold text-white">BWI Superapps</span>
+                <span className="block text-[11px] font-medium text-brand-300">Modul Kenazhiran</span>
+              </span>
+            </a>
+            <button onClick={tutup} className="block text-white/70 hover:text-white lg:hidden">
+              <Icon name="silang" className="h-6 w-6" />
+            </button>
+          </div>
+
+          <div className="flex flex-col overflow-y-auto duration-300 ease-linear">
+            <nav className="mt-1 px-4 py-4 lg:px-6">
+              <h3 className="mb-4 ml-3 text-xs font-semibold uppercase tracking-wider text-brand-400">Menu Nazhir</h3>
+              <ul className="mb-6 flex flex-col gap-1.5">
+                {menu.map((m) => (
+                  <li key={m.label}>
+                    <a
+                      href={m.href}
+                      className={`flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium duration-300 ease-in-out ${
+                        m.aktif ? 'bg-brand-600 text-white shadow-sm' : 'text-gray-300 hover:bg-white/10 hover:text-white'
+                      }`}
+                    >
+                      <Icon name={m.ikon} className="h-5 w-5 shrink-0" />
+                      <span>{m.label}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+
+          <div className="mt-auto border-t border-white/10 p-4 lg:p-6">
+            <div className="mb-3 flex items-center gap-3 rounded-lg bg-white/5 px-3 py-2.5">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">YN</span>
+              <span className="min-w-0">
+                <span className="block truncate text-sm font-semibold text-white">Yayasan Wakaf Nusantara</span>
+                <span className="block truncate text-[11px] text-gray-400">Nazhir Aktif</span>
+              </span>
+            </div>
+            <a
+              href="kenazhiran-login.html"
+              className="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white"
+            >
+              <Icon name="keluar" className="h-5 w-5 shrink-0" />
+              Keluar
+            </a>
+          </div>
+        </aside>
+      );
+    };
+
+    /* =========================================================
+       KOMPONEN: Header (layout TailAdmin — dipertahankan)
+       ========================================================= */
+    const Header = ({ bukaSidebar }) => (
+      <header className="sticky top-0 z-30 flex w-full border-b border-gray-200 bg-white">
+        <div className="flex flex-grow items-center justify-between gap-3 px-4 py-4 md:px-6 2xl:px-11">
+          <div className="flex min-w-0 items-center gap-3">
+            <button
+              onClick={bukaSidebar}
+              className="z-50 block rounded-lg border border-gray-200 bg-white p-2 text-gray-500 hover:text-brand-700 lg:hidden"
+            >
+              <Icon name="menu" className="h-5 w-5" />
+            </button>
+            <div className="min-w-0">
+              <h1 className="truncate text-lg font-bold leading-tight text-gray-800">Tambah Portofolio Aset</h1>
+              <p className="truncate text-xs text-gray-400">Pendaftaran Sub-ID baru di bawah NIB lembaga</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 2xsm:gap-5">
+            <div className="hidden xl:block">
+              <div className="relative">
+                <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                  <Icon name="cari" className="h-5 w-5" />
+                </span>
+                <input
+                  type="text"
+                  placeholder="Cari Sub-ID / aset..."
+                  className="w-64 rounded-lg border border-gray-200 bg-gray-50 py-2.5 pl-10 pr-4 text-sm outline-none focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-100"
+                />
+              </div>
+            </div>
+
+            <button className="relative flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-gray-500 hover:text-brand-700">
+              <span className="absolute -top-0.5 right-0 z-10 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white"></span>
+              <Icon name="lonceng" className="h-5 w-5" />
+            </button>
+
+            <div className="flex items-center gap-3">
+              <span className="hidden text-right lg:block">
+                <span className="block text-sm font-semibold leading-tight text-gray-800">Yayasan Wakaf Nusantara</span>
+                <span className="block text-xs font-medium text-brand-600">Nazhir Aktif</span>
+              </span>
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 text-sm font-bold text-brand-700">YN</span>
+              <Icon name="chevron" className="hidden h-4 w-4 text-gray-400 sm:block" />
+            </div>
+          </div>
+        </div>
+      </header>
+    );
+
+    /* =========================================================
+       KOMPONEN: Zona unggah dokumen (conditional)
+       ========================================================= */
+    const ZonaUnggah = ({ dok, berkas, onPilih, onHapus }) => (
+      <div className="fade-in">
+        <label className="mb-1.5 block text-sm font-semibold text-gray-700">
+          {dok.label} <span className="text-red-500">*</span>
+        </label>
+
+        {!berkas ? (
+          <label
+            htmlFor={`file-${dok.key}`}
+            className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 px-4 py-7 text-center transition hover:border-brand-400 hover:bg-brand-50/40"
+          >
+            <Icon name="unggah" className="h-7 w-7 text-gray-400" />
+            <span className="text-sm text-gray-500">
+              Drag &amp; Drop berkas atau <span className="font-semibold text-brand-700">Browse</span>
+            </span>
+            <span className="text-xs text-gray-400">Format .pdf / .jpg / .png &middot; maks. 5 MB</span>
+            <input
+              id={`file-${dok.key}`}
+              type="file"
+              className="hidden"
+              accept=".pdf,.jpg,.jpeg,.png"
+              onChange={(e) => onPilih(dok.key, e.target.files && e.target.files[0])}
+            />
+          </label>
+        ) : (
+          <div className="flex items-center justify-between gap-3 rounded-xl border border-brand-200 bg-brand-50 px-4 py-3">
+            <div className="flex min-w-0 items-center gap-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-brand-600">
+                <Icon name="berkas" className="h-5 w-5" />
+              </span>
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold text-gray-800">{berkas.nama}</p>
+                <p className="text-xs text-brand-700">{berkas.ukuran} &middot; Siap diunggah</p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => onHapus(dok.key)}
+              title="Hapus berkas"
+              className="inline-flex shrink-0 items-center justify-center rounded-lg border border-gray-300 bg-white p-2 text-gray-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-600"
+            >
+              <Icon name="sampah" className="h-4 w-4" />
+            </button>
+          </div>
+        )}
+
+        <p className="mt-1.5 text-xs text-gray-400">{dok.hint}</p>
+      </div>
+    );
+
+    /* =========================================================
+       KOMPONEN: Judul seksi bernomor
+       ========================================================= */
+    const JudulSeksi = ({ nomor, judul, deskripsi }) => (
+      <div className="mb-4 flex items-start gap-3">
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-50 text-xs font-bold text-brand-700">
+          {nomor}
+        </span>
+        <div>
+          <h3 className="text-base font-bold text-gray-800">{judul}</h3>
+          {deskripsi && <p className="mt-0.5 text-xs text-gray-400">{deskripsi}</p>}
+        </div>
+      </div>
+    );
+
+    /* =========================================================
+       KOMPONEN: Map picker koordinat (Leaflet + OpenStreetMap)
+       Klik/geser pin -> panggil onPilih("lat, lng"). Field teks tetap
+       jadi sumber nilai & fallback bila peta gagal dimuat (offline).
+       ========================================================= */
+    const uraiKoordinat = (s) => {
+      const b = String(s || '').split(',').map((x) => parseFloat(x.trim()));
+      return (b.length === 2 && isFinite(b[0]) && isFinite(b[1])) ? [b[0], b[1]] : null;
+    };
+
+    const PetaKoordinat = ({ nilai, onPilih }) => {
+      const wadahRef = useRef(null);
+      const petaRef = useRef(null);
+      const markerRef = useRef(null);
+      const pilihRef = useRef(onPilih);
+      pilihRef.current = onPilih;   // selalu pakai handler terbaru tanpa re-init peta
+
+      useEffect(() => {
+        if (!window.L || !wadahRef.current || petaRef.current) return;
+        const titikAwal = uraiKoordinat(nilai);
+        const pusat = titikAwal || [-6.9147, 107.6098];   // default: Bandung
+        const peta = window.L.map(wadahRef.current).setView(pusat, titikAwal ? 15 : 12);
+        window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; OpenStreetMap',
+        }).addTo(peta);
+
+        const ikon = window.L.divIcon({
+          className: '',
+          html: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="#0f766e" stroke="#ffffff" stroke-width="1.2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg>',
+          iconSize: [32, 32],
+          iconAnchor: [16, 32],
+        });
+        const taruhPin = (lat, lng) => {
+          if (markerRef.current) markerRef.current.setLatLng([lat, lng]);
+          else markerRef.current = window.L.marker([lat, lng], { icon: ikon }).addTo(peta);
+        };
+        if (titikAwal) taruhPin(titikAwal[0], titikAwal[1]);
+
+        peta.on('click', (e) => {
+          const lat = e.latlng.lat.toFixed(6);
+          const lng = e.latlng.lng.toFixed(6);
+          taruhPin(parseFloat(lat), parseFloat(lng));
+          if (pilihRef.current) pilihRef.current(lat + ', ' + lng);
+        });
+
+        petaRef.current = peta;
+        setTimeout(() => peta.invalidateSize(), 200);   // container baru tampil -> hitung ulang ukuran
+        return () => { peta.remove(); petaRef.current = null; markerRef.current = null; };
+      }, []);
+
+      if (!window.L) {
+        return (
+          <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 px-4 py-3 text-xs text-gray-500">
+            Peta tidak dapat dimuat (perlu koneksi internet). Silakan isi koordinat manual pada kolom di bawah.
+          </div>
+        );
+      }
+      return <div ref={wadahRef} className="h-56 w-full overflow-hidden rounded-lg border border-gray-200"></div>;
+    };
+
+    /* =========================================================
+       PANEL RINGKASAN (sticky, khas halaman penuh)
+       ========================================================= */
+    const PanelRingkasan = ({ nama, nilai, kategoriAktif, jumlahDok, totalDok, syarat, label }) => {
+      const baris = [
+        { label: 'Sub-ID Baru', nilai: SUB_ID_BARU, mono: true },
+        { label: 'NIB Induk', nilai: NIB_LEMBAGA, mono: true },
+        { label: 'Kategori', nilai: kategoriAktif ? kategoriAktif.nama : '—' },
+        { label: label.ringkasNama, nilai: nama || '—' },
+        {
+          label: label.ringkasNilai,
+          nilai: nilai && kategoriAktif
+            ? (kategoriAktif.satuan === 'Rp' ? 'Rp ' + nilai : nilai + ' M²')
+            : '—',
+        },
+      ];
+
+      const langkah = [
+        { teks: 'Kategori wakaf dipilih', selesai: !!kategoriAktif },
+        { teks: 'Data dasar aset terisi', selesai: !!kategoriAktif && nama.trim() !== '' && nilai !== '' },
+        { teks: `Dokumen persyaratan (${jumlahDok}/${totalDok || 2})`, selesai: totalDok > 0 && jumlahDok === totalDok },
+        { teks: 'Pernyataan legal disetujui', selesai: syarat.laporBulanan && syarat.bersediaAudit },
+      ];
+
+      return (
+        <div className="space-y-4 lg:sticky lg:top-24">
+          {/* Kartu NIB induk */}
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-800 to-brand-600 p-5 shadow-default">
+            <div className="relative z-10">
+              <div className="flex items-center gap-2">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/15">
+                  <Icon name="kartu" className="h-4 w-4 text-white" />
+                </span>
+                <span className="text-xs font-semibold text-brand-100">Sub-ID yang akan dibuat</span>
+              </div>
+              <h3 className="mt-3 font-mono text-2xl font-bold tracking-wider text-white">{SUB_ID_BARU}</h3>
+              <p className="mt-1 text-xs text-brand-100">
+                Diturunkan otomatis dari NIB <span className="font-mono font-semibold">{NIB_LEMBAGA}</span>
+              </p>
+            </div>
+            <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/5"></div>
+          </div>
+
+          {/* Ringkasan isian */}
+          <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-card">
+            <h4 className="mb-3 flex items-center gap-2 text-sm font-bold text-gray-800">
+              <Icon name="daftarPeriksa" className="h-4 w-4 text-brand-600" />
+              Ringkasan Pengajuan
+            </h4>
+            <dl className="space-y-2.5">
+              {baris.map((b) => (
+                <div key={b.label} className="flex items-start justify-between gap-3 border-b border-dashed border-gray-100 pb-2.5 last:border-0 last:pb-0">
+                  <dt className="shrink-0 text-xs text-gray-400">{b.label}</dt>
+                  <dd className={`text-right text-xs font-semibold text-gray-800 ${b.mono ? 'font-mono' : ''}`}>{b.nilai}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          {/* Alur status pengajuan */}
+          <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-card">
+            <h4 className="mb-1 text-sm font-bold text-gray-800">Alur Status Pengajuan</h4>
+            <p className="mb-4 text-xs text-gray-400">Sub-ID baru tidak langsung aktif — perlu persetujuan BWI Pusat.</p>
+
+            <ol className="space-y-3">
+              {['draft', 'review', 'aktif'].map((k, i) => (
+                <li key={k} className="flex gap-3">
+                  <div className="flex flex-col items-center">
+                    <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${STATUS[k].warna}`}>
+                      {i + 1}
+                    </span>
+                    {i < 2 && <span className="mt-1 h-6 w-px bg-gray-200"></span>}
+                  </div>
+                  <div className="pb-1">
+                    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS[k].warna}`}>
+                      <span className={`h-1.5 w-1.5 rounded-full ${STATUS[k].titik}`}></span>
+                      {STATUS[k].label}
+                    </span>
+                    <p className="mt-1 text-xs leading-relaxed text-gray-500">{STATUS[k].ket}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+
+            <div className="mt-3 flex items-start gap-2 rounded-lg border border-red-100 bg-red-50 px-3 py-2.5">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-red-500"></span>
+              <p className="text-xs leading-relaxed text-red-700">
+                <span className="font-semibold">Ditolak</span> — bila berkas tidak memenuhi syarat, pengajuan
+                dikembalikan untuk diperbaiki lalu diajukan ulang.
+              </p>
+            </div>
+          </div>
+
+          {/* Progres kelengkapan */}
+          <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-card">
+            <h4 className="mb-3 text-sm font-bold text-gray-800">Kelengkapan</h4>
+            <ul className="space-y-2.5">
+              {langkah.map((l) => (
+                <li key={l.teks} className="flex items-start gap-2.5">
+                  <span
+                    className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full ${
+                      l.selesai ? 'bg-brand-600 text-white' : 'border-2 border-gray-300 bg-white'
+                    }`}
+                  >
+                    {l.selesai && (
+                      <svg className="h-2.5 w-2.5" fill="none" viewBox="0 0 24 24" strokeWidth="4" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                    )}
+                  </span>
+                  <span className={`text-xs leading-relaxed ${l.selesai ? 'font-medium text-gray-700' : 'text-gray-400'}`}>
+                    {l.teks}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      );
+    };
+
+    /* =========================================================
+       HALAMAN UTAMA
+       ========================================================= */
+    const App = () => {
+      const [sidebarTerbuka, setSidebarTerbuka] = useState(false);
+
+      // --- State form (terisi awal dari record EDIT bila mode ubah) ---
+      const [nama, setNama] = useState(EDIT ? (EDIT.nama || '') : '');
+      const [nilai, setNilai] = useState(EDIT ? formatAngka(EDIT.nilai) : '');
+      const [kategori, setKategori] = useState(EDIT ? (EDIT.kategoriId || '') : '');
+      const [berkas, setBerkas] = useState({});
+      const [syarat, setSyarat] = useState({ laporBulanan: false, bersediaAudit: false });
+      // Field detail & legalitas tanah wakaf (nomor AIW, koordinat, peruntukan, dll)
+      const [detail, setDetail] = useState(EDIT ? (EDIT.detailTanah || {}) : {});
+      const [sentuh, setSentuh] = useState(false);
+      const [toast, setToast] = useState('');
+
+      const ubahDetail = (k, v) => setDetail((prev) => ({ ...prev, [k]: v }));
+
+      const kategoriAktif = KATEGORI.find((k) => k.id === kategori);
+      const dokumenWajib = kategori ? DOKUMEN_WAJIB[kategori] : [];
+      const dokumenOpsional = kategori ? (DOKUMEN_OPSIONAL[kategori] || []) : [];
+      const jumlahDokTerunggah = dokumenWajib.filter((d) => berkas[d.key]).length;
+
+      // Teks isian mengikuti kategori terpilih (fallback saat belum memilih)
+      const label = TEKS_FIELD[kategori] || TEKS_FIELD.kosong;
+
+      // Ganti kategori -> isian & berkas lama tidak relevan lagi (konteksnya berbeda).
+      // Klik ulang kategori yang sama tidak mereset apa pun.
+      const pilihKategori = (id) => {
+        if (id === kategori) return;
+        setKategori(id);
+        setBerkas({});
+        setNama('');
+        setNilai('');
+        setDetail({});
+        setSentuh(false);
+      };
+
+      const pilihBerkas = (key, file) => {
+        if (!file) return;
+        const meta = {
+          nama: file.name,
+          ukuran: (file.size / 1024).toFixed(0) + ' KB',
+          tipe: file.type || '',
+        };
+        setBerkas((prev) => ({ ...prev, [key]: meta }));
+
+        // Baca konten untuk pratinjau (best-effort, hanya berkas kecil agar aman kuota)
+        if (file.size <= 1.5 * 1024 * 1024) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            setBerkas((prev) => (prev[key] ? { ...prev, [key]: { ...prev[key], dataUrl: reader.result } } : prev));
+          };
+          reader.readAsDataURL(file);
+        }
+      };
+
+      const hapusBerkas = (key) => {
+        setBerkas((prev) => {
+          const salinan = { ...prev };
+          delete salinan[key];
+          return salinan;
+        });
+      };
+
+      const toggleSyarat = (key) => setSyarat((prev) => ({ ...prev, [key]: !prev[key] }));
+
+      // --- Aturan validasi ---
+      const semuaSyaratDisetujui = syarat.laporBulanan && syarat.bersediaAudit;
+      const dokumenLengkap = dokumenWajib.length > 0 && jumlahDokTerunggah === dokumenWajib.length;
+      const dasarLengkap = nama.trim() !== '' && nilai !== '' && kategori !== '';
+      const bolehSimpan = dasarLengkap && dokumenLengkap && semuaSyaratDisetujui;
+
+      // Draft cukup butuh kategori + nama/lokasi; sisanya boleh menyusul
+      const bisaDraft = kategori !== '' && nama.trim() !== '';
+
+      // Tulis record ke localStorage agar terbaca di halaman Master Aset
+      const tulisRecord = (status) => {
+        // Daftar dokumen (wajib + opsional): pakai berkas baru; bila mode ubah &
+        // belum diunggah ulang, pertahankan entri dari record lama (EDIT.dokumenList).
+        const semuaDok = dokumenWajib.concat(dokumenOpsional);
+        const dokumenList = semuaDok.map((d) => {
+          if (berkas[d.key]) {
+            return { key: d.key, label: d.label, nama: berkas[d.key].nama, ukuran: berkas[d.key].ukuran, tipe: berkas[d.key].tipe || '' };
+          }
+          if (EDIT && EDIT.dokumenList) {
+            const lama = EDIT.dokumenList.find((x) => x.key === d.key);
+            if (lama) return lama;
+          }
+          return null;
+        }).filter(Boolean);
+
+        const rec = {
+          subId: SUB_ID_BARU,
+          nib: NIB_LEMBAGA,
+          lembaga: 'Yayasan Wakaf Nusantara',
+          wilayah: 'BWI Prov. Jawa Barat',
+          nama: nama.trim(),
+          lokasi: kategori === 'uang' ? 'Rek. Wakaf Produktif' : 'Lokasi aset wakaf',
+          kategori: kategoriAktif ? kategoriAktif.nama : '',
+          kategoriId: kategori,
+          satuan: kategoriAktif ? kategoriAktif.satuan : '',
+          nilai: Number(String(nilai).replace(/[^\d]/g, '')) || 0,
+          dokumen: dokumenList.length,
+          totalDokumen: dokumenWajib.length,
+          dokumenList: dokumenList,
+          // Detail & legalitas tanah wakaf (untuk aset tidak bergerak)
+          detailTanah: (kategori === 'tanah') ? { ...detail } : null,
+          status: status,
+          tanggal: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
+        };
+        try {
+          const list = JSON.parse(localStorage.getItem('data_portofolio_bwi')) || [];
+          // Mode ubah: perbarui record dengan Sub-ID yang sama (tidak membuat duplikat)
+          const idx = list.findIndex((x) => String(x.subId) === String(SUB_ID_BARU));
+          if (idx >= 0) list[idx] = rec;
+          else list.push(rec);
+          localStorage.setItem('data_portofolio_bwi', JSON.stringify(list));
+        } catch (e) { /* mode privat */ }
+
+        // Simpan konten pratinjau di kunci TERPISAH (best-effort) agar record utama
+        // tetap kecil & selalu tersimpan meski kuota pratinjau penuh.
+        try {
+          const previews = {};
+          dokumenWajib.concat(dokumenOpsional).forEach((d) => {
+            if (berkas[d.key] && berkas[d.key].dataUrl) previews[d.key] = berkas[d.key].dataUrl;
+          });
+          if (Object.keys(previews).length) {
+            localStorage.setItem('dokumen_preview_' + SUB_ID_BARU, JSON.stringify(previews));
+          }
+        } catch (e) { /* kuota penuh -> lewati pratinjau, daftar dokumen tetap tampil */ }
+      };
+
+      // Simpan sebagai Draft -> belum masuk antrean verifikasi, masih bisa diedit
+      const simpanDraft = () => {
+        if (!bisaDraft) { setSentuh(true); return; }
+        tulisRecord('draft');
+        setToast(`Draft ${SUB_ID_BARU} ${MODE_UBAH ? 'diperbarui' : 'tersimpan'}. Anda dapat melengkapinya kapan saja.`);
+        setTimeout(() => { window.location.href = 'nazhir-aset.html'; }, 1400);
+      };
+
+      // Ajukan -> masuk status "Verifikasi Pusat" untuk diverifikasi BWI
+      const ajukan = () => {
+        setSentuh(true);
+        if (!bolehSimpan) return;
+        tulisRecord('review');
+        setToast(`Pengajuan ${SUB_ID_BARU} terkirim. Menunggu verifikasi BWI Pusat.`);
+        setTimeout(() => { window.location.href = 'nazhir-aset.html'; }, 1400);
+      };
+
+      const kembali = () => { window.location.href = 'nazhir-aset.html'; };
+
+      return (
+        <div className="flex h-screen overflow-hidden">
+          <Sidebar terbuka={sidebarTerbuka} tutup={() => setSidebarTerbuka(false)} />
+
+          {sidebarTerbuka && (
+            <div onClick={() => setSidebarTerbuka(false)} className="fixed inset-0 z-40 bg-black/40 lg:hidden"></div>
+          )}
+
+          <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+            <Header bukaSidebar={() => setSidebarTerbuka(true)} />
+
+            <main>
+              <div className="mx-auto max-w-screen-2xl space-y-5 p-4 md:p-6">
+
+                {/* Breadcrumb */}
+                <nav className="flex items-center gap-2 text-sm text-gray-400">
+                  <a href="nazhir-aset.html" className="hover:text-brand-700">Master Aset &amp; Portofolio</a>
+                  <Icon name="chevronKanan" className="h-4 w-4" />
+                  <span className="font-medium text-gray-600">Tambah Portofolio</span>
+                </nav>
+
+                {/* Header halaman + tombol Kembali (pojok kiri atas form) */}
+                <div className="flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={kembali}
+                    className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-600 transition hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                  >
+                    <Icon name="kembali" className="h-5 w-5" />
+                    Kembali
+                  </button>
+                  <div className="min-w-0">
+                    <h2 className="text-xl font-bold text-gray-800 md:text-2xl">
+                      {MODE_UBAH ? 'Lanjutkan Pengisian Portofolio' : 'Tambah Portofolio Aset'}
+                    </h2>
+                    <p className="mt-0.5 text-sm text-gray-500">
+                      {MODE_UBAH
+                        ? 'Lengkapi atau perbaiki draft ' + SUB_ID_BARU + ' sebelum diajukan ke BWI Pusat.'
+                        : 'Daftarkan aset wakaf baru sebagai Sub-ID di bawah NIB lembaga Anda.'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Layout 2 kolom: form + ringkasan */}
+                <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+
+                  {/* ============ KOLOM FORM ============ */}
+                  <div className="space-y-5 lg:col-span-2">
+
+                    {/* SEKSI 1 — Kategori wakaf (radio card/tile) — penentu konteks seluruh form */}
+                    <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-card md:p-6">
+                      <JudulSeksi nomor="1" judul="Kategori Wakaf" deskripsi="Pilih terlebih dahulu — menentukan label isian, satuan nilai, dan dokumen persyaratan." />
+
+                      <div role="radiogroup" aria-label="Kategori Wakaf" className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        {KATEGORI.map((k) => {
+                          const aktif = kategori === k.id;
+                          return (
+                            <label
+                              key={k.id}
+                              className={`relative flex cursor-pointer flex-col gap-3 rounded-xl border-2 p-5 transition ${
+                                aktif
+                                  ? 'border-brand-500 bg-brand-50 ring-2 ring-brand-100'
+                                  : 'border-gray-200 bg-white hover:border-brand-300 hover:bg-brand-50/40'
+                              }`}
+                            >
+                              <input
+                                type="radio"
+                                name="kategoriWakaf"
+                                value={k.id}
+                                checked={aktif}
+                                onChange={() => pilihKategori(k.id)}
+                                className="sr-only"
+                              />
+
+                              {/* Indikator radio */}
+                              <span
+                                className={`absolute right-4 top-4 flex h-5 w-5 items-center justify-center rounded-full border-2 transition ${
+                                  aktif ? 'border-brand-600 bg-brand-600' : 'border-gray-300 bg-white'
+                                }`}
+                              >
+                                {aktif && <span className="h-2 w-2 rounded-full bg-white"></span>}
+                              </span>
+
+                              <span
+                                className={`flex h-12 w-12 items-center justify-center rounded-xl ${
+                                  aktif ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-500'
+                                }`}
+                              >
+                                <Icon name={k.ikon} className="h-6 w-6" />
+                              </span>
+
+                              <span>
+                                <span className={`block text-base font-bold ${aktif ? 'text-brand-800' : 'text-gray-800'}`}>
+                                  {k.nama}
+                                </span>
+                                <span className="mt-1 block text-xs leading-relaxed text-gray-500">{k.keterangan}</span>
+                              </span>
+
+                              <span
+                                className={`inline-flex w-fit items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold ${
+                                  aktif ? 'bg-white text-brand-700' : 'bg-gray-100 text-gray-500'
+                                }`}
+                              >
+                                Satuan: {k.satuan}
+                              </span>
+                            </label>
+                          );
+                        })}
+                      </div>
+
+                      {sentuh && !kategori && (
+                        <p className="mt-3 text-xs font-medium text-red-600">Silakan pilih kategori wakaf terlebih dahulu.</p>
+                      )}
+                    </section>
+
+                    {/* SEKSI 2 — Data dasar aset (label & satuan mengikuti kategori) */}
+                    <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-card md:p-6">
+                      <JudulSeksi nomor="2" judul={label.judul} deskripsi={label.deskripsi} />
+
+                      {!kategori && (
+                        <div className="mb-4 flex items-start gap-3 rounded-xl border border-dashed border-gray-300 bg-gray-50 px-4 py-3">
+                          <Icon name="info" className="mt-0.5 h-5 w-5 shrink-0 text-gray-400" />
+                          <p className="text-xs leading-relaxed text-gray-500">
+                            Isian terkunci. Pilih kategori wakaf pada langkah 1 agar label dan satuan menyesuaikan
+                            jenis aset yang Anda daftarkan.
+                          </p>
+                        </div>
+                      )}
+
+                      <div className="space-y-4">
+                        <div>
+                          <label htmlFor="namaAset" className="mb-1.5 block text-sm font-semibold text-gray-700">
+                            {label.labelNama} <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            id="namaAset"
+                            type="text"
+                            value={nama}
+                            disabled={!kategori}
+                            onChange={(e) => setNama(e.target.value)}
+                            placeholder={label.placeholderNama}
+                            className={`w-full rounded-lg border px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-100 ${
+                              !kategori
+                                ? 'cursor-not-allowed border-gray-200 bg-gray-50 text-gray-400'
+                                : sentuh && !nama.trim()
+                                  ? 'border-red-300 bg-white text-gray-800 focus:border-red-500'
+                                  : 'border-gray-200 bg-white text-gray-800 focus:border-brand-500'
+                            }`}
+                          />
+                          {kategori && label.hintNama && (
+                            <p className="mt-1.5 text-xs text-gray-400">{label.hintNama}</p>
+                          )}
+                          {sentuh && kategori && !nama.trim() && (
+                            <p className="mt-1.5 text-xs font-medium text-red-600">{label.wajibNama}</p>
+                          )}
+                        </div>
+
+                        <div>
+                          <label htmlFor="nilaiAset" className="mb-1.5 block text-sm font-semibold text-gray-700">
+                            {label.labelNilai} <span className="text-red-500">*</span>
+                          </label>
+                          <div className="relative">
+                            <input
+                              id="nilaiAset"
+                              type="text"
+                              inputMode="numeric"
+                              value={nilai}
+                              disabled={!kategori}
+                              onChange={(e) => setNilai(formatAngka(e.target.value))}
+                              placeholder="0"
+                              className={`w-full rounded-lg border py-2.5 pl-4 pr-16 text-sm outline-none focus:ring-2 focus:ring-brand-100 ${
+                                !kategori
+                                  ? 'cursor-not-allowed border-gray-200 bg-gray-50 text-gray-400'
+                                  : sentuh && !nilai
+                                    ? 'border-red-300 bg-white text-gray-800 focus:border-red-500'
+                                    : 'border-gray-200 bg-white text-gray-800 focus:border-brand-500'
+                              }`}
+                            />
+                            <span
+                              className={`pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-xs font-semibold ${
+                                kategoriAktif ? 'bg-brand-50 text-brand-700' : 'bg-gray-100 text-gray-400'
+                              }`}
+                            >
+                              {kategoriAktif ? kategoriAktif.satuan : '—'}
+                            </span>
+                          </div>
+                          {kategori && label.hintNilai && (
+                            <p className="mt-1.5 text-xs text-gray-400">{label.hintNilai}</p>
+                          )}
+                          {sentuh && kategori && !nilai && (
+                            <p className="mt-1.5 text-xs font-medium text-red-600">{label.wajibNilai}</p>
+                          )}
+                        </div>
+                      </div>
+                    </section>
+
+                    {/* SEKSI 3 — Detail & legalitas tanah wakaf (khusus aset tidak bergerak) */}
+                    <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-card md:p-6">
+                      <JudulSeksi
+                        nomor="3"
+                        judul="Detail &amp; Legalitas Tanah Wakaf"
+                        deskripsi="Dicatat sebagai field agar data dapat ditarik langsung tanpa membuka berkas."
+                      />
+
+                      {kategori !== 'tanah' ? (
+                        <div className="flex items-start gap-3 rounded-xl border border-dashed border-gray-300 bg-gray-50 px-5 py-8">
+                          <Icon name="info" className="mt-0.5 h-5 w-5 shrink-0 text-gray-400" />
+                          <p className="text-sm text-gray-500">Pilih kategori Wakaf Tanah pada langkah 1 untuk mengisi detail legalitas.</p>
+                        </div>
+                      ) : (
+                        <div className="fade-in grid grid-cols-1 gap-4 md:grid-cols-2">
+                          <div>
+                            <label className="mb-1.5 block text-sm font-semibold text-gray-700">Status Legalitas Tanah</label>
+                            <select value={detail.legalitas || ''} onChange={(e) => ubahDetail('legalitas', e.target.value)}
+                              className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+                              <option value="">Pilih status legalitas</option>
+                              {OPSI_LEGALITAS.map((o) => <option key={o}>{o}</option>)}
+                            </select>
+                          </div>
+                          <div>
+                            <label className="mb-1.5 block text-sm font-semibold text-gray-700">Nomor AIW</label>
+                            <input type="text" value={detail.nomorAIW || ''} onChange={(e) => ubahDetail('nomorAIW', e.target.value)}
+                              placeholder="mis. W.2/12/AIW/2024"
+                              className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100" />
+                          </div>
+                          <div>
+                            <label className="mb-1.5 block text-sm font-semibold text-gray-700">Nomor Sertifikat BPN <span className="font-normal text-gray-400">(bila ada)</span></label>
+                            <input type="text" value={detail.nomorSertifikat || ''} onChange={(e) => ubahDetail('nomorSertifikat', e.target.value)}
+                              placeholder="mis. 12.34.56.78.9.00123"
+                              className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100" />
+                          </div>
+                          <div>
+                            <label className="mb-1.5 block text-sm font-semibold text-gray-700">Kantor Pertanahan (BPN) Penerbit <span className="font-normal text-gray-400">(bila ada)</span></label>
+                            <input type="text" value={detail.bpnPenerbit || ''} onChange={(e) => ubahDetail('bpnPenerbit', e.target.value)}
+                              placeholder="mis. Kantah Kab. Bandung"
+                              className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100" />
+                          </div>
+                          <div className="md:col-span-2">
+                            <div className="rounded-xl border border-brand-100 bg-brand-50/60 p-4">
+                              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-brand-700">Nilai Aset Tanah (Penilaian)</p>
+                              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                                <div>
+                                  <label className="mb-1.5 block text-sm font-semibold text-gray-700">Nilai Aset (Rp)</label>
+                                  <input type="text" inputMode="numeric" value={detail.nilaiAset || ''} onChange={(e) => ubahDetail('nilaiAset', formatAngka(e.target.value))}
+                                    placeholder="mis. 2.500.000.000"
+                                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100" />
+                                </div>
+                                <div>
+                                  <label className="mb-1.5 block text-sm font-semibold text-gray-700">Sumber Penilaian</label>
+                                  <select value={detail.sumberPenilaian || ''} onChange={(e) => ubahDetail('sumberPenilaian', e.target.value)}
+                                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+                                    <option value="">Pilih sumber</option>
+                                    {OPSI_PENILAIAN.map((o) => <option key={o}>{o}</option>)}
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className="mb-1.5 block text-sm font-semibold text-gray-700">Tanggal Penilaian</label>
+                                  <input type="date" value={detail.tglPenilaian || ''} onChange={(e) => ubahDetail('tglPenilaian', e.target.value)}
+                                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100" />
+                                </div>
+                              </div>
+                              <p className="mt-2 text-xs text-gray-500">Nilai nominal (Rp) terpisah dari <span className="font-semibold">Luas Dasar</span> (M²). Siap diisi dari penilaian DJKN/KJPP saat datanya tersedia.</p>
+                            </div>
+                          </div>
+                          <div className="md:col-span-2">
+                            <label className="mb-1.5 block text-sm font-semibold text-gray-700">Koordinat Lokasi</label>
+                            <PetaKoordinat nilai={detail.koordinat} onPilih={(v) => ubahDetail('koordinat', v)} />
+                            <input type="text" value={detail.koordinat || ''} onChange={(e) => ubahDetail('koordinat', e.target.value)}
+                              placeholder="mis. -6.9147, 107.6098"
+                              className="mt-2 w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100" />
+                            <p className="mt-1.5 text-xs text-gray-400">Klik pin pada peta untuk mengisi otomatis, atau ketik manual (lintang, bujur).</p>
+                          </div>
+                          <div>
+                            <label className="mb-1.5 block text-sm font-semibold text-gray-700">Peruntukan Harta Benda Wakaf</label>
+                            <select value={detail.peruntukan || ''} onChange={(e) => ubahDetail('peruntukan', e.target.value)}
+                              className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+                              <option value="">Pilih peruntukan</option>
+                              {OPSI_PERUNTUKAN.map((o) => <option key={o}>{o}</option>)}
+                            </select>
+                          </div>
+                          <div className="md:col-span-2">
+                            <label className="mb-1.5 block text-sm font-semibold text-gray-700">Penerima Manfaat (Mauquf Alaih)</label>
+                            <input type="text" value={detail.penerimaManfaat || ''} onChange={(e) => ubahDetail('penerimaManfaat', e.target.value)}
+                              placeholder="mis. Masyarakat sekitar / Yayasan Pendidikan Al-Falah"
+                              className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100" />
+                          </div>
+                          <div className="md:col-span-2">
+                            <label className="mb-1.5 block text-sm font-semibold text-gray-700">Resume Kondisi Tanah Wakaf Saat Ini</label>
+                            <textarea rows="3" value={detail.resume || ''} onChange={(e) => ubahDetail('resume', e.target.value)}
+                              placeholder="Ceritakan singkat kondisi, pemanfaatan, dan status tanah wakaf saat ini."
+                              className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"></textarea>
+                          </div>
+                        </div>
+                      )}
+                    </section>
+
+                    {/* SEKSI 4 — Dokumen persyaratan (CONDITIONAL RENDERING) */}
+                    <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-card md:p-6">
+                      <JudulSeksi
+                        nomor="4"
+                        judul="Dokumen Persyaratan"
+                        deskripsi="Daftar berkas menyesuaikan kategori wakaf yang Anda pilih."
+                      />
+
+                      {!kategori ? (
+                        <div className="flex items-start gap-3 rounded-xl border border-dashed border-gray-300 bg-gray-50 px-5 py-8">
+                          <Icon name="info" className="mt-0.5 h-5 w-5 shrink-0 text-gray-400" />
+                          <p className="text-sm text-gray-500">
+                            Pilih kategori wakaf pada langkah 1 untuk menampilkan zona unggah dokumen yang sesuai.
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="fade-in space-y-4">
+                          <div className="flex items-start gap-3 rounded-xl border border-brand-100 bg-brand-50 px-4 py-3">
+                            <Icon name="info" className="mt-0.5 h-5 w-5 shrink-0 text-brand-600" />
+                            <p className="text-xs leading-relaxed text-brand-800">
+                              Kategori <span className="font-semibold">{kategoriAktif.nama}</span> mensyaratkan{' '}
+                              <span className="font-semibold">{dokumenWajib.length} dokumen</span>. Terunggah{' '}
+                              <span className="font-semibold">{jumlahDokTerunggah}</span> dari {dokumenWajib.length}.
+                            </p>
+                          </div>
+
+                          <div className="grid grid-cols-1 gap-5">
+                            {dokumenWajib.map((dok) => (
+                              <ZonaUnggah
+                                key={dok.key}
+                                dok={dok}
+                                berkas={berkas[dok.key]}
+                                onPilih={pilihBerkas}
+                                onHapus={hapusBerkas}
+                              />
+                            ))}
+                          </div>
+
+                          {sentuh && !dokumenLengkap && (
+                            <p className="text-xs font-medium text-red-600">Seluruh dokumen persyaratan wajib diunggah.</p>
+                          )}
+
+                          {dokumenOpsional.length > 0 && (
+                            <div className="space-y-4 border-t border-gray-100 pt-4">
+                              <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">Dokumen Tambahan (Opsional)</p>
+                              <div className="grid grid-cols-1 gap-5">
+                                {dokumenOpsional.map((dok) => (
+                                  <ZonaUnggah
+                                    key={dok.key}
+                                    dok={dok}
+                                    berkas={berkas[dok.key]}
+                                    onPilih={pilihBerkas}
+                                    onHapus={hapusBerkas}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </section>
+
+                    {/* SEKSI 5 — Syarat & ketentuan legal */}
+                    <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-card md:p-6">
+                      <JudulSeksi
+                        nomor="5"
+                        judul="Syarat &amp; Ketentuan Legal"
+                        deskripsi="Pernyataan digital ini menggantikan surat pernyataan fisik."
+                      />
+
+                      <div className="space-y-3 rounded-xl border border-amber-200 bg-amber-50 p-4">
+                        <div className="flex items-start gap-2.5">
+                          <Icon name="peringatan" className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+                          <p className="text-xs leading-relaxed text-amber-800">
+                            Kedua pernyataan berikut mengikat secara hukum dan{' '}
+                            <span className="font-semibold">wajib disetujui</span> sebelum portofolio dapat disimpan.
+                          </p>
+                        </div>
+
+                        {SYARAT_LEGAL.map((s) => (
+                          <label
+                            key={s.key}
+                            className={`flex cursor-pointer items-start gap-3 rounded-lg border bg-white p-4 transition ${
+                              syarat[s.key] ? 'border-brand-300 ring-1 ring-brand-100' : 'border-gray-200 hover:border-brand-300'
+                            }`}
+                          >
+                            <span className="relative flex h-5 w-5 shrink-0 items-center justify-center pt-0.5">
+                              <input
+                                type="checkbox"
+                                checked={syarat[s.key]}
+                                onChange={() => toggleSyarat(s.key)}
+                                className="sr-only"
+                              />
+                              <span
+                                className={`flex h-5 w-5 items-center justify-center rounded border-2 transition ${
+                                  syarat[s.key] ? 'border-brand-600 bg-brand-600' : 'border-gray-300 bg-white'
+                                }`}
+                              >
+                                {syarat[s.key] && (
+                                  <svg className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" strokeWidth="3.5" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                  </svg>
+                                )}
+                              </span>
+                            </span>
+                            <span>
+                              <span className={`block text-sm font-semibold ${syarat[s.key] ? 'text-brand-800' : 'text-gray-800'}`}>
+                                {s.judul}
+                              </span>
+                              <span className="mt-0.5 block text-xs leading-relaxed text-gray-500">{s.teks}</span>
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+
+                      {sentuh && !semuaSyaratDisetujui && (
+                        <p className="mt-3 text-xs font-medium text-red-600">
+                          Kedua pernyataan legal wajib disetujui sebelum menyimpan.
+                        </p>
+                      )}
+                    </section>
+
+                    {/* Bar aksi */}
+                    <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-card md:px-6">
+                      <div className="flex flex-col-reverse items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <p className="flex items-center gap-1.5 text-xs text-gray-400">
+                          <Icon name="gembok" className="h-4 w-4 shrink-0" />
+                          {bolehSimpan
+                            ? 'Semua persyaratan terpenuhi — pengajuan siap dikirim.'
+                            : 'Belum lengkap? Simpan dulu sebagai draft, lanjutkan nanti.'}
+                        </p>
+
+                        <div className="flex flex-wrap justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={kembali}
+                            className="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-600 transition hover:bg-gray-50"
+                          >
+                            Batal
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={simpanDraft}
+                            disabled={!bisaDraft}
+                            title={bisaDraft ? 'Simpan tanpa mengajukan' : 'Pilih kategori dan isi nama/lokasi terlebih dahulu'}
+                            className={`inline-flex items-center gap-2 rounded-lg border-2 border-brand-600 bg-white px-5 py-2.5 text-sm font-semibold text-brand-700 transition ${
+                              bisaDraft ? 'hover:bg-brand-50' : 'cursor-not-allowed opacity-50'
+                            }`}
+                          >
+                            <Icon name="dokumen" className="h-5 w-5" />
+                            Simpan Sebagai Draft
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={ajukan}
+                            disabled={!bolehSimpan}
+                            className={`inline-flex items-center gap-2 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition ${
+                              bolehSimpan ? 'hover:bg-brand-700' : 'cursor-not-allowed opacity-50'
+                            }`}
+                          >
+                            <Icon name="centang" className="h-5 w-5" />
+                            Ajukan untuk Verifikasi
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="mt-3 flex items-start gap-2 border-t border-gray-100 pt-3">
+                        <Icon name="info" className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
+                        <p className="text-xs leading-relaxed text-gray-500">
+                          <span className="font-semibold text-gray-600">Draft</span> tersimpan tanpa masuk antrean dan
+                          masih bisa diedit. <span className="font-semibold text-gray-600">Ajukan</span> mengirim berkas
+                          ke status <span className="font-semibold text-amber-700">Verifikasi Pusat</span> — Sub-ID baru
+                          menjadi <span className="font-semibold text-brand-700">Aktif</span> hanya setelah disetujui BWI Pusat.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* ============ KOLOM RINGKASAN ============ */}
+                  <div className="lg:col-span-1">
+                    <PanelRingkasan
+                      nama={nama}
+                      nilai={nilai}
+                      kategoriAktif={kategoriAktif}
+                      jumlahDok={jumlahDokTerunggah}
+                      totalDok={dokumenWajib.length}
+                      syarat={syarat}
+                      label={label}
+                    />
+                  </div>
+                </div>
+              </div>
+            </main>
+
+            <footer className="border-t border-gray-200 bg-white py-4 text-center text-xs text-gray-400">
+              Badan Wakaf Indonesia &copy; 2026 &middot; Titik Terang OS &middot; Modul Kenazhiran
+            </footer>
+          </div>
+
+          {/* Toast */}
+          {toast && (
+            <div className="fixed bottom-6 right-6 z-[80] flex max-w-sm items-center gap-3 rounded-xl bg-gray-900 px-5 py-3 text-sm font-medium text-white shadow-2xl">
+              <Icon name="centangLingkaran" className="h-5 w-5 shrink-0 text-brand-400" />
+              <span>{toast}</span>
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+  <!-- Penjaga akun dibekukan: read-only global (blokir aksi CUD) -->
+  <script>
+    (function () {
+      var LEMBAGA = 'NZHR-BDG-170';
+      function beku() { try { var o = JSON.parse(localStorage.getItem('status_nazhir_bwi')); return !!(o && o[LEMBAGA] === 'dibekukan'); } catch (e) { return false; } }
+      if (!beku()) return;
+
+      // Aksi baca / tutup modal / navigasi -> tetap diizinkan
+      var ALLOW = /(lihat|kembali|keluar|template|unduh|cari|tutup|detail|sebelumnya|berikutnya|logout|masuk)/i;
+      // Aksi ubah data (Create/Update/Delete) -> diblokir
+      var CUD = /(tambah|buat|simpan|ajukan|kirim|hapus|batalkan|lengkapi|ubah|edit|unggah|upload|setuju|tolak|perbaiki)/i;
+
+      function aksiCUD(el) {
+        if (!el || !el.getAttribute) return false;
+        if (el.hasAttribute('data-lengkapi') || el.hasAttribute('data-hapus')) return true;
+        var da = el.getAttribute('data-aksi');
+        if (da && /batal|hapus|ubah|edit/i.test(da)) return true;
+        var teks = (el.textContent || '') + ' ' + (el.getAttribute('onclick') || '');
+        if (ALLOW.test(teks)) return false;
+        return CUD.test(teks);
+      }
+
+      // Interseptor klik fase-capture: hentikan sebelum handler CUD berjalan
+      document.addEventListener('click', function (e) {
+        var el = e.target.closest('button,a,[data-lengkapi],[data-hapus],[data-aksi]');
+        if (!el) return;
+        if (aksiCUD(el)) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          if (window.showToast) showToast('Akun dibekukan — aksi ini dinonaktifkan. Hubungi BWI Pusat.');
+        }
+      }, true);
+
+      document.addEventListener('DOMContentLoaded', function () {
+        // Redupkan tombol CUD statis sebagai penanda read-only
+        document.querySelectorAll('button').forEach(function (b) {
+          if (aksiCUD(b)) b.classList.add('opacity-50', 'cursor-not-allowed');
+        });
+        // Banner read-only (lewati halaman yang sudah punya #bannerCutoff sendiri)
+        if (document.getElementById('bannerCutoff')) return;
+        var host = document.querySelector('main .mx-auto') || document.querySelector('main');
+        if (!host) return;
+        var b = document.createElement('div');
+        b.className = 'mb-4 flex items-start gap-3 rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4';
+        b.innerHTML = '<svg class="mt-0.5 h-5 w-5 shrink-0 text-rose-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg><div><p class="text-sm font-bold text-rose-800">Akun Anda dibekukan</p><p class="mt-0.5 text-xs text-rose-800">Anda hanya dapat melihat data (read-only) &mdash; menambah, mengubah, dan menghapus dinonaktifkan. Hubungi BWI Pusat untuk pengaktifan kembali.</p></div>';
+        host.insertBefore(b, host.firstChild);
+      });
+    })();
+  </script>
+
+
+  <!-- Mode Calon Nazhir: shell penuh, read-only, banner status-aware (aktif bila sesi=calon) -->
+  <script>
+    (function () {
+      var sesi = {};
+      try { sesi = JSON.parse(localStorage.getItem('sesi_kenazhiran')) || {}; } catch (e) { sesi = {}; }
+      // Pasca-aktivasi (khusus dashboard): kartu akses SK (persisten) + banner "Selamat" (sekali)
+      document.addEventListener('DOMContentLoaded', function () {
+        var path = (location.pathname.split('/').pop() || '').toLowerCase();
+        if (path !== 'nazhir-dashboard.html') return;
+        var r = {}; try { r = JSON.parse(localStorage.getItem('pendaftaran_nazhir_bwi')) || {}; } catch (e) { }
+        if (r.status !== 'aktif' || !r.nib || sesi.nama !== r.namaBadanHukum) return;
+        var main = document.querySelector('main'); if (!main) return;
+        var host = main.querySelector('.max-w-screen-2xl') || main;
+        function esc2(t) { var e = document.createElement('div'); e.textContent = t == null ? '' : String(t); return e.innerHTML; }
+        var kartu = document.createElement('div');
+        kartu.className = 'mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-gray-200 bg-white px-5 py-4 shadow-card';
+        kartu.innerHTML = '<div class="flex items-center gap-3"><span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg></span><div><p class="text-sm font-bold text-gray-800">Sertifikat Keputusan (SK) Nazhir</p><p class="text-xs text-gray-400">NIB ' + esc2(r.nib) + ' \u00b7 Terbit ' + esc2(r.tglSertifikat || '-') + '</p></div></div>' +
+          '<a href="nazhir-sk.html" class="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-brand-700"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>Preview / Download SK</a>';
+        host.insertBefore(kartu, host.firstChild);
+        var flag = null; try { flag = localStorage.getItem('graduasi_baru_bwi'); } catch (e) { }
+        if (flag) {
+          try { localStorage.removeItem('graduasi_baru_bwi'); } catch (e) { }
+          var div = document.createElement('div');
+          div.className = 'mb-6 flex flex-wrap items-start gap-3 rounded-2xl border border-brand-200 bg-brand-50 px-5 py-4';
+          div.innerHTML = '<svg class="mt-0.5 h-6 w-6 shrink-0 text-brand-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>' +
+            '<div><p class="text-sm font-bold text-brand-800">Selamat! Akun Anda kini aktif sebagai Nazhir</p><p class="mt-0.5 text-xs text-brand-700">Pendaftaran Anda telah disetujui BWI Pusat. NIB &amp; Sertifikat Keputusan (SK) telah terbit dan seluruh menu kini dapat diakses.</p></div>';
+          host.insertBefore(div, host.firstChild);
+        }
+      });
+
+      if (sesi.mode !== 'calon') return;
+
+
+      var reg = {};
+      try { reg = JSON.parse(localStorage.getItem('pendaftaran_nazhir_bwi')) || {}; } catch (e) { reg = {}; }
+      var STATUS = reg.status || 'draft';
+
+      // Graduasi: pendaftaran disetujui -> menjadi Nazhir Aktif (akses penuh, guard nonaktif)
+      if (STATUS === 'aktif') {
+        try { localStorage.setItem('sesi_kenazhiran', JSON.stringify({ mode: 'aktif', nama: reg.namaBadanHukum })); } catch (e) { }
+        try { localStorage.setItem('graduasi_baru_bwi', '1'); } catch (e) { }
+        return;
+      }
+
+      var NAMA = reg.namaBadanHukum || sesi.nama || 'Calon Nazhir';
+      function esc(t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; }
+      function inisial(n) { var p = String(n || 'CN').trim().split(/\s+/); return ((p[0] || 'C')[0] + ((p[1] || p[0] || 'N')[0] || 'N')).toUpperCase().slice(0, 2); }
+      function progres() { var ada = 0; try { ada = Object.keys(reg.berkas || {}).length; } catch (e) { } return { ada: ada, total: 16, persen: Math.round((ada / 16) * 100) }; }
+      var CEK = '<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>';
+
+      var editable = ['draft', 'revisi', 'ditolak'].indexOf(STATUS) !== -1;
+      var CTA = editable ? (STATUS === 'ditolak' ? 'Daftar Ulang' : (STATUS === 'revisi' ? 'Perbaiki Berkas' : 'Lanjutkan Pendaftaran')) : 'Lihat Detail Pendaftaran';
+
+      function bannerConf() {
+        var cat = reg.catatanPusat ? ' <span class="font-semibold">Catatan Pusat:</span> ' + esc(reg.catatanPusat) : '';
+        if (STATUS === 'revisi') return ['orange', 'Berkas perlu diperbaiki (Revisi)', 'BWI Pusat meminta perbaikan berkas.' + cat + ' Klik <b>Perbaiki Berkas</b> untuk memperbaiki lalu ajukan ulang.'];
+        if (STATUS === 'ditolak') return ['red', 'Pendaftaran ditolak', 'Maaf, pengajuan Anda tidak disetujui.' + cat + ' Anda dapat mendaftar ulang dari awal.'];
+        if (STATUS === 'diajukan') return ['amber', 'Berkas sedang diverifikasi BWI Pusat', 'Pengajuan Anda diterima & sedang diperiksa. Klik <b>Lihat Detail</b> untuk memantau.'];
+        if (STATUS === 'diverifikasi') return ['emerald', 'Dokumen terverifikasi BWI Pusat', 'Berkas Anda lengkap & terverifikasi. Menunggu penjadwalan presentasi/wawancara. Klik untuk detail.'];
+        if (STATUS === 'terjadwal') return ['blue', 'Disetujui verifikasi &mdash; jadwal presentasi ditetapkan', 'BWI Pusat menetapkan jadwal presentasi/wawancara Anda: <b>' + esc(reg.jadwalPresentasi || '-') + '</b>. Klik <b>Lihat Detail</b> untuk jadwal &amp; link lengkap.'];
+        if (STATUS === 'persetujuan') return ['violet', 'Lulus presentasi &mdash; menunggu persetujuan akhir', 'Selangkah lagi. Pengajuan Anda menunggu persetujuan akhir &amp; penerbitan sertifikat. Klik untuk detail.'];
+        return ['amber', 'Anda berstatus Calon Nazhir', 'Lengkapi berkas pendaftaran &rarr; menunggu verifikasi BWI Pusat &rarr; akun menjadi <b>Nazhir Aktif</b>. Menu lain read-only hingga akun aktif.'];
+      }
+      function warnaMap(w) {
+        return {
+          amber: ['border-amber-200 bg-amber-50', 'text-amber-600', 'text-amber-800'],
+          orange: ['border-orange-200 bg-orange-50', 'text-orange-600', 'text-orange-800'],
+          red: ['border-red-200 bg-red-50', 'text-red-600', 'text-red-800'],
+          emerald: ['border-emerald-200 bg-emerald-50', 'text-emerald-600', 'text-emerald-800'],
+          blue: ['border-blue-200 bg-blue-50', 'text-blue-600', 'text-blue-800'],
+          violet: ['border-violet-200 bg-violet-50', 'text-violet-600', 'text-violet-800']
+        }[w];
+      }
+      function banner() {
+        var b = bannerConf(), c = warnaMap(b[0]);
+        return '<div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl border ' + c[0] + ' px-5 py-4">' +
+          '<div class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 ' + c[1] + '" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>' +
+          '<div><p class="text-sm font-bold ' + c[2] + '">' + b[1] + '</p><p class="mt-0.5 text-xs ' + c[2] + '">' + b[2] + '</p></div></div>' +
+          '<a href="nazhir-pendaftaran.html" class="shrink-0 rounded-lg bg-brand-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-brand-700">' + CTA + '</a></div>';
+      }
+      function barProgres(p) {
+        return '<div><div class="flex items-center justify-between text-sm"><span class="font-semibold text-gray-700">' + p.ada + ' dari ' + p.total + ' berkas terunggah</span><span class="font-bold text-brand-700">' + p.persen + '%</span></div>' +
+          '<div class="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-gray-100"><div class="h-full rounded-full bg-brand-500" style="width:' + p.persen + '%"></div></div></div>';
+      }
+      function idxDash() {
+        if (STATUS === 'persetujuan') return 3;
+        if (STATUS === 'diverifikasi' || STATUS === 'terjadwal') return 2;
+        if (STATUS === 'diajukan' || STATUS === 'revisi' || STATUS === 'ditolak') return 1;
+        return 0;
+      }
+      function stepsDash() {
+        var cur = idxDash();
+        return ['Lengkapi Berkas', 'Verifikasi Pusat', 'Presentasi/Wawancara', 'Keputusan', 'Sertifikat Terbit'].map(function (s, i) {
+          var done = i < cur, act = i === cur;
+          var lingk = done ? 'bg-brand-600 text-white' : act ? 'bg-brand-100 text-brand-700 ring-2 ring-brand-500' : 'bg-gray-100 text-gray-400';
+          return '<li class="flex items-center gap-2 rounded-lg border ' + (act ? 'border-brand-200 bg-brand-50' : 'border-gray-100 bg-gray-50') + ' px-3 py-2"><span class="flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ' + lingk + '">' + (done ? CEK : (i + 1)) + '</span><span class="' + (done || act ? 'text-gray-700' : 'text-gray-400') + '">' + s + '</span></li>';
+        }).join('');
+      }
+      function isiDashboard(p) {
+        return '<div class="mx-auto max-w-screen-2xl space-y-6 p-4 md:p-6">' + banner() +
+          '<div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-card">' +
+          '<p class="text-sm text-gray-400">Selamat datang,</p><h2 class="text-xl font-bold text-gray-800">' + esc(NAMA) + '</h2>' +
+          '<div class="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2">' +
+          '<div class="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-4"><p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Nomor Induk BWI (NIB)</p><p class="mt-1 font-mono text-lg font-bold text-gray-400">Belum Terbit</p><p class="mt-0.5 text-xs text-gray-400">NIB terbit otomatis setelah pendaftaran disetujui BWI Pusat.</p></div>' +
+          '<div class="rounded-xl border border-gray-200 p-4">' + barProgres(p) + '<a href="nazhir-pendaftaran.html" class="mt-3 inline-flex rounded-lg bg-brand-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-brand-700">' + CTA + '</a></div>' +
+          '</div></div>' +
+          '<div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-card"><h3 class="text-base font-bold text-gray-800">Tahapan menuju Nazhir Aktif</h3>' +
+          '<ol class="mt-4 grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-5">' + stepsDash() + '</ol></div></div>';
+      }
+      function isiKosong(p) {
+        return '<div class="mx-auto max-w-screen-2xl space-y-6 p-4 md:p-6">' + banner() +
+          '<div class="flex flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white px-6 py-16 text-center shadow-card">' +
+          '<span class="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 text-gray-400"><svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg></span>' +
+          '<h3 class="mt-4 text-lg font-bold text-gray-800">Fitur tersedia setelah akun aktif</h3>' +
+          '<p class="mt-1 max-w-md text-sm text-gray-500">Menu ini akan berisi data setelah pendaftaran Anda disetujui BWI Pusat dan akun menjadi Nazhir Aktif.</p>' +
+          '<div class="mt-5 w-full max-w-sm">' + barProgres(p) + '</div>' +
+          '<a href="nazhir-pendaftaran.html" class="mt-5 inline-flex rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700">' + CTA + '</a>' +
+          '</div></div>';
+      }
+      function gantiTeks(dari, ke) {
+        var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null), t = [];
+        while (w.nextNode()) { if (w.currentNode.nodeValue.indexOf(dari) !== -1) t.push(w.currentNode); }
+        t.forEach(function (n) { n.nodeValue = n.nodeValue.split(dari).join(ke); });
+      }
+      function gantiTeksExact(dari, ke) {
+        var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null), t = [];
+        while (w.nextNode()) { if (w.currentNode.nodeValue.trim() === dari) t.push(w.currentNode); }
+        t.forEach(function (n) { n.nodeValue = n.nodeValue.replace(dari, ke); });
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        gantiTeks('Yayasan Wakaf Nusantara', NAMA);
+        gantiTeks('Nazhir Aktif', 'Calon Nazhir');
+        gantiTeksExact('YN', inisial(NAMA));
+
+        var path = (location.pathname.split('/').pop() || '').toLowerCase();
+        if (path === 'nazhir-pendaftaran.html') return;
+        var main = document.querySelector('main');
+        if (!main) return;
+        var p = progres();
+        main.innerHTML = (path === 'nazhir-dashboard.html') ? isiDashboard(p) : isiKosong(p);
+      });
+    })();
+  </script>
+
+</body>
+
+</html>

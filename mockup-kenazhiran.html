@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TTOS · Modul Kenazhiran BWI — Mockup</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .input { width:100%; border:1px solid #e2e8f0; border-radius:0.5rem; padding:0.55rem 0.75rem; font-size:0.875rem; outline:none; transition:border .15s, box-shadow .15s; background:#fff; }
+    .input:focus { border-color:#10b981; box-shadow:0 0 0 3px rgba(16,185,129,.12); }
+    .btn-primary { display:inline-flex; align-items:center; gap:0.35rem; background:#059669; color:#fff; font-weight:600; font-size:0.875rem; padding:0.55rem 1.1rem; border-radius:0.5rem; }
+    .btn-primary:hover { background:#047857; }
+  </style>
+</head>
+<body class="bg-slate-100">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useMemo, Fragment } = React;
+
+    // =============================================================
+    // INLINE SVG ICONS (pengganti lucide-react untuk standalone HTML)
+    // =============================================================
+    const ICONS = {
+      "landmark": '<line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/>',
+      "dashboard": '<rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>',
+      "file-text": '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/>',
+      "building": '<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/>',
+      "database": '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/>',
+      "log-out": '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/>',
+      "shield-check": '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
+      "coins": '<circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/>',
+      "tree": '<path d="m17 14 3 3.3a1 1 0 0 1-.7 1.7H4.7a1 1 0 0 1-.7-1.7L7 14h-.3a1 1 0 0 1-.7-1.7L9 9h-.2A1 1 0 0 1 8 7.3L12 3l4 4.3a1 1 0 0 1-.8 1.7H15l3 3.3a1 1 0 0 1-.7 1.7H17Z"/><path d="M12 22v-3"/>',
+      "chevron-right": '<path d="m9 18 6-6-6-6"/>',
+      "chevron-left": '<path d="m15 18-6-6 6-6"/>',
+      "save": '<path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/>',
+      "lock": '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+      "filter": '<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>',
+      "search": '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+      "download": '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/>',
+      "users": '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+      "trending-up": '<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>',
+      "alert-triangle": '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+      "check-circle": '<path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/>',
+      "clock": '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+      "menu": '<line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>',
+      "x": '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+      "wallet": '<path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>',
+      "arrow-up-right": '<path d="M7 7h10v10"/><path d="M7 17 17 7"/>',
+      "history": '<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/>',
+      "badge-check": '<path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/>',
+      "map-pin": '<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/>',
+      "repeat": '<path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>'
+    };
+
+    function Icon({ name, className }) {
+      return (
+        <svg
+          className={className}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          dangerouslySetInnerHTML={{ __html: ICONS[name] || "" }}
+        />
+      );
+    }
+
+    // =============================================================
+    // Helpers format
+    // =============================================================
+    const fmtRp = (n) => "Rp " + Number(n || 0).toLocaleString("id-ID");
+    const fmtJt = (n) => {
+      const jt = n / 1000000;
+      return jt >= 1000 ? (jt / 1000).toFixed(1) + " M" : jt.toLocaleString("id-ID") + " Jt";
+    };
+
+    // =============================================================
+    // Data dummy realistis
+    // =============================================================
+    const NAZHIR_PROFILE = {
+      nama: "Yayasan Wakaf Al-Amin Nusantara",
+      masterId: "NWU-33-0007841",
+      jenisMaster: "Wakaf Uang",
+      wilayah: "Jawa Tengah",
+      pic: "H. Abdurrahman Wahid, S.E.",
+      siwakUser: "alamin.nusantara@siwak.kemenag.go.id",
+      subIds: [
+        { id: "SUB-33-0007841-T1", jenis: "Wakaf Tanah", lokasi: "Semarang", nilai: 4200000000, icon: "tanah" },
+        { id: "SUB-33-0007841-T2", jenis: "Wakaf Tanah", lokasi: "Kudus", nilai: 1850000000, icon: "tanah" },
+        { id: "SUB-33-0007841-B1", jenis: "Wakaf Bangunan", lokasi: "Salatiga", nilai: 3100000000, icon: "bangunan" }
+      ]
+    };
+
+    const RIWAYAT_MUTASI = [
+      { tgl: "2025-01-15", program: "Wakaf Uang Produktif", sebelum: 100000000, sesudah: 130000000, periode: "2025", by: "Nazhir" },
+      { tgl: "2024-12-10", program: "Wakaf Tanah Semarang", sebelum: 3900000000, sesudah: 4200000000, periode: "2024", by: "Nazhir" },
+      { tgl: "2024-11-02", program: "Wakaf Uang Produktif", sebelum: 80000000, sesudah: 100000000, periode: "2024", by: "Nazhir" },
+      { tgl: "2024-07-21", program: "Wakaf Bangunan Salatiga", sebelum: 2800000000, sesudah: 3100000000, periode: "2024", by: "Nazhir" }
+    ];
+
+    const ADMIN_REKAP = [
+      { masterId: "NWU-33-0007841", nama: "Yayasan Wakaf Al-Amin Nusantara", wilayah: "Jawa Tengah", subCount: 3, uang: 130000000, aset: 9150000000, status: "Terlapor" },
+      { masterId: "NWU-31-0004512", nama: "Baitul Maal Hidayatullah", wilayah: "DKI Jakarta", subCount: 5, uang: 512000000, aset: 22400000000, status: "Terlapor" },
+      { masterId: "NWU-35-0009920", nama: "Yayasan Dompet Peduli Ummat", wilayah: "Jawa Timur", subCount: 2, uang: 340000000, aset: 7800000000, status: "Draft" },
+      { masterId: "NWU-32-0006677", nama: "Wakaf Salman ITB", wilayah: "Jawa Barat", subCount: 4, uang: 890000000, aset: 15600000000, status: "Terlapor" },
+      { masterId: "NWU-73-0002210", nama: "Yayasan Hasanah Sulawesi", wilayah: "Sulawesi Selatan", subCount: 1, uang: 76000000, aset: 2100000000, status: "Belum Lapor" }
+    ];
+
+    const PERIODE_OPTIONS = ["2025 (Aktif)", "2024 (Terkunci)", "2023 (Terkunci)"];
+
+    // =============================================================
+    // APP ROOT
+    // =============================================================
+    function App() {
+      const [role, setRole] = useState(null);
+      const [page, setPage] = useState("dashboard");
+      const [periode, setPeriode] = useState(PERIODE_OPTIONS[0]);
+      const [sidebarOpen, setSidebarOpen] = useState(false);
+
+      const isNazhir = role === "Nazhir";
+      const terkunci = periode.indexOf("Terkunci") !== -1;
+
+      const navNazhir = [
+        { key: "dashboard", label: "Dashboard", icon: "dashboard" },
+        { key: "pelaporan", label: "Form Pelaporan Pintar", icon: "file-text" },
+        { key: "aset", label: "Master & Sub-ID Aset", icon: "database" },
+        { key: "riwayat", label: "Riwayat Mutasi", icon: "history" }
+      ];
+      const navAdmin = [
+        { key: "dashboard", label: "Dashboard Nasional", icon: "dashboard" },
+        { key: "masterdata", label: "Master Data Nazhir", icon: "building" },
+        { key: "cutoff", label: "Kelola Cut-off Periode", icon: "lock" }
+      ];
+      const nav = isNazhir ? navNazhir : navAdmin;
+
+      if (!role) {
+        return <LoginScreen onLogin={(r) => { setRole(r); setPage("dashboard"); }} />;
+      }
+
+      return (
+        <div className="min-h-screen bg-slate-100 text-slate-800">
+          {/* ================= HEADER (SSO Siwak) ================= */}
+          <header className="fixed top-0 inset-x-0 h-16 bg-white border-b border-slate-200 z-30 flex items-center justify-between px-4 lg:px-6">
+            <div className="flex items-center gap-3">
+              <button className="lg:hidden p-2 rounded-lg hover:bg-slate-100" onClick={() => setSidebarOpen(true)}>
+                <Icon name="menu" className="w-5 h-5" />
+              </button>
+              <div className="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center shadow-sm">
+                <Icon name="landmark" className="w-5 h-5 text-white" />
+              </div>
+              <div className="leading-tight">
+                <p className="font-bold text-slate-800 text-sm">TTOS · Modul Kenazhiran</p>
+                <p className="text-[11px] text-slate-400">Badan Wakaf Indonesia</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              {/* Toggle Tampilan Nazhir / Admin */}
+              <div className="hidden sm:flex items-center bg-slate-100 rounded-lg p-1 text-xs font-medium">
+                {["Nazhir", "Admin Pusat"].map((r) => (
+                  <button key={r} onClick={() => { setRole(r); setPage("dashboard"); }}
+                    className={"px-3 py-1.5 rounded-md transition " + (role === r ? "bg-white shadow-sm text-emerald-700" : "text-slate-500 hover:text-slate-700")}>
+                    {r}
+                  </button>
+                ))}
+              </div>
+
+              {/* User SSO Siwak */}
+              <div className="flex items-center gap-2 pl-3 border-l border-slate-200">
+                <div className="text-right hidden md:block leading-tight">
+                  <p className="text-xs font-semibold text-slate-700">{isNazhir ? NAZHIR_PROFILE.pic : "Admin BWI Pusat"}</p>
+                  <p className="text-[10px] text-emerald-600 flex items-center gap-1 justify-end">
+                    <Icon name="shield-check" className="w-3 h-3" /> SSO Siwak Kemenag
+                  </p>
+                </div>
+                <div className="w-9 h-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm">
+                  {isNazhir ? "AW" : "BW"}
+                </div>
+                <button onClick={() => setRole(null)} className="p-2 rounded-lg hover:bg-slate-100 text-slate-400" title="Keluar">
+                  <Icon name="log-out" className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </header>
+
+          {/* ================= SIDEBAR ================= */}
+          {sidebarOpen && <div className="fixed inset-0 bg-black/30 z-30 lg:hidden" onClick={() => setSidebarOpen(false)} />}
+          <aside className={"fixed top-16 bottom-0 left-0 w-64 bg-white border-r border-slate-200 z-40 lg:z-20 transform transition-transform " + (sidebarOpen ? "translate-x-0" : "-translate-x-full") + " lg:translate-x-0"}>
+            <div className="p-4">
+              <div className={"mb-4 px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 " + (isNazhir ? "bg-emerald-50 text-emerald-700" : "bg-slate-800 text-white")}>
+                <Icon name={isNazhir ? "building" : "shield-check"} className="w-4 h-4" />
+                {isNazhir ? "Tampilan Nazhir" : "Tampilan Admin Pusat"}
+              </div>
+              <nav className="space-y-1">
+                {nav.map((item) => {
+                  const active = page === item.key;
+                  return (
+                    <button key={item.key} onClick={() => { setPage(item.key); setSidebarOpen(false); }}
+                      className={"w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition " + (active ? "bg-emerald-600 text-white shadow-sm" : "text-slate-600 hover:bg-slate-100")}>
+                      <Icon name={item.icon} className="w-5 h-5" />
+                      {item.label}
+                    </button>
+                  );
+                })}
+              </nav>
+
+              {/* Mobile role toggle */}
+              <div className="sm:hidden mt-6 pt-4 border-t border-slate-100">
+                <p className="text-[10px] uppercase text-slate-400 mb-2 px-1">Ganti Tampilan</p>
+                {["Nazhir", "Admin Pusat"].map((r) => (
+                  <button key={r} onClick={() => { setRole(r); setPage("dashboard"); setSidebarOpen(false); }}
+                    className={"w-full text-left px-3 py-2 rounded-lg text-sm mb-1 " + (role === r ? "bg-emerald-50 text-emerald-700 font-semibold" : "text-slate-500")}>
+                    {r}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="absolute bottom-4 inset-x-4 text-[10px] text-slate-300 text-center">Titik Terang OS · v0.1 Mockup</div>
+          </aside>
+
+          {/* ================= MAIN ================= */}
+          <main className="pt-16 lg:pl-64 min-h-screen">
+            <div className="p-4 lg:p-8 max-w-7xl mx-auto">
+              <PeriodBar periode={periode} setPeriode={setPeriode} terkunci={terkunci} isNazhir={isNazhir} />
+
+              {isNazhir && page === "dashboard" && <NazhirDashboard terkunci={terkunci} onLapor={() => setPage("pelaporan")} />}
+              {isNazhir && page === "pelaporan" && <SmartReportForm terkunci={terkunci} />}
+              {isNazhir && page === "aset" && <AsetPage />}
+              {isNazhir && page === "riwayat" && <RiwayatPage />}
+
+              {!isNazhir && page === "dashboard" && <AdminDashboard periode={periode} />}
+              {!isNazhir && page === "masterdata" && <MasterDataPage />}
+              {!isNazhir && page === "cutoff" && <CutoffPage periode={periode} />}
+            </div>
+          </main>
+        </div>
+      );
+    }
+
+    // =============================================================
+    // LOGIN / ROLE SELECTOR
+    // =============================================================
+    function LoginScreen({ onLogin }) {
+      const roles = [
+        { role: "Nazhir", desc: "Lapor kinerja & kelola aset lembaga", icon: "building" },
+        { role: "Admin Pusat", desc: "Rekap nasional, cut-off, master data", icon: "shield-check" },
+        { role: "Admin Wilayah", desc: "Monitoring rekap tingkat wilayah", icon: "map-pin" }
+      ];
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-emerald-700 via-emerald-800 to-slate-900 flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div className="bg-emerald-600 p-6 text-center text-white">
+              <div className="w-14 h-14 mx-auto rounded-2xl bg-white/15 flex items-center justify-center mb-3">
+                <Icon name="landmark" className="w-7 h-7" />
+              </div>
+              <h1 className="text-lg font-bold">Titik Terang OS</h1>
+              <p className="text-emerald-100 text-sm">Modul Kenazhiran · Badan Wakaf Indonesia</p>
+            </div>
+            <div className="p-6">
+              <div className="flex items-center gap-2 justify-center text-xs text-slate-500 mb-5 bg-slate-50 rounded-lg py-2">
+                <Icon name="shield-check" className="w-4 h-4 text-emerald-600" />
+                Autentikasi melalui <b className="text-slate-700">SSO Siwak Kemenag</b>
+              </div>
+              <p className="text-xs font-semibold text-slate-400 uppercase mb-3 text-center">Masuk sebagai (demo)</p>
+              <div className="space-y-2">
+                {roles.map((r) => (
+                  <button key={r.role} onClick={() => onLogin(r.role === "Admin Wilayah" ? "Admin Pusat" : r.role)}
+                    className="w-full flex items-center gap-3 p-3 rounded-xl border border-slate-200 hover:border-emerald-400 hover:bg-emerald-50 transition text-left group">
+                    <div className="w-10 h-10 rounded-lg bg-slate-100 group-hover:bg-emerald-100 flex items-center justify-center">
+                      <Icon name={r.icon} className="w-5 h-5 text-slate-500 group-hover:text-emerald-600" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-slate-800 text-sm">{r.role}</p>
+                      <p className="text-xs text-slate-400">{r.desc}</p>
+                    </div>
+                    <Icon name="chevron-right" className="w-4 h-4 text-slate-300 group-hover:text-emerald-500" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // =============================================================
+    // PERIOD BAR (Cut-off filter)
+    // =============================================================
+    function PeriodBar({ periode, setPeriode, terkunci, isNazhir }) {
+      return (
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+          <div>
+            <h2 className="text-xl font-bold text-slate-800">{isNazhir ? "Dashboard Nazhir" : "Dashboard Pengawasan Nasional"}</h2>
+            <p className="text-sm text-slate-400">{isNazhir ? NAZHIR_PROFILE.nama : "Rekap seluruh wilayah · tanpa duplikasi ID"}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-2">
+              <Icon name="filter" className="w-4 h-4 text-slate-400" />
+              <select value={periode} onChange={(e) => setPeriode(e.target.value)} className="text-sm font-medium text-slate-700 bg-transparent outline-none cursor-pointer">
+                {PERIODE_OPTIONS.map((p) => <option key={p}>{p}</option>)}
+              </select>
+            </div>
+            {terkunci && (
+              <span className="flex items-center gap-1 text-xs font-semibold text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-2.5 py-2">
+                <Icon name="lock" className="w-3.5 h-3.5" /> Periode Terkunci
+              </span>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // =============================================================
+    // NAZHIR DASHBOARD
+    // =============================================================
+    function NazhirDashboard({ terkunci, onLapor }) {
+      const totalAset = NAZHIR_PROFILE.subIds.reduce((a, s) => a + s.nilai, 0);
+      const stats = [
+        { label: "Master ID (Wakaf Uang)", value: fmtRp(130000000), icon: "coins", tone: "emerald" },
+        { label: "Total Nilai Aset (Sub-ID)", value: fmtRp(totalAset), icon: "wallet", tone: "slate" },
+        { label: "Jumlah Aset Terhubung", value: NAZHIR_PROFILE.subIds.length + " Sub-ID", icon: "database", tone: "slate" },
+        { label: "Status Laporan Periode", value: terkunci ? "Terkunci" : "Perlu Diisi", icon: terkunci ? "lock" : "clock", tone: terkunci ? "amber" : "rose" }
+      ];
+      const tones = { emerald: "bg-emerald-50 text-emerald-600", slate: "bg-slate-100 text-slate-500", amber: "bg-amber-50 text-amber-600", rose: "bg-rose-50 text-rose-600" };
+
+      return (
+        <div className="space-y-6">
+          {/* Fitur: Master ID + Sub-ID (Manajemen Single ID) — Role: Nazhir */}
+          <div className="bg-white rounded-2xl border border-slate-200 p-5">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center">
+                  <Icon name="badge-check" className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <p className="text-xs text-slate-400">Master ID Nazhir · {NAZHIR_PROFILE.jenisMaster}</p>
+                  <p className="font-bold text-slate-800 text-lg tracking-tight">{NAZHIR_PROFILE.masterId}</p>
+                  <p className="text-xs text-slate-500">{NAZHIR_PROFILE.nama} · {NAZHIR_PROFILE.wilayah}</p>
+                </div>
+              </div>
+              <span className="flex items-center gap-1 text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-full px-3 py-1">
+                <Icon name="shield-check" className="w-3.5 h-3.5" /> Ditarik dari Siwak
+              </span>
+            </div>
+
+            <div className="mt-4 pt-4 border-t border-slate-100">
+              <p className="text-xs font-semibold text-slate-400 uppercase mb-2 flex items-center gap-1">
+                <Icon name="repeat" className="w-3.5 h-3.5" /> Sub-ID / Aset Tambahan (1 Lembaga = 1 Master ID)
+              </p>
+              <div className="grid sm:grid-cols-3 gap-3">
+                {NAZHIR_PROFILE.subIds.map((s) => (
+                  <div key={s.id} className="border border-slate-200 rounded-xl p-3 hover:border-emerald-300 transition">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Icon name={s.icon === "tanah" ? "tree" : "building"} className={"w-4 h-4 " + (s.icon === "tanah" ? "text-emerald-600" : "text-slate-500")} />
+                      <span className="text-xs font-semibold text-slate-700">{s.jenis}</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400">{s.id}</p>
+                    <p className="text-[11px] text-slate-500 flex items-center gap-1 mt-0.5"><Icon name="map-pin" className="w-3 h-3" />{s.lokasi}</p>
+                    <p className="font-bold text-slate-800 mt-1">{fmtRp(s.nilai)}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Stat cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {stats.map((s) => (
+              <div key={s.label} className="bg-white rounded-2xl border border-slate-200 p-4">
+                <div className={"w-9 h-9 rounded-lg flex items-center justify-center mb-3 " + tones[s.tone]}>
+                  <Icon name={s.icon} className="w-5 h-5" />
+                </div>
+                <p className="text-xs text-slate-400">{s.label}</p>
+                <p className="font-bold text-slate-800 text-lg mt-0.5">{s.value}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Riwayat + CTA */}
+          <div className="grid lg:grid-cols-3 gap-4">
+            <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-5">
+              <div className="flex items-center justify-between mb-3">
+                <p className="font-semibold text-slate-700 flex items-center gap-2"><Icon name="history" className="w-4 h-4 text-slate-400" /> Riwayat Mutasi Terakhir</p>
+                <span className="text-xs text-slate-400">Pencatatan delta · anti duplikasi</span>
+              </div>
+              <div className="space-y-2">
+                {RIWAYAT_MUTASI.slice(0, 3).map((m, i) => {
+                  const delta = m.sesudah - m.sebelum;
+                  return (
+                    <div key={i} className="flex items-center justify-between py-2 border-b border-slate-50 last:border-0">
+                      <div>
+                        <p className="text-sm font-medium text-slate-700">{m.program}</p>
+                        <p className="text-xs text-slate-400">{m.tgl} · {fmtRp(m.sebelum)} → {fmtRp(m.sesudah)}</p>
+                      </div>
+                      <span className="flex items-center gap-1 text-sm font-bold text-emerald-600">
+                        <Icon name="arrow-up-right" className="w-4 h-4" /> +{fmtJt(delta)}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Fitur: Pelaporan pintar CTA + Draft — Role: Nazhir */}
+            <div className={"rounded-2xl p-5 flex flex-col justify-between " + (terkunci ? "bg-slate-100 border border-slate-200" : "bg-emerald-600 text-white")}>
+              <div>
+                <p className={"font-semibold " + (terkunci ? "text-slate-600" : "text-white")}>{terkunci ? "Periode Ini Terkunci" : "Laporan Periode Aktif"}</p>
+                <p className={"text-xs mt-1 " + (terkunci ? "text-slate-400" : "text-emerald-100")}>
+                  {terkunci ? "Data historis tidak dapat diubah setelah cut-off. Pilih periode aktif untuk melapor." : "Isi laporan kinerja lewat form pintar, bukan unggah Excel. Draft tersimpan otomatis."}
+                </p>
+              </div>
+              <button disabled={terkunci} onClick={onLapor}
+                className={"mt-4 w-full py-2.5 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 transition " + (terkunci ? "bg-slate-200 text-slate-400 cursor-not-allowed" : "bg-white text-emerald-700 hover:bg-emerald-50")}>
+                <Icon name="file-text" className="w-4 h-4" /> {terkunci ? "Tidak Tersedia" : "Isi Form Pelaporan"}
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // =============================================================
+    // SMART REPORT FORM (multi-step + auto-save + delta calc)
+    // =============================================================
+    function SmartReportForm({ terkunci }) {
+      const steps = ["Pilih Program", "Input Mutasi", "Program & Manfaat", "Review & Submit"];
+      const [step, setStep] = useState(0);
+      const [saveState, setSaveState] = useState("saved");
+      const [program, setProgram] = useState("Wakaf Uang Produktif");
+      const nilaiSebelum = 100000000;
+      const [nilaiSekarang, setNilaiSekarang] = useState(130000000);
+      const [penerima, setPenerima] = useState(1240);
+
+      const delta = nilaiSekarang - nilaiSebelum;
+
+      useEffect(() => {
+        setSaveState("saving");
+        const t = setTimeout(() => setSaveState("saved"), 900);
+        return () => clearTimeout(t);
+      }, [nilaiSekarang, penerima, program, step]);
+
+      if (terkunci) {
+        return (
+          <div className="bg-white rounded-2xl border border-slate-200 p-10 text-center">
+            <Icon name="lock" className="w-10 h-10 text-amber-500 mx-auto mb-3" />
+            <p className="font-bold text-slate-700">Periode Terkunci (Cut-off)</p>
+            <p className="text-sm text-slate-400 mt-1 max-w-sm mx-auto">Laporan periode ini sudah dikunci Admin Pusat. Pilih periode aktif pada filter di atas untuk membuat laporan baru.</p>
+          </div>
+        );
+      }
+
+      return (
+        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+          {/* Header + Auto-save indicator — Fitur: Simpan Otomatis, Role: Nazhir */}
+          <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+            <div>
+              <p className="font-bold text-slate-800">Form Pelaporan Kinerja Pintar</p>
+              <p className="text-xs text-slate-400">Pengganti unggah Excel · pencatatan mutasi berkesinambungan</p>
+            </div>
+            <span className={"flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full " + (saveState === "saving" ? "bg-amber-50 text-amber-600" : "bg-emerald-50 text-emerald-600")}>
+              {saveState === "saving"
+                ? <Fragment><Icon name="clock" className="w-3.5 h-3.5 animate-pulse" /> Menyimpan draft…</Fragment>
+                : <Fragment><Icon name="save" className="w-3.5 h-3.5" /> Draft tersimpan</Fragment>}
+            </span>
+          </div>
+
+          {/* Stepper */}
+          <div className="flex items-center gap-1 px-5 py-4 overflow-x-auto">
+            {steps.map((s, i) => (
+              <Fragment key={s}>
+                <div className="flex items-center gap-2 shrink-0">
+                  <div className={"w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold " + (i < step ? "bg-emerald-600 text-white" : i === step ? "bg-emerald-100 text-emerald-700 ring-2 ring-emerald-500" : "bg-slate-100 text-slate-400")}>
+                    {i < step ? <Icon name="check-circle" className="w-4 h-4" /> : i + 1}
+                  </div>
+                  <span className={"text-xs font-medium " + (i === step ? "text-slate-800" : "text-slate-400")}>{s}</span>
+                </div>
+                {i < steps.length - 1 && <div className={"h-0.5 flex-1 min-w-4 " + (i < step ? "bg-emerald-500" : "bg-slate-100")} />}
+              </Fragment>
+            ))}
+          </div>
+
+          {/* Step content */}
+          <div className="px-5 py-6 min-h-[320px]">
+            {step === 0 && (
+              <div className="space-y-4 max-w-lg">
+                <Field label="Program Wakaf yang Dilaporkan">
+                  <select value={program} onChange={(e) => setProgram(e.target.value)} className="input">
+                    <option>Wakaf Uang Produktif</option>
+                    <option>Wakaf Tanah Semarang</option>
+                    <option>Wakaf Bangunan Salatiga</option>
+                  </select>
+                </Field>
+                <Field label="Master ID Terkait">
+                  <input disabled value={NAZHIR_PROFILE.masterId + " — " + NAZHIR_PROFILE.nama} className="input bg-slate-50 text-slate-500" />
+                </Field>
+                <div className="flex items-start gap-2 text-xs text-slate-500 bg-slate-50 rounded-lg p-3">
+                  <Icon name="alert-triangle" className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                  <span>Sistem mencatat <b>mutasi (selisih)</b>, bukan total baru — mencegah data terakumulasi ganda.</span>
+                </div>
+              </div>
+            )}
+
+            {step === 1 && (
+              <div className="max-w-xl space-y-5">
+                {/* Fitur unggulan: kalkulasi delta — Role: Nazhir */}
+                <div className="grid grid-cols-2 gap-4">
+                  <Field label="Nilai Tercatat Sebelumnya (terkunci)">
+                    <input disabled value={fmtRp(nilaiSebelum)} className="input bg-slate-50 text-slate-500 font-semibold" />
+                  </Field>
+                  <Field label="Nilai Saat Ini (input)">
+                    <input type="number" value={nilaiSekarang} onChange={(e) => setNilaiSekarang(Number(e.target.value))} className="input font-semibold" />
+                  </Field>
+                </div>
+
+                <div className={"rounded-xl p-4 border-2 border-dashed transition " + (delta > 0 ? "border-emerald-300 bg-emerald-50" : delta < 0 ? "border-rose-300 bg-rose-50" : "border-slate-200 bg-slate-50")}>
+                  <p className="text-xs text-slate-500 mb-1">Mutasi yang akan dicatat (delta)</p>
+                  <div className="flex items-center gap-2">
+                    <Icon name={delta >= 0 ? "arrow-up-right" : "trending-up"} className={"w-6 h-6 " + (delta >= 0 ? "text-emerald-600" : "text-rose-600 rotate-180")} />
+                    <span className={"text-2xl font-extrabold " + (delta > 0 ? "text-emerald-600" : delta < 0 ? "text-rose-600" : "text-slate-500")}>
+                      {delta > 0 ? "+" : ""}{fmtRp(delta)}
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-400 mt-1">
+                    {delta > 0 ? "Penambahan aset dicatat sebagai entri mutasi baru, total tidak diduplikasi." : delta < 0 ? "Pengurangan/koreksi nilai aset tercatat." : "Tidak ada perubahan nilai."}
+                  </p>
+                </div>
+                <Field label="Keterangan Sumber Penambahan">
+                  <input placeholder="mis. Setoran wakaf tunai baru dari 3 wakif korporasi" className="input" />
+                </Field>
+              </div>
+            )}
+
+            {step === 2 && (
+              <div className="max-w-xl space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <Field label="Jumlah Penerima Manfaat (Mauquf 'alaih)">
+                    <input type="number" value={penerima} onChange={(e) => setPenerima(Number(e.target.value))} className="input" />
+                  </Field>
+                  <Field label="Kategori Manfaat">
+                    <select className="input"><option>Pendidikan</option><option>Ekonomi Produktif</option><option>Sosial &amp; Kesehatan</option></select>
+                  </Field>
+                </div>
+                <Field label="Realisasi Penyaluran Manfaat (periode ini)">
+                  <input placeholder="mis. Rp 18.500.000" className="input" />
+                </Field>
+                <Field label="Ringkasan Kinerja Program">
+                  <textarea rows={3} placeholder="Deskripsi singkat capaian program wakaf pada periode ini…" className="input resize-none" />
+                </Field>
+              </div>
+            )}
+
+            {step === 3 && (
+              <div className="max-w-xl space-y-3">
+                <p className="font-semibold text-slate-700 mb-2">Tinjau sebelum submit</p>
+                {[
+                  ["Program", program],
+                  ["Master ID", NAZHIR_PROFILE.masterId],
+                  ["Nilai Sebelum → Sekarang", fmtRp(nilaiSebelum) + " → " + fmtRp(nilaiSekarang)],
+                  ["Mutasi Tercatat", (delta >= 0 ? "+" : "") + fmtRp(delta)],
+                  ["Penerima Manfaat", penerima.toLocaleString("id-ID") + " orang"]
+                ].map((row) => (
+                  <div key={row[0]} className="flex justify-between text-sm py-2 border-b border-slate-100">
+                    <span className="text-slate-400">{row[0]}</span>
+                    <span className="font-semibold text-slate-700">{row[1]}</span>
+                  </div>
+                ))}
+                <div className="flex items-start gap-2 text-xs text-emerald-700 bg-emerald-50 rounded-lg p-3 mt-2">
+                  <Icon name="check-circle" className="w-4 h-4 shrink-0 mt-0.5" />
+                  <span>Setelah submit, laporan masuk rekap Admin BWI dan terkunci saat cut-off periode.</span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Footer nav */}
+          <div className="flex items-center justify-between px-5 py-4 border-t border-slate-100 bg-slate-50">
+            <button onClick={() => setStep((s) => Math.max(0, s - 1))} disabled={step === 0}
+              className="flex items-center gap-1 text-sm font-medium text-slate-500 disabled:opacity-40">
+              <Icon name="chevron-left" className="w-4 h-4" /> Kembali
+            </button>
+            {step < steps.length - 1 ? (
+              <button onClick={() => setStep((s) => s + 1)} className="btn-primary">Lanjut <Icon name="chevron-right" className="w-4 h-4" /></button>
+            ) : (
+              <button className="btn-primary" style={{ background: "#047857" }}><Icon name="check-circle" className="w-4 h-4" /> Submit Laporan</button>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // =============================================================
+    // ASET PAGE (Master & Sub-ID)
+    // =============================================================
+    function AsetPage() {
+      return (
+        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+          {/* Fitur: Manajemen Single ID — Role: Nazhir */}
+          <div className="px-5 py-4 border-b border-slate-100">
+            <p className="font-bold text-slate-800">Master ID &amp; Aset Terhubung</p>
+            <p className="text-xs text-slate-400">Satu lembaga hanya memiliki satu Master ID. Aset lain menjadi Sub-ID.</p>
+          </div>
+          <div className="p-5">
+            <div className="rounded-xl bg-emerald-50 border border-emerald-100 p-4 mb-4 flex items-center gap-3">
+              <Icon name="coins" className="w-8 h-8 text-emerald-600" />
+              <div className="flex-1">
+                <p className="text-xs text-emerald-700">Master ID · {NAZHIR_PROFILE.jenisMaster}</p>
+                <p className="font-bold text-slate-800">{NAZHIR_PROFILE.masterId}</p>
+              </div>
+              <span className="text-xs bg-white text-emerald-700 rounded-full px-3 py-1 font-semibold">Aktif</span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-xs text-slate-400 border-b border-slate-100">
+                    <th className="py-2 font-medium">Sub-ID</th><th className="font-medium">Jenis</th>
+                    <th className="font-medium">Lokasi</th><th className="font-medium text-right">Nilai</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {NAZHIR_PROFILE.subIds.map((s) => (
+                    <tr key={s.id} className="border-b border-slate-50">
+                      <td className="py-3 font-mono text-xs text-slate-600">{s.id}</td>
+                      <td className="text-slate-700">{s.jenis}</td>
+                      <td className="text-slate-500">{s.lokasi}</td>
+                      <td className="text-right font-semibold text-slate-800">{fmtRp(s.nilai)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // =============================================================
+    // RIWAYAT MUTASI (audit trail)
+    // =============================================================
+    function RiwayatPage() {
+      return (
+        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+          {/* Fitur: Audit log / riwayat mutasi — Role: Nazhir */}
+          <div className="px-5 py-4 border-b border-slate-100">
+            <p className="font-bold text-slate-800">Riwayat Mutasi &amp; Audit Log</p>
+            <p className="text-xs text-slate-400">Setiap perubahan nilai terekam: nilai lama → baru, tanggal, dan pelaku.</p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-xs text-slate-400 border-b border-slate-100 bg-slate-50">
+                  <th className="py-3 px-5 font-medium">Tanggal</th><th className="font-medium">Program</th>
+                  <th className="font-medium">Nilai Lama → Baru</th><th className="font-medium text-right">Mutasi</th>
+                  <th className="font-medium">Periode</th><th className="font-medium px-5">Oleh</th>
+                </tr>
+              </thead>
+              <tbody>
+                {RIWAYAT_MUTASI.map((m, i) => {
+                  const delta = m.sesudah - m.sebelum;
+                  return (
+                    <tr key={i} className="border-b border-slate-50 hover:bg-slate-50">
+                      <td className="py-3 px-5 text-slate-500">{m.tgl}</td>
+                      <td className="text-slate-700 font-medium">{m.program}</td>
+                      <td className="text-slate-500 text-xs">{fmtRp(m.sebelum)} → {fmtRp(m.sesudah)}</td>
+                      <td className="text-right font-bold text-emerald-600">+{fmtJt(delta)}</td>
+                      <td><span className="text-xs bg-slate-100 rounded px-2 py-0.5">{m.periode}</span></td>
+                      <td className="px-5 text-xs text-slate-400">{m.by}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    }
+
+    // =============================================================
+    // ADMIN DASHBOARD (national aggregation)
+    // =============================================================
+    function AdminDashboard({ periode }) {
+      const [q, setQ] = useState("");
+      const totalUang = ADMIN_REKAP.reduce((a, r) => a + r.uang, 0);
+      const totalAset = ADMIN_REKAP.reduce((a, r) => a + r.aset, 0);
+      const terlapor = ADMIN_REKAP.filter((r) => r.status === "Terlapor").length;
+
+      const rows = useMemo(() => ADMIN_REKAP.filter((r) => r.nama.toLowerCase().indexOf(q.toLowerCase()) !== -1 || r.masterId.indexOf(q) !== -1), [q]);
+
+      const stats = [
+        { label: "Total Nazhir (Master ID)", value: ADMIN_REKAP.length + " Lembaga", sub: "tanpa duplikasi ID", icon: "users", tone: "emerald" },
+        { label: "Total Wakaf Uang", value: fmtRp(totalUang), sub: "nasional", icon: "coins", tone: "slate" },
+        { label: "Total Nilai Aset", value: fmtRp(totalAset), sub: "seluruh sub-ID", icon: "wallet", tone: "slate" },
+        { label: "Kepatuhan Lapor", value: terlapor + "/" + ADMIN_REKAP.length, sub: "sudah melapor", icon: "check-circle", tone: "amber" }
+      ];
+      const tones = { emerald: "bg-emerald-50 text-emerald-600", slate: "bg-slate-100 text-slate-500", amber: "bg-amber-50 text-amber-600" };
+
+      return (
+        <div className="space-y-6">
+          {/* Fitur: Rekap nasional tanpa duplikasi — Role: Admin Pusat/Wilayah */}
+          <div className="rounded-xl bg-slate-800 text-white p-4 flex items-center gap-3">
+            <Icon name="shield-check" className="w-6 h-6 text-emerald-400" />
+            <div className="flex-1">
+              <p className="text-sm font-semibold">Data ditampilkan per Master ID — bebas duplikasi</p>
+              <p className="text-xs text-slate-300">Beberapa aset/lokasi milik satu lembaga digabung otomatis ke satu Master ID.</p>
+            </div>
+            <span className="text-xs bg-slate-700 rounded px-2 py-1">{periode}</span>
+          </div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {stats.map((s) => (
+              <div key={s.label} className="bg-white rounded-2xl border border-slate-200 p-4">
+                <div className={"w-9 h-9 rounded-lg flex items-center justify-center mb-3 " + tones[s.tone]}><Icon name={s.icon} className="w-5 h-5" /></div>
+                <p className="text-xs text-slate-400">{s.label}</p>
+                <p className="font-bold text-slate-800 text-lg mt-0.5">{s.value}</p>
+                <p className="text-[11px] text-slate-400">{s.sub}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+            <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 border-b border-slate-100">
+              <p className="font-bold text-slate-800">Rekap Pelaporan Nazhir Nasional</p>
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 border border-slate-200 rounded-lg px-3 py-1.5">
+                  <Icon name="search" className="w-4 h-4 text-slate-400" />
+                  <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Cari lembaga / Master ID" className="text-sm outline-none w-40 sm:w-56" />
+                </div>
+                <button className="flex items-center gap-1.5 text-sm font-medium bg-emerald-600 text-white rounded-lg px-3 py-1.5 hover:bg-emerald-700">
+                  <Icon name="download" className="w-4 h-4" /> Export
+                </button>
+              </div>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-xs text-slate-400 border-b border-slate-100 bg-slate-50">
+                    <th className="py-3 px-5 font-medium">Master ID</th><th className="font-medium">Lembaga Nazhir</th>
+                    <th className="font-medium">Wilayah</th><th className="font-medium text-center">Sub-ID</th>
+                    <th className="font-medium text-right">Wakaf Uang</th><th className="font-medium text-right">Total Aset</th>
+                    <th className="font-medium px-5">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((r) => (
+                    <tr key={r.masterId} className="border-b border-slate-50 hover:bg-slate-50">
+                      <td className="py-3 px-5 font-mono text-xs text-slate-600">{r.masterId}</td>
+                      <td className="text-slate-700 font-medium">{r.nama}</td>
+                      <td className="text-slate-500">{r.wilayah}</td>
+                      <td className="text-center text-slate-500">{r.subCount}</td>
+                      <td className="text-right text-slate-700">{fmtRp(r.uang)}</td>
+                      <td className="text-right font-semibold text-slate-800">{fmtRp(r.aset)}</td>
+                      <td className="px-5"><StatusBadge status={r.status} /></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // =============================================================
+    // MASTER DATA (merge / de-dup)
+    // =============================================================
+    function MasterDataPage() {
+      const dupes = [
+        { id: "NWU-31-0004512", nama: "Baitul Maal Hidayatullah", dup: "ID lama: WKF-31-8821, WKF-31-9903" },
+        { id: "NWU-32-0006677", nama: "Wakaf Salman ITB", dup: "ID lama: WU-32-1150" }
+      ];
+      return (
+        <div className="space-y-4">
+          {/* Fitur: Merge / de-duplikasi ID — Role: Admin Pusat */}
+          <div className="bg-white rounded-2xl border border-slate-200 p-5">
+            <p className="font-bold text-slate-800">Master Data Nazhir</p>
+            <p className="text-xs text-slate-400 mb-4">Konsolidasi ID duplikat lama ke satu Master ID berbasis ID Wakaf Uang.</p>
+            <div className="space-y-3">
+              {dupes.map((d) => (
+                <div key={d.id} className="flex flex-wrap items-center justify-between gap-3 border border-amber-200 bg-amber-50 rounded-xl p-4">
+                  <div className="flex items-center gap-3">
+                    <Icon name="alert-triangle" className="w-5 h-5 text-amber-500" />
+                    <div>
+                      <p className="font-semibold text-slate-700 text-sm">{d.nama}</p>
+                      <p className="text-xs text-slate-500">Master ID: <span className="font-mono">{d.id}</span> · {d.dup}</p>
+                    </div>
+                  </div>
+                  <button className="text-xs font-semibold bg-emerald-600 text-white rounded-lg px-3 py-2 hover:bg-emerald-700 flex items-center gap-1">
+                    <Icon name="repeat" className="w-3.5 h-3.5" /> Gabungkan ke Master ID
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // =============================================================
+    // CUT-OFF MANAGEMENT
+    // =============================================================
+    function CutoffPage() {
+      const periods = [
+        { p: "Tahun 2025", tgl: "Ditutup 31 Des 2025", locked: false },
+        { p: "Tahun 2024", tgl: "Dikunci 15 Jan 2025", locked: true },
+        { p: "Tahun 2023", tgl: "Dikunci 20 Jan 2024", locked: true }
+      ];
+      return (
+        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+          {/* Fitur: Cut-off periode — Role: Admin Pusat */}
+          <div className="px-5 py-4 border-b border-slate-100">
+            <p className="font-bold text-slate-800">Kelola Cut-off Periode Pelaporan</p>
+            <p className="text-xs text-slate-400">Kunci periode agar data historis nasional tidak berubah setelah batas waktu.</p>
+          </div>
+          <div className="p-5 space-y-3">
+            {periods.map((p) => (
+              <div key={p.p} className="flex items-center justify-between border border-slate-200 rounded-xl p-4">
+                <div className="flex items-center gap-3">
+                  <div className={"w-10 h-10 rounded-lg flex items-center justify-center " + (p.locked ? "bg-amber-50 text-amber-600" : "bg-emerald-50 text-emerald-600")}>
+                    <Icon name={p.locked ? "lock" : "clock"} className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-slate-700 text-sm">{p.p}</p>
+                    <p className="text-xs text-slate-400">{p.tgl}</p>
+                  </div>
+                </div>
+                {p.locked ? (
+                  <span className="text-xs font-semibold text-amber-600 bg-amber-50 rounded-full px-3 py-1.5 flex items-center gap-1"><Icon name="lock" className="w-3.5 h-3.5" /> Terkunci</span>
+                ) : (
+                  <button className="text-xs font-semibold bg-slate-800 text-white rounded-lg px-3 py-2 hover:bg-slate-900 flex items-center gap-1">
+                    <Icon name="lock" className="w-3.5 h-3.5" /> Jalankan Cut-off
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // =============================================================
+    // SMALL HELPERS
+    // =============================================================
+    function Field({ label, children }) {
+      return (
+        <label className="block">
+          <span className="text-xs font-medium text-slate-500 mb-1 block">{label}</span>
+          {children}
+        </label>
+      );
+    }
+
+    function StatusBadge({ status }) {
+      const map = {
+        "Terlapor": "bg-emerald-50 text-emerald-700",
+        "Draft": "bg-amber-50 text-amber-700",
+        "Belum Lapor": "bg-rose-50 text-rose-700"
+      };
+      return <span className={"text-xs font-semibold rounded-full px-2.5 py-1 " + map[status]}>{status}</span>;
+    }
+
+    // =============================================================
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>

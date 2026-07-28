@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulasi SSOT — Master Program &amp; Laporan Program | BWI Kenazhiran</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- React + ReactDOM + Babel -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Outfit', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+          colors: {
+            brand: {
+              50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 300: '#5eead4', 400: '#2dd4bf',
+              500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a',
+            }
+          },
+          maxWidth: { 'screen-2xl': '1536px' },
+          boxShadow: {
+            'card': '0px 1px 3px rgba(0, 0, 0, 0.06), 0px 1px 2px rgba(0, 0, 0, 0.04)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body, html { font-family: 'Outfit', sans-serif !important; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+    @keyframes pop { from { opacity: 0; transform: translateY(6px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .pop { animation: pop .2s cubic-bezier(.4,0,.2,1); }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 antialiased">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useMemo } = React;
+
+    /* =========================================================
+       Helper mata uang & angka
+       ========================================================= */
+    const toNumber = (v) => Number(String(v).replace(/[^\d]/g, '')) || 0;
+    const formatRibuan = (v) => {
+      const n = toNumber(v);
+      return n ? n.toLocaleString('id-ID') : '';
+    };
+    const rupiah = (n) => 'Rp ' + (Number(n) || 0).toLocaleString('id-ID');
+
+    /* =========================================================
+       DUMMY DATA — mensimulasikan aset & program yang sudah ada.
+       "Penggemukan Sapi Perah" dengan Modal Awal Rp 300.000.000
+       (angka ini HANYA diinput sekali di fase Master Program).
+       ========================================================= */
+    const ASET_DUMMY = [
+      { id: 'NZHR-BDG-001', nama: 'Tanah Jl. Merdeka', lokasi: 'Semarang, Jawa Tengah', luas: '500 M²' },
+      { id: 'NZHR-BDG-003', nama: 'Tanah Jl. Sudirman', lokasi: 'Bandung, Jawa Barat', luas: '2.500 M²' },
+      { id: 'NZHR-BDG-005', nama: 'Tanah Jl. Kenari', lokasi: 'Yogyakarta', luas: '1.200 M²' },
+    ];
+
+    const PROGRAM_AWAL = [
+      {
+        kode: 'PRG-BDG-001',
+        nama: 'Penggemukan Sapi Perah',
+        jenis: 'produktif',
+        asetId: 'NZHR-BDG-001',
+        asetNama: 'Tanah Jl. Merdeka',
+        modalAwal: 300000000,      // ← SUMBER KEBENARAN (di-input SEKALI)
+        nilaiTerkini: 300000000,   // ← nilai berjalan; diperbarui otomatis oleh laporan
+        jumlahLaporan: 0,
+      },
+    ];
+
+    const JENIS_LABEL = {
+      produktif: 'Wakaf Produktif',
+      sosial: 'Sosial & Ibadah',
+      pendidikan: 'Pendidikan',
+      kesehatan: 'Kesehatan',
+      peternakan: 'Peternakan / Agri',
+    };
+
+    /* =========================================================
+       Komponen kecil
+       ========================================================= */
+    const Field = ({ label, wajib, children, hint }) => (
+      <div>
+        <label className="mb-1.5 block text-sm font-semibold text-gray-700">
+          {label} {wajib && <span className="text-red-500">*</span>}
+        </label>
+        {children}
+        {hint && <p className="mt-1.5 text-xs text-gray-400">{hint}</p>}
+      </div>
+    );
+
+    const inputCls =
+      "w-full rounded-lg border border-gray-200 bg-white py-2.5 px-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100";
+    const selectCls =
+      "w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pl-4 pr-10 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100";
+
+    const Chevron = () => (
+      <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400">
+        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+        </svg>
+      </span>
+    );
+
+    /* =========================================================
+       FASE 1 — Form Tambah Master Program
+       Modal Awal diinput SEKALI di sini.
+       ========================================================= */
+    const MasterProgramForm = ({ programs, onTambah, toast }) => {
+      const [asetId, setAsetId] = useState('');
+      const [nama, setNama] = useState('');
+      const [jenis, setJenis] = useState('peternakan');
+      const [modal, setModal] = useState('');
+
+      const submit = () => {
+        if (!asetId) return toast('Pilih aset wakaf sumber terlebih dahulu.', 'error');
+        if (!nama.trim()) return toast('Nama program wajib diisi.', 'error');
+        const modalNum = toNumber(modal);
+        if (modalNum <= 0) return toast('Modal awal harus lebih dari 0.', 'error');
+
+        const aset = ASET_DUMMY.find(a => a.id === asetId);
+        const kode = 'PRG-BDG-' + String(programs.length + 1).padStart(3, '0');
+        onTambah({
+          kode,
+          nama: nama.trim(),
+          jenis,
+          asetId,
+          asetNama: aset ? aset.nama : asetId,
+          modalAwal: modalNum,
+          nilaiTerkini: modalNum,   // nilai berjalan diinisialisasi = modal awal
+          jumlahLaporan: 0,
+        });
+        toast('Program "' + kode + '" dibuat. Modal awal ' + rupiah(modalNum) + ' terkunci sebagai baseline.', 'ok');
+        setAsetId(''); setNama(''); setJenis('peternakan'); setModal('');
+      };
+
+      return (
+        <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+          <div className="flex items-center gap-3 border-b border-gray-100 bg-gradient-to-r from-brand-50 to-white px-6 py-4">
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">1</span>
+            <div>
+              <h3 className="text-base font-bold text-gray-800">Tambah Master Program</h3>
+              <p className="text-xs text-gray-400">Modal awal diinput <span className="font-semibold text-brand-700">sekali</span> di fase ini.</p>
+            </div>
+          </div>
+
+          <div className="space-y-5 px-6 py-5">
+            <Field label="Aset Wakaf Sumber" wajib hint="Program melebur / dibangun di atas aset ini.">
+              <div className="relative">
+                <select className={selectCls} value={asetId} onChange={e => setAsetId(e.target.value)}>
+                  <option value="">Pilih Aset Wakaf Tanah</option>
+                  {ASET_DUMMY.map(a => (
+                    <option key={a.id} value={a.id}>{a.id} · {a.nama} ({a.luas})</option>
+                  ))}
+                </select>
+                <Chevron />
+              </div>
+            </Field>
+
+            <Field label="Nama Program" wajib>
+              <input className={inputCls} type="text" value={nama}
+                onChange={e => setNama(e.target.value)}
+                placeholder="mis. Penggemukan Sapi Perah" />
+            </Field>
+
+            <Field label="Jenis Program" wajib>
+              <div className="relative">
+                <select className={selectCls} value={jenis} onChange={e => setJenis(e.target.value)}>
+                  {Object.keys(JENIS_LABEL).map(k => <option key={k} value={k}>{JENIS_LABEL[k]}</option>)}
+                </select>
+                <Chevron />
+              </div>
+            </Field>
+
+            <Field label="Modal Awal Program (Rp)" wajib
+              hint="Angka ini menjadi Single Source of Truth — tidak akan pernah diketik ulang saat pelaporan.">
+              <input className={inputCls} inputMode="numeric" value={modal}
+                onChange={e => setModal(formatRibuan(e.target.value))}
+                placeholder="mis. 300.000.000" />
+            </Field>
+
+            <button onClick={submit}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.8" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+              Simpan Master Program
+            </button>
+          </div>
+        </div>
+      );
+    };
+
+    /* =========================================================
+       FASE 2 — Form Laporan Program
+       - Nilai Awal/Bulan Lalu: AUTO-FILL + READ-ONLY (dari SSOT)
+       - Input aktual: hanya Nilai Aktual & Biaya Operasional
+       - Selisih dihitung otomatis -> ditampilkan sebagai Badge/Alert
+       ========================================================= */
+    const LaporanProgramForm = ({ programs, onLapor, toast }) => {
+      const [kode, setKode] = useState('');
+      const [periode, setPeriode] = useState('');
+      const [aktual, setAktual] = useState('');
+      const [opex, setOpex] = useState('');
+
+      const program = useMemo(() => programs.find(p => p.kode === kode) || null, [programs, kode]);
+
+      // NILAI AWAL/BULAN LALU: ditarik dari SSOT (nilai berjalan program). Read-only.
+      const nilaiAwal = program ? program.nilaiTerkini : 0;
+      const aktualNum = toNumber(aktual);
+      const opexNum = toNumber(opex);
+
+      // SMART CALCULATION — selisih otomatis, tidak pernah diketik user.
+      const selisih = program && aktual !== '' ? aktualNum - nilaiAwal : 0;
+      const adaAktual = program && aktual !== '';
+
+      const submit = () => {
+        if (!program) return toast('Pilih program yang akan dilaporkan.', 'error');
+        if (!periode) return toast('Pilih periode laporan.', 'error');
+        if (aktualNum <= 0) return toast('Isi Nilai Aktual Saat Ini (hasil taksiran bulan ini).', 'error');
+
+        onLapor(program.kode, {
+          periode,
+          nilaiAwal,               // baseline dari SSOT
+          nilaiAktual: aktualNum,  // fakta bulan ini
+          biayaOperasional: opexNum,
+          selisih: aktualNum - nilaiAwal,
+        });
+        toast('Laporan ' + program.kode + ' tersimpan. Nilai berjalan diperbarui ke ' + rupiah(aktualNum) + '.', 'ok');
+        setKode(''); setPeriode(''); setAktual(''); setOpex('');
+      };
+
+      return (
+        <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+          <div className="flex items-center gap-3 border-b border-gray-100 bg-gradient-to-r from-brand-50 to-white px-6 py-4">
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">2</span>
+            <div>
+              <h3 className="text-base font-bold text-gray-800">Form Laporan Program</h3>
+              <p className="text-xs text-gray-400">Nilai awal ditarik otomatis — Nazhir hanya isi data faktual bulan ini.</p>
+            </div>
+          </div>
+
+          <div className="space-y-5 px-6 py-5">
+            <Field label="Program yang Dilaporkan" wajib>
+              <div className="relative">
+                <select className={selectCls} value={kode} onChange={e => { setKode(e.target.value); setAktual(''); setOpex(''); }}>
+                  <option value="">Pilih Program</option>
+                  {programs.map(p => <option key={p.kode} value={p.kode}>{p.kode} · {p.nama}</option>)}
+                </select>
+                <Chevron />
+              </div>
+            </Field>
+
+            <Field label="Periode Laporan" wajib>
+              <div className="relative">
+                <select className={selectCls} value={periode} onChange={e => setPeriode(e.target.value)}>
+                  <option value="">Pilih Periode</option>
+                  <option value="Januari 2026">Januari 2026</option>
+                  <option value="Februari 2026">Februari 2026</option>
+                  <option value="Maret 2026">Maret 2026</option>
+                </select>
+                <Chevron />
+              </div>
+            </Field>
+
+            {/* NILAI AWAL — READ ONLY (dikunci) */}
+            <Field label="Nilai Awal / Bulan Lalu (Rp)"
+              hint="Terkunci — ditarik otomatis dari data program (Single Source of Truth).">
+              <div className="relative">
+                <input
+                  className="w-full cursor-not-allowed rounded-lg border border-gray-200 bg-gray-100 py-2.5 pl-4 pr-10 text-sm font-semibold text-gray-500 outline-none"
+                  type="text"
+                  value={program ? rupiah(nilaiAwal) : ''}
+                  placeholder="Pilih program dulu…"
+                  readOnly
+                  disabled
+                  tabIndex={-1}
+                />
+                <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400">
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="1.8" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                  </svg>
+                </span>
+              </div>
+            </Field>
+
+            {/* INPUT FAKTUAL — hanya 2 hal */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <Field label="Nilai Aktual Saat Ini (Rp)" wajib>
+                <input className={inputCls} inputMode="numeric" value={aktual}
+                  onChange={e => setAktual(formatRibuan(e.target.value))}
+                  placeholder="mis. 350.000.000" disabled={!program} />
+              </Field>
+              <Field label="Biaya Operasional (Rp)">
+                <input className={inputCls} inputMode="numeric" value={opex}
+                  onChange={e => setOpex(formatRibuan(e.target.value))}
+                  placeholder="mis. 15.000.000" disabled={!program} />
+              </Field>
+            </div>
+
+            {/* BADGE / ALERT KALKULASI OTOMATIS — pengganti input Kenaikan/Penyusutan */}
+            <KalkulasiBadge adaAktual={adaAktual} selisih={selisih} opex={opexNum} />
+
+            <button onClick={submit}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={!program}>
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.8" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+              </svg>
+              Kirim Laporan Program
+            </button>
+          </div>
+        </div>
+      );
+    };
+
+    /* =========================================================
+       Badge/Alert hasil Smart Calculation (bukan input)
+       ========================================================= */
+    const KalkulasiBadge = ({ adaAktual, selisih, opex }) => {
+      if (!adaAktual) {
+        return (
+          <div className="flex items-center gap-3 rounded-xl border border-dashed border-gray-200 bg-gray-50 px-4 py-3.5 text-sm text-gray-400">
+            <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth="1.7" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z" />
+            </svg>
+            Selisih nilai program akan dihitung otomatis setelah Nilai Aktual diisi.
+          </div>
+        );
+      }
+
+      const naik = selisih > 0;
+      const turun = selisih < 0;
+      const warna = naik ? 'emerald' : turun ? 'red' : 'gray';
+      const judul = naik ? 'Kenaikan Nilai Program' : turun ? 'Penyusutan Nilai Program' : 'Nilai Program Stabil';
+      const skema = {
+        emerald: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+        red: 'border-red-200 bg-red-50 text-red-700',
+        gray: 'border-gray-200 bg-gray-50 text-gray-600',
+      }[warna];
+
+      const IkonArah = () => naik ? (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
+        </svg>
+      ) : turun ? (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6 9 12.75l4.286-4.286a11.948 11.948 0 0 1 4.306 6.043l.288.866m0 0 1.323-5.06m-1.323 5.06-5.06-1.324" />
+        </svg>
+      ) : (
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
+        </svg>
+      );
+
+      return (
+        <div className={"pop rounded-xl border px-4 py-3.5 " + skema}>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <IkonArah />
+              <span className="text-sm font-semibold">{judul}</span>
+            </div>
+            <span className="text-lg font-bold">
+              {naik ? '+' : turun ? '−' : ''}{rupiah(Math.abs(selisih))}
+            </span>
+          </div>
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-current/10 pt-2 text-xs opacity-90">
+            <span>Biaya operasional bulan ini: <span className="font-semibold">{rupiah(opex)}</span></span>
+            <span>Nilai bersih setelah operasional: <span className="font-semibold">{(selisih - opex) >= 0 ? '+' : '−'}{rupiah(Math.abs(selisih - opex))}</span></span>
+          </div>
+        </div>
+      );
+    };
+
+    /* =========================================================
+       Panel State Langsung (bukti kedua form saling terhubung)
+       ========================================================= */
+    const LiveStatePanel = ({ programs }) => (
+      <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+        <div className="border-b border-gray-100 px-6 py-4">
+          <h3 className="text-base font-bold text-gray-800">Kondisi Program (Live State)</h3>
+          <p className="text-xs text-gray-400">Nilai berjalan diperbarui otomatis oleh setiap laporan — satu sumber kebenaran.</p>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-gray-50 text-left">
+                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Program</th>
+                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Modal Awal</th>
+                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Nilai Berjalan</th>
+                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Total Perubahan</th>
+                <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500">Laporan</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {programs.map(p => {
+                const delta = p.nilaiTerkini - p.modalAwal;
+                return (
+                  <tr key={p.kode} className="hover:bg-gray-50">
+                    <td className="px-5 py-3.5">
+                      <p className="font-medium text-gray-800">{p.nama}</p>
+                      <p className="text-xs text-gray-400"><span className="font-mono">{p.kode}</span> · {p.asetNama}</p>
+                    </td>
+                    <td className="whitespace-nowrap px-5 py-3.5 text-gray-600">{rupiah(p.modalAwal)}</td>
+                    <td className="whitespace-nowrap px-5 py-3.5 font-semibold text-gray-800">{rupiah(p.nilaiTerkini)}</td>
+                    <td className="whitespace-nowrap px-5 py-3.5">
+                      <span className={"inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold " +
+                        (delta > 0 ? 'bg-emerald-50 text-emerald-700' : delta < 0 ? 'bg-red-50 text-red-700' : 'bg-gray-100 text-gray-500')}>
+                        {delta > 0 ? '+' : delta < 0 ? '−' : ''}{rupiah(Math.abs(delta))}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3.5 text-gray-600">{p.jumlahLaporan}×</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+
+    const RiwayatPanel = ({ laporan }) => (
+      <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+        <div className="border-b border-gray-100 px-6 py-4">
+          <h3 className="text-base font-bold text-gray-800">Riwayat Laporan</h3>
+          <p className="text-xs text-gray-400">Selisih tercatat otomatis, tanpa pernah diketik manual.</p>
+        </div>
+        {laporan.length === 0 ? (
+          <div className="px-6 py-10 text-center text-sm text-gray-400">Belum ada laporan. Coba isi Form Laporan Program.</div>
+        ) : (
+          <ul className="divide-y divide-gray-100">
+            {laporan.map((l, i) => (
+              <li key={i} className="flex items-center justify-between gap-3 px-6 py-3.5">
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium text-gray-800">{l.namaProgram} <span className="font-normal text-gray-400">· {l.periode}</span></p>
+                  <p className="text-xs text-gray-400">{rupiah(l.nilaiAwal)} → {rupiah(l.nilaiAktual)} · opex {rupiah(l.biayaOperasional)}</p>
+                </div>
+                <span className={"shrink-0 rounded-md px-2.5 py-1 text-xs font-semibold " +
+                  (l.selisih > 0 ? 'bg-emerald-50 text-emerald-700' : l.selisih < 0 ? 'bg-red-50 text-red-700' : 'bg-gray-100 text-gray-500')}>
+                  {l.selisih > 0 ? '+' : l.selisih < 0 ? '−' : ''}{rupiah(Math.abs(l.selisih))}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    );
+
+    /* =========================================================
+       Toast
+       ========================================================= */
+    const Toast = ({ toast }) => {
+      if (!toast) return null;
+      const ok = toast.tipe !== 'error';
+      return (
+        <div className={"pop fixed bottom-6 right-6 z-50 flex max-w-md items-center gap-3 rounded-xl px-5 py-3 text-sm font-medium text-white shadow-2xl " +
+          (ok ? 'bg-gray-900' : 'bg-red-600')}>
+          <svg className={"h-5 w-5 shrink-0 " + (ok ? 'text-brand-400' : 'text-white')} fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
+            {ok
+              ? <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              : <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />}
+          </svg>
+          {toast.pesan}
+        </div>
+      );
+    };
+
+    /* =========================================================
+       APP — state induk (SSOT). Kedua form berbagi state ini.
+       ========================================================= */
+    const App = () => {
+      const [programs, setPrograms] = useState(PROGRAM_AWAL);
+      const [laporan, setLaporan] = useState([]);
+      const [toast, setToast] = useState(null);
+
+      const tampilToast = (pesan, tipe = 'ok') => {
+        setToast({ pesan, tipe });
+        clearTimeout(window.__t);
+        window.__t = setTimeout(() => setToast(null), 3400);
+      };
+
+      const tambahProgram = (p) => setPrograms(prev => [...prev, p]);
+
+      // Saat laporan masuk: catat riwayat + PERBARUI nilai berjalan program (SSOT bergulir).
+      const buatLaporan = (kode, data) => {
+        const prog = programs.find(x => x.kode === kode);
+        setLaporan(prev => [{ ...data, kode, namaProgram: prog ? prog.nama : kode }, ...prev]);
+        setPrograms(prev => prev.map(x =>
+          x.kode === kode
+            ? { ...x, nilaiTerkini: data.nilaiAktual, jumlahLaporan: x.jumlahLaporan + 1 }
+            : x
+        ));
+      };
+
+      return (
+        <div className="mx-auto max-w-screen-2xl p-4 md:p-8">
+          {/* Hero */}
+          <div className="relative mb-6 overflow-hidden rounded-2xl bg-gradient-to-br from-brand-900 via-brand-800 to-brand-600 p-6 shadow-card md:p-8">
+            <div className="pointer-events-none absolute -right-10 -top-10 h-52 w-52 rounded-full bg-white/5"></div>
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-brand-100">
+              Simulasi · Single Source of Truth
+            </span>
+            <h1 className="mt-3 text-2xl font-bold text-white md:text-3xl">Master Program &amp; Laporan Program</h1>
+            <p className="mt-1 max-w-2xl text-sm text-brand-100">
+              Modal awal diinput <b>sekali</b> di Master Program. Saat pelaporan, nilai awal ditarik otomatis &amp; dikunci;
+              Nazhir hanya mengisi <b>Nilai Aktual</b> dan <b>Biaya Operasional</b> — selisih dihitung sistem.
+            </p>
+          </div>
+
+          {/* Dua form saling terhubung */}
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <MasterProgramForm programs={programs} onTambah={tambahProgram} toast={tampilToast} />
+            <LaporanProgramForm programs={programs} onLapor={buatLaporan} toast={tampilToast} />
+          </div>
+
+          {/* Bukti keterhubungan state */}
+          <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <LiveStatePanel programs={programs} />
+            <RiwayatPanel laporan={laporan} />
+          </div>
+
+          <p className="mt-6 text-center text-xs text-gray-400">
+            Badan Wakaf Indonesia © 2026 · Titik Terang OS · Modul Kenazhiran — Simulasi SSOT
+          </p>
+
+          <Toast toast={toast} />
+        </div>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+
+</html>

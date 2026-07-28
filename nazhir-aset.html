@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Master Aset & Portofolio | Modul Kenazhiran BWI Superapps</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tipografi Outfit (Google Fonts) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Outfit', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+          // Identitas eksklusif Modul Kenazhiran = DEEP TEAL
+          colors: {
+            brand: {
+              50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 300: '#5eead4', 400: '#2dd4bf',
+              500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a',
+            }
+          },
+          maxWidth: { 'screen-2xl': '1536px' },
+          boxShadow: {
+            'default': '0px 8px 13px -3px rgba(0, 0, 0, 0.07)',
+            'card': '0px 1px 3px rgba(0, 0, 0, 0.06), 0px 1px 2px rgba(0, 0, 0, 0.04)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body,
+    html {
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 999px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    #sidebar ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, .18);
+    }
+
+    /* Animasi masuk modal */
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .modal-in {
+      animation: modalIn .22s cubic-bezier(.4, 0, .2, 1);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+  <!-- ===== Page Wrapper Start ===== -->
+  <div class="flex h-screen overflow-hidden">
+
+    <!-- ===== Sidebar Start ===== -->
+    <aside id="sidebar"
+      class="absolute left-0 top-0 z-50 flex h-screen w-[290px] flex-col overflow-y-hidden bg-brand-900 duration-300 ease-linear lg:static lg:translate-x-0 -translate-x-full">
+
+      <!-- SIDEBAR HEADER -->
+      <div class="flex items-center justify-between gap-2 px-6 py-5.5 h-[72px] lg:py-6.5">
+        <a href="nazhir-dashboard.html" class="flex items-center gap-3">
+          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
+            <!-- Ikon: sertifikat / identitas wakaf -->
+            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 0 0 2.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 0 1 2.916.52 6.003 6.003 0 0 1-5.395 4.972m0 0a6.726 6.726 0 0 1-2.749 1.35m0 0a6.772 6.772 0 0 1-3.044 0" />
+            </svg>
+          </span>
+          <span class="leading-tight">
+            <span class="block text-base font-bold text-white">BWI Superapps</span>
+            <span class="block text-[11px] font-medium text-brand-300">Modul Kenazhiran</span>
+          </span>
+        </a>
+
+        <!-- Tombol tutup sidebar (mobile) -->
+        <button onclick="tutupSidebar()" class="block lg:hidden text-white/70 hover:text-white">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- SIDEBAR MENU: navigasi khusus Nazhir -->
+      <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
+        <nav class="mt-1 px-4 py-4 lg:px-6">
+          <h3 class="mb-4 ml-3 text-xs font-semibold uppercase tracking-wider text-brand-400">Menu Nazhir</h3>
+
+          <ul class="mb-6 flex flex-col gap-1.5">
+
+            <!-- 1. Dashboard NIB -->
+            <li>
+              <a href="nazhir-dashboard.html"
+                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
+                <!-- Ikon: identifikasi / kartu -->
+                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm.375 0h.007v.008h-.007V12Zm-3.75 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z" />
+                </svg>
+                <span>Dashboard NIB</span>
+              </a>
+            </li>
+
+            <!-- 2. Master Aset & Portofolio (ACTIVE) -->
+            <li>
+              <a href="nazhir-aset.html"
+                class="flex w-full items-center gap-3 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm duration-300 ease-in-out">
+                <!-- Ikon: bangunan / aset -->
+                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
+                </svg>
+                <span>Master Aset &amp; Portofolio</span>
+              </a>
+            </li>
+
+            <!-- Master Program -->
+            <li>
+              <a href="nazhir-program.html"
+                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
+                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M6.429 9.75 2.25 12l4.179 2.25m0-4.5 5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0 4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0-5.571 3-5.571-3" />
+                </svg>
+                <span>Master Program</span>
+              </a>
+            </li>
+
+            <!-- 3. Pelaporan Mutasi Aset -->
+            <li>
+              <a href="nazhir-laporan.html"
+                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
+                <!-- Ikon: dokumen dengan panah (mutasi) -->
+                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                </svg>
+                <span>Pelaporan Mutasi Aset</span>
+              </a>
+            </li>
+
+            <!-- Laporan Program -->
+            <li>
+              <a href="nazhir-laporan-program.html"
+                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
+                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605" />
+                </svg>
+                <span>Laporan Program</span>
+              </a>
+            </li>
+
+            <!-- 4. Riwayat & Dokumen -->
+            <li>
+              <a href="nazhir-dokumen.html"
+                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
+                <!-- Ikon: arsip / riwayat -->
+                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M20.25 7.5l-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                </svg>
+                <span>Riwayat &amp; Dokumen</span>
+              </a>
+            </li>
+            <!-- Permohonan Buka Kunci -->
+            <li>
+              <a href="nazhir-buka-kunci.html"
+                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
+                <!-- Ikon: kunci -->
+                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 0 1 15.75 5.25Z" />
+                </svg>
+                <span>Permohonan Buka Kunci</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- SIDEBAR FOOTER: profil ringkas + keluar -->
+      <div class="mt-auto border-t border-white/10 p-4 lg:p-6">
+        <div class="mb-3 flex items-center gap-3 rounded-lg bg-white/5 px-3 py-2.5">
+          <span
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">YN</span>
+          <span class="min-w-0">
+            <span class="block truncate text-sm font-semibold text-white">Yayasan Wakaf Nusantara</span>
+            <span class="block truncate text-[11px] text-gray-400">Nazhir Aktif</span>
+          </span>
+        </div>
+        <button onclick="logout()"
+          class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
+          <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+          </svg>
+          Keluar
+        </button>
+      </div>
+    </aside>
+    <!-- ===== Sidebar End ===== -->
+
+    <!-- ===== Content Area Start ===== -->
+    <div class="relative flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
+
+      <!-- Small Device Overlay -->
+      <div id="overlay" onclick="tutupSidebar()" class="fixed inset-0 z-40 hidden bg-black/40 lg:hidden"></div>
+
+      <!-- ===== Header Start ===== -->
+      <header class="sticky top-0 z-30 flex w-full border-b border-gray-200 bg-white">
+        <div class="flex flex-grow items-center justify-between gap-3 px-4 py-4 md:px-6 2xl:px-11">
+
+          <div class="flex items-center gap-3 min-w-0">
+            <!-- Hamburger (toggle sidebar) -->
+            <button onclick="toggleSidebar()"
+              class="z-50 block rounded-lg border border-gray-200 bg-white p-2 text-gray-500 hover:text-brand-700 lg:hidden">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>
+            </button>
+
+            <div class="min-w-0">
+              <h1 class="truncate text-lg font-bold leading-tight text-gray-800">Master Aset &amp; Portofolio</h1>
+              <p class="truncate text-xs text-gray-400">Pilar NIB Tunggal — satu identitas, banyak aset</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3 2xsm:gap-5">
+
+            <!-- Pencarian -->
+            <div class="hidden xl:block">
+              <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                  </svg>
+                </span>
+                <input type="text" placeholder="Cari Sub-ID / aset..."
+                  class="w-64 rounded-lg border border-gray-200 bg-gray-50 py-2.5 pl-10 pr-4 text-sm outline-none focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-100">
+              </div>
+            </div>
+
+            <!-- Notifikasi -->
+            <div class="relative">
+              <button onclick="toggleDropdown('notifDropdown', event)"
+                class="relative flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-gray-50 text-gray-500 hover:text-brand-700">
+                <span
+                  class="absolute -top-0.5 right-0 z-10 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white"></span>
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                </svg>
+              </button>
+
+              <div id="notifDropdown"
+                class="dropdown-menu absolute right-0 mt-2.5 hidden w-80 rounded-xl border border-gray-200 bg-white shadow-default">
+                <div class="border-b border-gray-100 px-4 py-3">
+                  <h5 class="text-sm font-semibold text-gray-700">Notifikasi</h5>
+                </div>
+                <ul class="max-h-64 overflow-y-auto">
+                  <li class="border-b border-gray-100 px-4 py-3 hover:bg-gray-50">
+                    <p class="text-sm text-gray-700"><span class="font-semibold">Sub-ID NZHR-BDG-002</span> berhasil
+                      ditautkan ke NIB Anda.</p>
+                    <p class="mt-0.5 text-xs text-gray-400">08 Juli 2026</p>
+                  </li>
+                  <li class="border-b border-gray-100 px-4 py-3 hover:bg-gray-50">
+                    <p class="text-sm text-gray-700"><span class="font-semibold">NIB Terverifikasi</span> oleh Admin BWI
+                      Pusat.</p>
+                    <p class="mt-0.5 text-xs text-gray-400">21 Juni 2026</p>
+                  </li>
+                  <li class="px-4 py-3 hover:bg-gray-50">
+                    <p class="text-sm text-gray-700"><span class="font-semibold">Data ditarik</span> dari Siwak Kemenag
+                      berhasil.</p>
+                    <p class="mt-0.5 text-xs text-gray-400">18 Juni 2026</p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Dropdown profil: identitas Nazhir -->
+            <div class="relative">
+              <button onclick="toggleDropdown('userDropdown', event)" class="flex items-center gap-3">
+                <span class="hidden text-right lg:block">
+                  <span class="block text-sm font-semibold leading-tight text-gray-800">Yayasan Wakaf Nusantara</span>
+                  <span class="block text-xs text-brand-600 font-medium">Nazhir Aktif</span>
+                </span>
+                <span
+                  class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 text-sm font-bold text-brand-700">YN</span>
+                <svg id="userChevron" class="hidden h-4 w-4 text-gray-400 transition-transform sm:block" fill="none"
+                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                </svg>
+              </button>
+
+              <div id="userDropdown"
+                class="dropdown-menu absolute right-0 mt-2.5 hidden w-64 rounded-xl border border-gray-200 bg-white shadow-default">
+                <div class="border-b border-gray-100 px-5 py-3.5">
+                  <p class="text-sm font-semibold text-gray-800">Yayasan Wakaf Nusantara</p>
+                  <p class="text-xs text-gray-400">nazhir.nusantara@bwi.go.id</p>
+                </div>
+                <ul class="border-b border-gray-100 px-2 py-2">
+                  <li>
+                    <a href="#"
+                      class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-brand-700">
+                      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                      </svg>
+                      Profil Lembaga
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#"
+                      class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-brand-700">
+                      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.03 7.03 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                      </svg>
+                      Pengaturan Akun
+                    </a>
+                  </li>
+                </ul>
+                <div class="px-2 py-2">
+                  <button onclick="logout()"
+                    class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-gray-600 hover:bg-red-50 hover:text-red-600">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                    </svg>
+                    Keluar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- ===== Header End ===== -->
+
+      <!-- ===== Main Content Start ===== -->
+      <main>
+        <div class="mx-auto max-w-screen-2xl space-y-6 p-4 md:p-6">
+
+          <!-- Judul halaman -->
+          <div>
+            <h2 class="text-xl font-bold text-gray-800 md:text-2xl">Master Data Aset &amp; Portofolio Wakaf</h2>
+            <p class="mt-1 text-sm text-gray-500">Seluruh aset wakaf lembaga Anda terkonsolidasi dalam satu Nomor Induk
+              BWI (NIB) — tanpa perlu mendaftar akun lembaga baru.</p>
+          </div>
+
+          <!-- ============ SECTION 1: NIB BADGE ============ -->
+          <div
+            class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-900 via-brand-800 to-brand-600 p-6 shadow-card md:p-8">
+
+            <!-- Ornamen latar -->
+            <div class="pointer-events-none absolute -right-10 -top-10 h-52 w-52 rounded-full bg-white/5"></div>
+            <div class="pointer-events-none absolute -bottom-16 right-24 h-40 w-40 rounded-full bg-white/5"></div>
+
+            <div class="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+
+              <div class="min-w-0">
+                <div class="flex items-center gap-2">
+                  <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-white/10">
+                    <svg class="h-5 w-5 text-brand-200" fill="none" viewBox="0 0 24 24" stroke-width="1.7"
+                      stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm.375 0h.007v.008h-.007V12Zm-3.75 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z" />
+                    </svg>
+                  </span>
+                  <p class="text-sm font-medium text-brand-100">Nomor Induk BWI (NIB)</p>
+                </div>
+
+                <h2 class="mt-3 font-mono text-3xl font-bold tracking-wider text-white md:text-4xl">NZHR-BDG-170</h2>
+                <p class="mt-1 max-w-lg text-sm text-brand-100">Satu Identitas untuk Seluruh Pengelolaan Aset Wakaf
+                  Anda.</p>
+              </div>
+
+              <!-- Ringkas jumlah portofolio -->
+              <div class="shrink-0">
+                <div class="flex items-center gap-2 rounded-xl bg-white/10 px-4 py-3 ring-1 ring-white/15">
+                  <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75" />
+                    </svg>
+                  </span>
+                  <div>
+                    <p id="jumlahSubId" class="text-lg font-bold leading-none text-white">1 Sub-ID</p>
+                    <p class="mt-0.5 text-[11px] text-brand-100">Portofolio Aktif</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============ BARIS AKSI: Riwayat SK + Tambah Portofolio ============ -->
+          <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
+            <a href="nazhir-aset-sk.html"
+              class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-600 shadow-sm transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-100">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+              Riwayat SK
+            </a>
+            <button type="button" onclick="tambahPortofolio()"
+              class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-200">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+              Tambah Portofolio Baru
+            </button>
+          </div>
+
+          <!-- ============ SECTION 2 + 3: TABEL MASTER ASET ============ -->
+          <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+
+            <!-- Kepala card: judul + filter -->
+            <div
+              class="flex flex-col gap-4 border-b border-gray-100 px-5 py-4 md:flex-row md:items-center md:justify-between md:px-6">
+              <div>
+                <h3 class="text-base font-bold text-gray-800">Daftar Portofolio Aset Terdaftar</h3>
+                <p class="text-xs text-gray-400">Seluruh Sub-ID aset tidak bergerak (wakaf tanah) di bawah satu NIB lembaga.</p>
+              </div>
+
+              <!-- Filter jenis & status -->
+              <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+
+                <!-- Filter Jenis / Kategori Wakaf -->
+                <div class="relative">
+                  <select id="filterJenis" onchange="renderPortofolio()"
+                    class="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pl-4 pr-10 text-sm text-gray-700 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 sm:w-40">
+                    <option value="">Semua Jenis</option>
+                    <option value="tanah">Wakaf Tanah</option>
+                  </select>
+                  <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                  </span>
+                </div>
+
+                <!-- Filter Status -->
+                <div class="relative">
+                  <select id="filterStatus" onchange="renderPortofolio()"
+                    class="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pl-4 pr-10 text-sm text-gray-700 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 sm:w-44">
+                    <option value="">Semua Status</option>
+                    <option value="draft">Draft</option>
+                    <option value="aktif">Aktif</option>
+                    <option value="review">Verifikasi Pusat</option>
+                    <option value="revisi">Revisi</option>
+                    <option value="ditolak">Ditolak</option>
+                    <option value="nonaktif">Nonaktif</option>
+                  </select>
+                  <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tabel master aset -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-gray-100 bg-gray-50 text-left">
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Sub-ID
+                      Aset</th>
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Kategori
+                      Wakaf</th>
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Nama /
+                      Lokasi Aset</th>
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Nilai /
+                      Luas Dasar</th>
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Status
+                    </th>
+                    <th
+                      class="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">
+                      Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="portofolioBody" class="divide-y divide-gray-100">
+
+                  <!-- Baris di bawah ini hanya fallback tampilan tanpa JavaScript.
+                       Saat skrip berjalan, isi <tbody> dirender ulang dari
+                       localStorage 'data_portofolio_bwi'. -->
+
+                  <!-- Baris 1: Wakaf Tanah -->
+                  <tr class="transition hover:bg-gray-50">
+                    <td class="whitespace-nowrap px-5 py-4 font-mono text-xs font-semibold text-gray-700 md:px-6">
+                      NZHR-BDG-001</td>
+                    <td class="px-5 py-4 md:px-6">
+                      <span
+                        class="inline-flex items-center gap-1.5 rounded-md bg-purple-50 px-2.5 py-1 text-xs font-medium text-purple-700">
+                        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+                          stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m17 14 3 3.3a1 1 0 0 1-.7 1.7H4.7a1 1 0 0 1-.7-1.7L7 14h-.3a1 1 0 0 1-.7-1.7L9 9h-.2A1 1 0 0 1 8 7.3L12 3l4 4.3a1 1 0 0 1-.8 1.7H15l3 3.3a1 1 0 0 1-.7 1.7H17Z" />
+                        </svg>
+                        Wakaf Tanah
+                      </span>
+                    </td>
+                    <td class="px-5 py-4 md:px-6">
+                      <p class="font-medium text-gray-800">Tanah Jl. Merdeka</p>
+                      <p class="text-xs text-gray-400">Semarang, Jawa Tengah</p>
+                    </td>
+                    <td class="whitespace-nowrap px-5 py-4 font-semibold text-gray-800 md:px-6">500 M&sup2;</td>
+                    <td class="px-5 py-4 md:px-6">
+                      <span
+                        class="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700">
+                        <span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> Aktif
+                      </span>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Kaki card: catatan Pilar NIB Tunggal -->
+            <div class="flex items-start gap-3 border-t border-gray-100 bg-gray-50 px-5 py-4 md:px-6">
+              <svg class="mt-0.5 h-5 w-5 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.7"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+              </svg>
+              <p class="text-xs text-gray-500">
+                Setiap penambahan aset baru (mis. wakaf tanah di lokasi lain) akan didaftarkan sebagai <span
+                  class="font-semibold text-gray-600">Sub-ID</span> di bawah NIB yang sama — bukan sebagai lembaga
+                Nazhir baru. Nomor Sub-ID diturunkan otomatis dari NIB lembaga
+                (<span class="font-mono font-semibold text-gray-600">NZHR-BDG</span> + nomor urut), sehingga portofolio
+                berikutnya menjadi <span id="subIdBerikutnya"
+                  class="font-mono font-semibold text-gray-600">NZHR-BDG-003</span>.
+                Portofolio baru berstatus <span class="font-semibold text-gray-600">Draft</span> atau
+                <span class="font-semibold text-amber-700">Verifikasi Pusat</span> hingga disetujui BWI Pusat menjadi
+                <span class="font-semibold text-brand-700">Aktif</span>.
+                <span class="mt-1 block text-gray-400">Master Aset khusus <span class="font-semibold text-gray-600">aset tidak bergerak</span> (wakaf tanah). Wakaf uang tidak didaftarkan di sini — pelaporannya melalui menu <span class="font-semibold text-gray-600">Pelaporan Mutasi Aset</span>.</span>
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </main>
+      <!-- ===== Main Content End ===== -->
+
+      <footer class="border-t border-gray-200 bg-white py-4 text-center text-xs text-gray-400">
+        Badan Wakaf Indonesia &copy; 2026 &middot; Titik Terang OS &middot; Modul Kenazhiran
+      </footer>
+    </div>
+    <!-- ===== Content Area End ===== -->
+  </div>
+  <!-- ===== Page Wrapper End ===== -->
+
+  <!-- ===== Modal: Konfirmasi Batalkan Draft ===== -->
+  <div id="modalBatal" class="fixed inset-0 z-[75] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/50" onclick="tutupModalBatal()"></div>
+    <div class="modal-in relative w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-2xl">
+      <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-50 text-red-600">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+        </svg>
+      </div>
+      <h3 class="text-base font-bold text-gray-800">Batalkan Pengajuan Draft?</h3>
+      <p class="mt-1 text-sm text-gray-500">
+        Draft <span id="batalSubId" class="font-mono font-semibold text-gray-700"></span> akan dibatalkan dan dihapus
+        permanen. Tindakan ini tidak dapat dikembalikan.
+      </p>
+      <div class="mt-5 flex justify-center gap-2">
+        <button type="button" onclick="tutupModalBatal()"
+          class="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-600 transition hover:bg-gray-50">Kembali</button>
+        <button type="button" onclick="konfirmasiBatal()"
+          class="rounded-lg bg-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700">Ya, Batalkan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notifikasi -->
+  <div id="toast"
+    class="fixed bottom-6 right-6 z-[80] hidden max-w-md items-center gap-3 rounded-xl bg-gray-900 px-5 py-3 text-sm font-medium text-white shadow-2xl">
+    <svg class="h-5 w-5 shrink-0 text-brand-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+    </svg>
+    <span id="toastMsg"></span>
+  </div>
+
+  <!-- =========================================================
+       LOGIKA SHELL (Vanilla JS) — navigasi, dropdown, toast.
+       ========================================================= -->
+  <script>
+    function toggleSidebar() {
+      const sb = document.getElementById('sidebar');
+      const ov = document.getElementById('overlay');
+      const tertutup = sb.classList.contains('-translate-x-full');
+      sb.classList.toggle('-translate-x-full', !tertutup);
+      ov.classList.toggle('hidden', !tertutup);
+    }
+
+    function tutupSidebar() {
+      document.getElementById('sidebar').classList.add('-translate-x-full');
+      document.getElementById('overlay').classList.add('hidden');
+    }
+
+    function toggleDropdown(id, event) {
+      if (event) event.stopPropagation();
+      const target = document.getElementById(id);
+      const sedangTerbuka = !target.classList.contains('hidden');
+      document.querySelectorAll('.dropdown-menu').forEach(d => d.classList.add('hidden'));
+      if (!sedangTerbuka) target.classList.remove('hidden');
+      document.getElementById('userChevron')
+        .classList.toggle('rotate-180', id === 'userDropdown' && !sedangTerbuka);
+    }
+
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.dropdown-menu').forEach(d => d.classList.add('hidden'));
+      document.getElementById('userChevron').classList.remove('rotate-180');
+    });
+    document.querySelectorAll('.dropdown-menu').forEach(d => {
+      d.addEventListener('click', e => e.stopPropagation());
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.dropdown-menu').forEach(d => d.classList.add('hidden'));
+        tutupSidebar();
+        tutupModalBatal();
+      }
+    });
+
+    // NIB lembaga — Sub-ID portofolio diturunkan dari prefix NIB ini
+    const NIB_LEMBAGA = 'NZHR-BDG-170';
+    const PREFIX_NIB = NIB_LEMBAGA.replace(/-\d+$/, '');   // 'NZHR-BDG'
+    const KUNCI_PORTOFOLIO = 'data_portofolio_bwi';
+
+    /* =========================================================
+       ALUR STATUS PORTOFOLIO
+       Sub-ID baru TIDAK langsung aktif — melewati verifikasi BWI.
+       draft -> review -> (ditolak | aktif)
+       ========================================================= */
+    const STATUS_PORTOFOLIO = {
+      draft: { label: 'Draft', warna: 'bg-gray-100 text-gray-600', titik: 'bg-gray-400' },
+      review: { label: 'Verifikasi Pusat', warna: 'bg-amber-50 text-amber-700', titik: 'bg-amber-500' },
+      revisi: { label: 'Revisi', warna: 'bg-orange-50 text-orange-700', titik: 'bg-orange-500' },
+      ditolak: { label: 'Ditolak', warna: 'bg-red-50 text-red-600', titik: 'bg-red-500' },
+      aktif: { label: 'Aktif', warna: 'bg-brand-50 text-brand-700', titik: 'bg-brand-500' },
+      nonaktif: { label: 'Nonaktif', warna: 'bg-slate-100 text-slate-600', titik: 'bg-slate-400' },
+    };
+
+    // Portofolio bawaan (sudah disetujui Pusat).
+    // CATATAN: Master Aset kini KHUSUS aset tidak bergerak (Wakaf Tanah).
+    // Wakaf Uang tidak lagi didaftarkan di sini — pelaporannya lewat menu
+    // "Pelaporan Mutasi Aset" (tab Penerimaan), sesuai keputusan BWI.
+    const DEFAULT_PORTOFOLIO = [
+      {
+        subId: PREFIX_NIB + '-001', kategoriId: 'tanah', kategori: 'Wakaf Tanah',
+        nama: 'Tanah Jl. Merdeka', lokasi: 'Semarang, Jawa Tengah',
+        satuan: 'M²', nilai: 500, status: 'aktif',
+        dokumen: 2, totalDokumen: 2, tanggal: '12 Januari 2025',
+        dokumenList: [
+          { key: 'bpn', label: 'Sertifikat BPN', nama: 'Sertifikat-BPN-Merdeka.pdf', ukuran: '420 KB', tipe: 'application/pdf' },
+          { key: 'aiw', label: 'AIW (Akta Ikrar Wakaf)', nama: 'AIW-Tanah-Merdeka.pdf', ukuran: '310 KB', tipe: 'application/pdf' },
+        ]
+      },
+    ];
+
+    let daftarPortofolio = [];
+
+    // Gabungkan data bawaan + localStorage dengan dedupe berdasarkan subId.
+    // Entri di localStorage MENIMPA data bawaan (mis. status di-nonaktifkan),
+    // sehingga tidak terjadi duplikasi baris.
+    function bacaPortofolio() {
+      let tambahan = [];
+      try {
+        const isi = JSON.parse(localStorage.getItem(KUNCI_PORTOFOLIO));
+        if (Array.isArray(isi)) tambahan = isi;
+      } catch (e) { /* mode privat */ }
+
+      const peta = {}; const urut = [];
+      DEFAULT_PORTOFOLIO.forEach(p => { if (!(p.subId in peta)) urut.push(p.subId); peta[p.subId] = p; });
+      tambahan.forEach(p => { if (!(p.subId in peta)) urut.push(p.subId); peta[p.subId] = p; });
+      // Master Aset hanya menampung aset tidak bergerak. Setiap entri wakaf uang
+      // (baik bawaan lama maupun sisa di localStorage) disaring keluar di sini.
+      return urut.map(id => peta[id]).filter(p => p.kategoriId !== 'uang');
+    }
+
+    // Nomor Sub-ID berikutnya, mis. 'NZHR-BDG-003'
+    function subIdBerikutnya() {
+      return PREFIX_NIB + '-' + String(bacaPortofolio().length + 1).padStart(3, '0');
+    }
+
+    function amankan(teks) {
+      const div = document.createElement('div');
+      div.textContent = teks == null ? '' : String(teks);
+      return div.innerHTML;
+    }
+
+    function nilaiTampil(p) {
+      const n = Number(p.nilai) || 0;
+      return p.satuan === 'Rp'
+        ? 'Rp ' + n.toLocaleString('id-ID')
+        : n.toLocaleString('id-ID') + ' M²';
+    }
+
+    /* Warna kategori sengaja BUKAN hijau/teal agar tidak tertukar dengan
+       badge status "Aktif". Wakaf Uang = biru, Wakaf Tanah = ungu. */
+    function badgeKategori(p) {
+      const uang = p.kategoriId === 'uang';
+      const warna = uang ? 'bg-blue-50 text-blue-700' : 'bg-purple-50 text-purple-700';
+      const ikon = uang
+        ? '<circle cx="8" cy="8" r="6" /><path stroke-linecap="round" stroke-linejoin="round" d="M18.09 10.37A6 6 0 1 1 10.34 18M7 6h1v4m8.71 3.88.7.71-2.82 2.82" />'
+        : '<path stroke-linecap="round" stroke-linejoin="round" d="m17 14 3 3.3a1 1 0 0 1-.7 1.7H4.7a1 1 0 0 1-.7-1.7L7 14h-.3a1 1 0 0 1-.7-1.7L9 9h-.2A1 1 0 0 1 8 7.3L12 3l4 4.3a1 1 0 0 1-.8 1.7H15l3 3.3a1 1 0 0 1-.7 1.7H17Z" />';
+      return '<span class="inline-flex items-center gap-1.5 rounded-md ' + warna + ' px-2.5 py-1 text-xs font-medium">' +
+        '<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">' + ikon + '</svg>' +
+        amankan(p.kategori) + '</span>';
+    }
+
+    function badgeStatus(p) {
+      const s = STATUS_PORTOFOLIO[p.status] || STATUS_PORTOFOLIO.draft;
+      return '<span class="inline-flex items-center gap-1.5 rounded-full ' + s.warna + ' px-2.5 py-1 text-xs font-semibold">' +
+        '<span class="h-1.5 w-1.5 rounded-full ' + s.titik + '"></span>' + amankan(s.label) + '</span>';
+    }
+
+    /* --- Ikon tombol aksi --- */
+    const SVG_MATA = '<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>';
+    const SVG_BATAL = '<svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>';
+
+    /* Nazhir berwenang MELIHAT semua portofolio.
+       Untuk status DRAFT (belum diajukan ke BWI), Nazhir masih boleh membatalkan /
+       menariknya. Status lain (Verifikasi Pusat, Revisi, Ditolak, Aktif) read-only. */
+    function tombolAksi(p) {
+      const lihat = '<button type="button" data-aksi="lihat" data-sub="' + amankan(p.subId) + '" ' +
+        'class="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 px-3.5 py-2 text-xs font-semibold text-gray-600 transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700">' +
+        SVG_MATA + 'Lihat Detail</button>';
+
+      if (p.status !== 'draft') return lihat;
+
+      const batal = '<button type="button" data-aksi="batal" data-sub="' + amankan(p.subId) + '" title="Batalkan pengajuan" ' +
+        'class="inline-flex items-center gap-1.5 rounded-lg border border-red-200 px-3.5 py-2 text-xs font-semibold text-red-600 transition hover:border-red-300 hover:bg-red-50">' +
+        SVG_BATAL + 'Batalkan</button>';
+
+      return '<div class="inline-flex items-center justify-end gap-1.5">' + lihat + batal + '</div>';
+    }
+
+    // Terapkan filter jenis (kategori) & status pada daftar
+    function terapkanFilter(list) {
+      const fJenis = document.getElementById('filterJenis') ? document.getElementById('filterJenis').value : '';
+      const fStatus = document.getElementById('filterStatus') ? document.getElementById('filterStatus').value : '';
+      return list.filter(p => {
+        if (fJenis && p.kategoriId !== fJenis) return false;
+        if (fStatus && p.status !== fStatus) return false;
+        return true;
+      });
+    }
+
+    function renderPortofolio() {
+      const body = document.getElementById('portofolioBody');
+      if (!body) return;
+      daftarPortofolio = bacaPortofolio();        // daftar penuh (sumber data)
+      const tampil = terapkanFilter(daftarPortofolio);   // subset hasil filter
+
+      body.innerHTML = '';
+      if (tampil.length === 0) {
+        body.innerHTML =
+          '<tr><td colspan="6" class="px-6 py-12 text-center">' +
+          '<div class="flex flex-col items-center gap-2 text-gray-400">' +
+          '<svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">' +
+          '<path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" /></svg>' +
+          '<span class="text-sm font-medium text-gray-500">Tidak ada portofolio yang cocok</span>' +
+          '<span class="text-xs">Coba ubah pilihan filter jenis atau status.</span>' +
+          '</div></td></tr>';
+      } else {
+        tampil.forEach(p => {
+          const tr = document.createElement('tr');
+          tr.className = 'transition hover:bg-gray-50';
+          tr.innerHTML =
+            '<td class="whitespace-nowrap px-5 py-4 font-mono text-xs font-semibold text-gray-700 md:px-6">' + amankan(p.subId) + '</td>' +
+            '<td class="px-5 py-4 md:px-6">' + badgeKategori(p) + '</td>' +
+            '<td class="px-5 py-4 md:px-6">' +
+            '<p class="font-medium text-gray-800">' + amankan(p.nama) + '</p>' +
+            '<p class="text-xs text-gray-400">' + amankan(p.lokasi) + '</p></td>' +
+            '<td class="whitespace-nowrap px-5 py-4 font-semibold text-gray-800 md:px-6">' + nilaiTampil(p) + '</td>' +
+            '<td class="px-5 py-4 md:px-6">' + badgeStatus(p) + '</td>' +
+            '<td class="px-5 py-4 text-right md:px-6">' + tombolAksi(p) + '</td>';
+          body.appendChild(tr);
+        });
+      }
+
+      // Kartu NIB hanya menghitung portofolio berstatus AKTIF (dari daftar PENUH, bukan hasil filter)
+      const jumlahAktif = daftarPortofolio.filter(p => p.status === 'aktif').length;
+      const elJumlah = document.getElementById('jumlahSubId');
+      if (elJumlah) elJumlah.textContent = jumlahAktif + ' Sub-ID';
+
+      // Nomor Sub-ID berikutnya pada catatan kaki
+      const elNext = document.getElementById('subIdBerikutnya');
+      if (elNext) elNext.textContent = subIdBerikutnya();
+    }
+
+    /* =========================================================
+       AKSI BARIS: "Lihat Detail" -> halaman detail (bukan modal)
+       ========================================================= */
+    function cariPortofolio(subId) {
+      return daftarPortofolio.find(p => String(p.subId) === String(subId));
+    }
+
+    // Titipkan record ke localStorage lalu buka halaman detail berdiri sendiri
+    function bukaDetail(subId) {
+      const p = cariPortofolio(subId);
+      if (!p) return;
+      try {
+        localStorage.setItem('active_nazhir_aset_view', JSON.stringify(p));
+      } catch (e) { /* mode privat */ }
+      window.location.href = 'nazhir-aset-detail.html';
+    }
+
+    // Delegasi klik tombol aksi pada tabel (Lihat Detail / Batalkan)
+    document.addEventListener('click', e => {
+      const btn = e.target.closest('[data-aksi]');
+      if (!btn) return;
+      if (btn.dataset.aksi === 'lihat') bukaDetail(btn.dataset.sub);
+      else if (btn.dataset.aksi === 'batal') bukaModalBatal(btn.dataset.sub);
+    });
+
+    /* =========================================================
+       BATALKAN / TARIK PENGAJUAN DRAFT
+       Hanya berlaku untuk status draft (belum diajukan ke BWI).
+       ========================================================= */
+    let subIdBatal = null;
+
+    function bukaModalBatal(subId) {
+      const p = cariPortofolio(subId);
+      if (!p || p.status !== 'draft') return;   // pengaman: hanya draft
+      subIdBatal = subId;
+      document.getElementById('batalSubId').textContent = subId;
+      const m = document.getElementById('modalBatal');
+      m.classList.remove('hidden'); m.classList.add('flex');
+    }
+
+    function tutupModalBatal() {
+      const m = document.getElementById('modalBatal');
+      if (!m) return;
+      m.classList.add('hidden'); m.classList.remove('flex');
+      subIdBatal = null;
+    }
+
+    function konfirmasiBatal() {
+      if (!subIdBatal) { tutupModalBatal(); return; }
+      try {
+        const list = JSON.parse(localStorage.getItem(KUNCI_PORTOFOLIO)) || [];
+        const sisa = list.filter(p => String(p.subId) !== String(subIdBatal));
+        localStorage.setItem(KUNCI_PORTOFOLIO, JSON.stringify(sisa));
+        localStorage.removeItem('dokumen_preview_' + subIdBatal);   // bersihkan pratinjau
+      } catch (e) { /* mode privat */ }
+      tutupModalBatal();
+      renderPortofolio();
+      showToast('Pengajuan draft berhasil dibatalkan dan dihapus.');
+    }
+
+    document.addEventListener('DOMContentLoaded', renderPortofolio);
+
+    // Tombol "Tambah Portofolio Baru" -> halaman form pendaftaran Sub-ID
+    function tambahPortofolio() {
+      // Titipkan konteks NIB & nomor Sub-ID berikutnya agar halaman form konsisten
+      try {
+        localStorage.setItem('active_nazhir_portofolio_baru', JSON.stringify({
+          nib: NIB_LEMBAGA,
+          prefix: PREFIX_NIB,
+          subIdBaru: subIdBerikutnya()
+        }));
+      } catch (e) { /* mode privat */ }
+      window.location.href = 'nazhir-aset-tambah.html';
+    }
+
+    function logout() {
+      showToast('Anda telah keluar dari sistem. Mengalihkan halaman...');
+      setTimeout(() => { window.location.href = 'kenazhiran-login.html'; }, 900);
+    }
+
+    let toastTimer = null;
+    function showToast(pesan) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = pesan;
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, 3600);
+    }
+  </script>
+  <!-- Penjaga akun dibekukan: read-only global (blokir aksi CUD) -->
+  <script>
+    (function () {
+      var LEMBAGA = 'NZHR-BDG-170';
+      function beku() { try { var o = JSON.parse(localStorage.getItem('status_nazhir_bwi')); return !!(o && o[LEMBAGA] === 'dibekukan'); } catch (e) { return false; } }
+      if (!beku()) return;
+
+      // Aksi baca / tutup modal / navigasi -> tetap diizinkan
+      var ALLOW = /(lihat|kembali|keluar|template|unduh|cari|tutup|detail|sebelumnya|berikutnya|logout|masuk)/i;
+      // Aksi ubah data (Create/Update/Delete) -> diblokir
+      var CUD = /(tambah|buat|simpan|ajukan|kirim|hapus|batalkan|lengkapi|ubah|edit|unggah|upload|setuju|tolak|perbaiki)/i;
+
+      function aksiCUD(el) {
+        if (!el || !el.getAttribute) return false;
+        if (el.hasAttribute('data-lengkapi') || el.hasAttribute('data-hapus')) return true;
+        var da = el.getAttribute('data-aksi');
+        if (da && /batal|hapus|ubah|edit/i.test(da)) return true;
+        var teks = (el.textContent || '') + ' ' + (el.getAttribute('onclick') || '');
+        if (ALLOW.test(teks)) return false;
+        return CUD.test(teks);
+      }
+
+      // Interseptor klik fase-capture: hentikan sebelum handler CUD berjalan
+      document.addEventListener('click', function (e) {
+        var el = e.target.closest('button,a,[data-lengkapi],[data-hapus],[data-aksi]');
+        if (!el) return;
+        if (aksiCUD(el)) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          if (window.showToast) showToast('Akun dibekukan — aksi ini dinonaktifkan. Hubungi BWI Pusat.');
+        }
+      }, true);
+
+      document.addEventListener('DOMContentLoaded', function () {
+        // Redupkan tombol CUD statis sebagai penanda read-only
+        document.querySelectorAll('button').forEach(function (b) {
+          if (aksiCUD(b)) b.classList.add('opacity-50', 'cursor-not-allowed');
+        });
+        // Banner read-only (lewati halaman yang sudah punya #bannerCutoff sendiri)
+        if (document.getElementById('bannerCutoff')) return;
+        var host = document.querySelector('main .mx-auto') || document.querySelector('main');
+        if (!host) return;
+        var b = document.createElement('div');
+        b.className = 'mb-4 flex items-start gap-3 rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4';
+        b.innerHTML = '<svg class="mt-0.5 h-5 w-5 shrink-0 text-rose-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg><div><p class="text-sm font-bold text-rose-800">Akun Anda dibekukan</p><p class="mt-0.5 text-xs text-rose-800">Anda hanya dapat melihat data (read-only) &mdash; menambah, mengubah, dan menghapus dinonaktifkan. Hubungi BWI Pusat untuk pengaktifan kembali.</p></div>';
+        host.insertBefore(b, host.firstChild);
+      });
+    })();
+  </script>
+
+
+  <!-- Mode Calon Nazhir: shell penuh, read-only, banner status-aware (aktif bila sesi=calon) -->
+  <script>
+    (function () {
+      var sesi = {};
+      try { sesi = JSON.parse(localStorage.getItem('sesi_kenazhiran')) || {}; } catch (e) { sesi = {}; }
+      // Pasca-aktivasi (khusus dashboard): kartu akses SK (persisten) + banner "Selamat" (sekali)
+      document.addEventListener('DOMContentLoaded', function () {
+        var path = (location.pathname.split('/').pop() || '').toLowerCase();
+        if (path !== 'nazhir-dashboard.html') return;
+        var r = {}; try { r = JSON.parse(localStorage.getItem('pendaftaran_nazhir_bwi')) || {}; } catch (e) { }
+        if (r.status !== 'aktif' || !r.nib || sesi.nama !== r.namaBadanHukum) return;
+        var main = document.querySelector('main'); if (!main) return;
+        var host = main.querySelector('.max-w-screen-2xl') || main;
+        function esc2(t) { var e = document.createElement('div'); e.textContent = t == null ? '' : String(t); return e.innerHTML; }
+        var kartu = document.createElement('div');
+        kartu.className = 'mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-gray-200 bg-white px-5 py-4 shadow-card';
+        kartu.innerHTML = '<div class="flex items-center gap-3"><span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg></span><div><p class="text-sm font-bold text-gray-800">Sertifikat Keputusan (SK) Nazhir</p><p class="text-xs text-gray-400">NIB ' + esc2(r.nib) + ' \u00b7 Terbit ' + esc2(r.tglSertifikat || '-') + '</p></div></div>' +
+          '<a href="nazhir-sk.html" class="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-brand-700"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>Preview / Download SK</a>';
+        host.insertBefore(kartu, host.firstChild);
+        var flag = null; try { flag = localStorage.getItem('graduasi_baru_bwi'); } catch (e) { }
+        if (flag) {
+          try { localStorage.removeItem('graduasi_baru_bwi'); } catch (e) { }
+          var div = document.createElement('div');
+          div.className = 'mb-6 flex flex-wrap items-start gap-3 rounded-2xl border border-brand-200 bg-brand-50 px-5 py-4';
+          div.innerHTML = '<svg class="mt-0.5 h-6 w-6 shrink-0 text-brand-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>' +
+            '<div><p class="text-sm font-bold text-brand-800">Selamat! Akun Anda kini aktif sebagai Nazhir</p><p class="mt-0.5 text-xs text-brand-700">Pendaftaran Anda telah disetujui BWI Pusat. NIB &amp; Sertifikat Keputusan (SK) telah terbit dan seluruh menu kini dapat diakses.</p></div>';
+          host.insertBefore(div, host.firstChild);
+        }
+      });
+
+      if (sesi.mode !== 'calon') return;
+
+
+      var reg = {};
+      try { reg = JSON.parse(localStorage.getItem('pendaftaran_nazhir_bwi')) || {}; } catch (e) { reg = {}; }
+      var STATUS = reg.status || 'draft';
+
+      // Graduasi: pendaftaran disetujui -> menjadi Nazhir Aktif (akses penuh, guard nonaktif)
+      if (STATUS === 'aktif') {
+        try { localStorage.setItem('sesi_kenazhiran', JSON.stringify({ mode: 'aktif', nama: reg.namaBadanHukum })); } catch (e) { }
+        try { localStorage.setItem('graduasi_baru_bwi', '1'); } catch (e) { }
+        return;
+      }
+
+      var NAMA = reg.namaBadanHukum || sesi.nama || 'Calon Nazhir';
+      function esc(t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; }
+      function inisial(n) { var p = String(n || 'CN').trim().split(/\s+/); return ((p[0] || 'C')[0] + ((p[1] || p[0] || 'N')[0] || 'N')).toUpperCase().slice(0, 2); }
+      function progres() { var ada = 0; try { ada = Object.keys(reg.berkas || {}).length; } catch (e) { } return { ada: ada, total: 16, persen: Math.round((ada / 16) * 100) }; }
+      var CEK = '<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>';
+
+      var editable = ['draft', 'revisi', 'ditolak'].indexOf(STATUS) !== -1;
+      var CTA = editable ? (STATUS === 'ditolak' ? 'Daftar Ulang' : (STATUS === 'revisi' ? 'Perbaiki Berkas' : 'Lanjutkan Pendaftaran')) : 'Lihat Detail Pendaftaran';
+
+      function bannerConf() {
+        var cat = reg.catatanPusat ? ' <span class="font-semibold">Catatan Pusat:</span> ' + esc(reg.catatanPusat) : '';
+        if (STATUS === 'revisi') return ['orange', 'Berkas perlu diperbaiki (Revisi)', 'BWI Pusat meminta perbaikan berkas.' + cat + ' Klik <b>Perbaiki Berkas</b> untuk memperbaiki lalu ajukan ulang.'];
+        if (STATUS === 'ditolak') return ['red', 'Pendaftaran ditolak', 'Maaf, pengajuan Anda tidak disetujui.' + cat + ' Anda dapat mendaftar ulang dari awal.'];
+        if (STATUS === 'diajukan') return ['amber', 'Berkas sedang diverifikasi BWI Pusat', 'Pengajuan Anda diterima & sedang diperiksa. Klik <b>Lihat Detail</b> untuk memantau.'];
+        if (STATUS === 'diverifikasi') return ['emerald', 'Dokumen terverifikasi BWI Pusat', 'Berkas Anda lengkap & terverifikasi. Menunggu penjadwalan presentasi/wawancara. Klik untuk detail.'];
+        if (STATUS === 'terjadwal') return ['blue', 'Disetujui verifikasi &mdash; jadwal presentasi ditetapkan', 'BWI Pusat menetapkan jadwal presentasi/wawancara Anda: <b>' + esc(reg.jadwalPresentasi || '-') + '</b>. Klik <b>Lihat Detail</b> untuk jadwal &amp; link lengkap.'];
+        if (STATUS === 'persetujuan') return ['violet', 'Lulus presentasi &mdash; menunggu persetujuan akhir', 'Selangkah lagi. Pengajuan Anda menunggu persetujuan akhir &amp; penerbitan sertifikat. Klik untuk detail.'];
+        return ['amber', 'Anda berstatus Calon Nazhir', 'Lengkapi berkas pendaftaran &rarr; menunggu verifikasi BWI Pusat &rarr; akun menjadi <b>Nazhir Aktif</b>. Menu lain read-only hingga akun aktif.'];
+      }
+      function warnaMap(w) {
+        return {
+          amber: ['border-amber-200 bg-amber-50', 'text-amber-600', 'text-amber-800'],
+          orange: ['border-orange-200 bg-orange-50', 'text-orange-600', 'text-orange-800'],
+          red: ['border-red-200 bg-red-50', 'text-red-600', 'text-red-800'],
+          emerald: ['border-emerald-200 bg-emerald-50', 'text-emerald-600', 'text-emerald-800'],
+          blue: ['border-blue-200 bg-blue-50', 'text-blue-600', 'text-blue-800'],
+          violet: ['border-violet-200 bg-violet-50', 'text-violet-600', 'text-violet-800']
+        }[w];
+      }
+      function banner() {
+        var b = bannerConf(), c = warnaMap(b[0]);
+        return '<div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl border ' + c[0] + ' px-5 py-4">' +
+          '<div class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 ' + c[1] + '" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>' +
+          '<div><p class="text-sm font-bold ' + c[2] + '">' + b[1] + '</p><p class="mt-0.5 text-xs ' + c[2] + '">' + b[2] + '</p></div></div>' +
+          '<a href="nazhir-pendaftaran.html" class="shrink-0 rounded-lg bg-brand-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-brand-700">' + CTA + '</a></div>';
+      }
+      function barProgres(p) {
+        return '<div><div class="flex items-center justify-between text-sm"><span class="font-semibold text-gray-700">' + p.ada + ' dari ' + p.total + ' berkas terunggah</span><span class="font-bold text-brand-700">' + p.persen + '%</span></div>' +
+          '<div class="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-gray-100"><div class="h-full rounded-full bg-brand-500" style="width:' + p.persen + '%"></div></div></div>';
+      }
+      function idxDash() {
+        if (STATUS === 'persetujuan') return 3;
+        if (STATUS === 'diverifikasi' || STATUS === 'terjadwal') return 2;
+        if (STATUS === 'diajukan' || STATUS === 'revisi' || STATUS === 'ditolak') return 1;
+        return 0;
+      }
+      function stepsDash() {
+        var cur = idxDash();
+        return ['Lengkapi Berkas', 'Verifikasi Pusat', 'Presentasi/Wawancara', 'Keputusan', 'Sertifikat Terbit'].map(function (s, i) {
+          var done = i < cur, act = i === cur;
+          var lingk = done ? 'bg-brand-600 text-white' : act ? 'bg-brand-100 text-brand-700 ring-2 ring-brand-500' : 'bg-gray-100 text-gray-400';
+          return '<li class="flex items-center gap-2 rounded-lg border ' + (act ? 'border-brand-200 bg-brand-50' : 'border-gray-100 bg-gray-50') + ' px-3 py-2"><span class="flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ' + lingk + '">' + (done ? CEK : (i + 1)) + '</span><span class="' + (done || act ? 'text-gray-700' : 'text-gray-400') + '">' + s + '</span></li>';
+        }).join('');
+      }
+      function isiDashboard(p) {
+        return '<div class="mx-auto max-w-screen-2xl space-y-6 p-4 md:p-6">' + banner() +
+          '<div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-card">' +
+          '<p class="text-sm text-gray-400">Selamat datang,</p><h2 class="text-xl font-bold text-gray-800">' + esc(NAMA) + '</h2>' +
+          '<div class="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2">' +
+          '<div class="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-4"><p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Nomor Induk BWI (NIB)</p><p class="mt-1 font-mono text-lg font-bold text-gray-400">Belum Terbit</p><p class="mt-0.5 text-xs text-gray-400">NIB terbit otomatis setelah pendaftaran disetujui BWI Pusat.</p></div>' +
+          '<div class="rounded-xl border border-gray-200 p-4">' + barProgres(p) + '<a href="nazhir-pendaftaran.html" class="mt-3 inline-flex rounded-lg bg-brand-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-brand-700">' + CTA + '</a></div>' +
+          '</div></div>' +
+          '<div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-card"><h3 class="text-base font-bold text-gray-800">Tahapan menuju Nazhir Aktif</h3>' +
+          '<ol class="mt-4 grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-5">' + stepsDash() + '</ol></div></div>';
+      }
+      function isiKosong(p) {
+        return '<div class="mx-auto max-w-screen-2xl space-y-6 p-4 md:p-6">' + banner() +
+          '<div class="flex flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white px-6 py-16 text-center shadow-card">' +
+          '<span class="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 text-gray-400"><svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg></span>' +
+          '<h3 class="mt-4 text-lg font-bold text-gray-800">Fitur tersedia setelah akun aktif</h3>' +
+          '<p class="mt-1 max-w-md text-sm text-gray-500">Menu ini akan berisi data setelah pendaftaran Anda disetujui BWI Pusat dan akun menjadi Nazhir Aktif.</p>' +
+          '<div class="mt-5 w-full max-w-sm">' + barProgres(p) + '</div>' +
+          '<a href="nazhir-pendaftaran.html" class="mt-5 inline-flex rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700">' + CTA + '</a>' +
+          '</div></div>';
+      }
+      function gantiTeks(dari, ke) {
+        var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null), t = [];
+        while (w.nextNode()) { if (w.currentNode.nodeValue.indexOf(dari) !== -1) t.push(w.currentNode); }
+        t.forEach(function (n) { n.nodeValue = n.nodeValue.split(dari).join(ke); });
+      }
+      function gantiTeksExact(dari, ke) {
+        var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null), t = [];
+        while (w.nextNode()) { if (w.currentNode.nodeValue.trim() === dari) t.push(w.currentNode); }
+        t.forEach(function (n) { n.nodeValue = n.nodeValue.replace(dari, ke); });
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        gantiTeks('Yayasan Wakaf Nusantara', NAMA);
+        gantiTeks('Nazhir Aktif', 'Calon Nazhir');
+        gantiTeksExact('YN', inisial(NAMA));
+
+        var path = (location.pathname.split('/').pop() || '').toLowerCase();
+        if (path === 'nazhir-pendaftaran.html') return;
+        var main = document.querySelector('main');
+        if (!main) return;
+        var p = progres();
+        main.innerHTML = (path === 'nazhir-dashboard.html') ? isiDashboard(p) : isiKosong(p);
+      });
+    })();
+  </script>
+
+</body>
+
+</html>

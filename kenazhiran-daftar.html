@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Daftar Nazhir | Sistem Informasi Kenazhiran Nasional BWI</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Outfit', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+          colors: {
+            brand: {
+              50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 300: '#5eead4', 400: '#2dd4bf',
+              500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a', 950: '#042f2e',
+            }
+          },
+          keyframes: { fadeIn: { '0%': { opacity: 0, transform: 'translateY(16px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } } },
+          animation: { fadeIn: 'fadeIn .55s cubic-bezier(.16,1,.3,1) both' }
+        }
+      }
+    }
+  </script>
+  <style>
+    body, html { font-family: 'Outfit', sans-serif !important; }
+    .pola-titik { background-image: radial-gradient(rgba(255, 255, 255, .07) 1px, transparent 1px); background-size: 24px 24px; }
+  </style>
+</head>
+
+<body class="min-h-screen bg-slate-900 text-slate-100 antialiased">
+  <div class="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-slate-900 to-brand-950 px-4 py-10">
+    <div class="pola-titik absolute inset-0"></div>
+    <div class="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-brand-600/20 blur-3xl"></div>
+    <div class="absolute -bottom-40 -left-24 h-96 w-96 rounded-full bg-brand-500/10 blur-3xl"></div>
+
+    <div class="relative z-10 w-full max-w-md animate-fadeIn">
+      <div class="mb-6 flex flex-col items-center text-center">
+        <span class="flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-600 shadow-lg shadow-brand-900/50 ring-1 ring-white/10">
+          <svg class="h-9 w-9 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
+          </svg>
+        </span>
+        <h1 class="mt-4 text-2xl font-bold text-white">Pendaftaran Nazhir Wakaf Uang</h1>
+        <p class="mt-1 text-sm font-medium text-brand-300">Badan Wakaf Indonesia</p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white p-7 shadow-2xl md:p-8">
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-brand-100 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+          </svg>
+          Langkah 1 dari 2 &middot; Buat Akun
+        </span>
+
+        <h2 class="mt-5 text-xl font-bold text-slate-800">Buat Akun Calon Nazhir</h2>
+        <p class="mt-1 text-sm text-slate-500">Cukup isi data dasar dulu. Kelengkapan 16 berkas persyaratan dapat Anda lengkapi secara bertahap setelah masuk.</p>
+
+        <form id="formDaftar" class="mt-6 space-y-4" novalidate>
+          <div>
+            <label for="namaBH" class="mb-1.5 block text-sm font-medium text-slate-700">Nama Badan Hukum / Yayasan <span class="text-red-500">*</span></label>
+            <input id="namaBH" type="text" placeholder="mis. PT Telkom Group"
+              class="w-full rounded-lg border border-slate-300 bg-white py-3 px-4 text-sm text-slate-800 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+          </div>
+          <div>
+            <label for="email" class="mb-1.5 block text-sm font-medium text-slate-700">Email <span class="text-red-500">*</span></label>
+            <input id="email" type="email" placeholder="nama@lembaga.or.id"
+              class="w-full rounded-lg border border-slate-300 bg-white py-3 px-4 text-sm text-slate-800 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+          </div>
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label for="pic" class="mb-1.5 block text-sm font-medium text-slate-700">Nama PIC <span class="text-red-500">*</span></label>
+              <input id="pic" type="text" placeholder="Contact person"
+                class="w-full rounded-lg border border-slate-300 bg-white py-3 px-4 text-sm text-slate-800 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+            </div>
+            <div>
+              <label for="hp" class="mb-1.5 block text-sm font-medium text-slate-700">No. HP <span class="text-red-500">*</span></label>
+              <input id="hp" type="tel" placeholder="08xxxxxxxxxx"
+                class="w-full rounded-lg border border-slate-300 bg-white py-3 px-4 text-sm text-slate-800 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+            </div>
+          </div>
+          <div>
+            <label for="sandi" class="mb-1.5 block text-sm font-medium text-slate-700">Kata Sandi <span class="text-red-500">*</span></label>
+            <input id="sandi" type="password" placeholder="Minimal 6 karakter"
+              class="w-full rounded-lg border border-slate-300 bg-white py-3 px-4 text-sm text-slate-800 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+          </div>
+
+          <label class="flex cursor-pointer items-start gap-2.5 text-sm text-slate-600">
+            <input id="setuju" type="checkbox" class="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500">
+            <span>Saya menyatakan data yang diisi benar dan menyetujui ketentuan pendaftaran Nazhir Wakaf Uang BWI.</span>
+          </label>
+
+          <p id="pesanError" class="hidden text-sm font-medium text-red-600"></p>
+
+          <button type="submit"
+            class="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-300 focus:ring-offset-2">
+            Buat Akun &amp; Lanjut Lengkapi Berkas
+          </button>
+        </form>
+
+        <div class="mt-5 flex items-start gap-2.5 rounded-lg border border-brand-100 bg-brand-50 p-3.5">
+          <svg class="mt-0.5 h-4 w-4 shrink-0 text-brand-600" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+          </svg>
+          <p class="text-xs text-brand-800">Pendaftaran nazhir wakaf uang ditujukan ke <span class="font-semibold">BWI Pusat</span>. Salah satu berkas (Rekomendasi BWI Perwakilan) diurus manual ke BWI daerah, lalu diunggah di langkah berikutnya.</p>
+        </div>
+      </div>
+
+      <p class="mt-6 text-center text-sm text-slate-400">
+        Sudah punya akun? <a href="kenazhiran-login.html" class="font-semibold text-brand-300 hover:text-brand-200">Masuk di sini</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const KUNCI_DAFTAR = 'pendaftaran_nazhir_bwi';
+
+    document.getElementById('formDaftar').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const namaBH = document.getElementById('namaBH').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const pic = document.getElementById('pic').value.trim();
+      const hp = document.getElementById('hp').value.trim();
+      const sandi = document.getElementById('sandi').value;
+      const setuju = document.getElementById('setuju').checked;
+      const err = document.getElementById('pesanError');
+
+      function gagal(msg) { err.textContent = msg; err.classList.remove('hidden'); }
+
+      if (!namaBH || !email || !pic || !hp) return gagal('Mohon lengkapi seluruh isian bertanda *.');
+      if (sandi.length < 6) return gagal('Kata sandi minimal 6 karakter.');
+      if (!setuju) return gagal('Mohon setujui ketentuan pendaftaran terlebih dahulu.');
+
+      // Pertahankan berkas bila akun sudah pernah dibuat sebelumnya
+      let lama = {};
+      try { lama = JSON.parse(localStorage.getItem(KUNCI_DAFTAR)) || {}; } catch (e2) { lama = {}; }
+
+      const rec = {
+        namaBadanHukum: namaBH,
+        email: email, pic: pic, hp: hp,
+        sandi: sandi,                              // simulasi (mockup) — untuk login akun terdaftar
+        jenis: 'Wakaf Uang',
+        status: 'draft',                          // draft -> diajukan -> verifikasi -> ...
+        berkas: (lama && lama.berkas) ? lama.berkas : {},
+        tglDaftar: lama.tglDaftar || tanggalHariIni(),
+      };
+      try {
+        localStorage.setItem(KUNCI_DAFTAR, JSON.stringify(rec));
+        // Tandai sesi sebagai Calon Nazhir -> shell nazhir tampil read-only + data kosong
+        localStorage.setItem('sesi_kenazhiran', JSON.stringify({ mode: 'calon', nama: namaBH }));
+      } catch (e3) { /* mode privat */ }
+      window.location.href = 'nazhir-dashboard.html';
+    });
+
+    function tanggalHariIni() {
+      const b = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+      const d = new Date();
+      return d.getDate() + ' ' + b[d.getMonth()] + ' ' + d.getFullYear();
+    }
+  </script>
+</body>
+
+</html>

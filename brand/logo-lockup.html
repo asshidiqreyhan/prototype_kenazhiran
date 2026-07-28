@@ -1,0 +1,450 @@
+<meta charset="utf-8">
+<title>Logo Lockup Generator — Titik Terang Teknologi</title>
+<style>
+  :root{
+    --bg:#0b0b0c; --panel:#141417; --line:#26262b; --fg:#f2f2f4;
+    --muted:#8e8e98; --accent:#e8e8ec;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--fg);
+    font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  .wrap{display:grid; grid-template-columns:320px 1fr; min-height:100vh}
+  @media (max-width:860px){ .wrap{grid-template-columns:1fr} }
+
+  aside{
+    background:var(--panel); border-right:1px solid var(--line);
+    padding:24px 20px; display:flex; flex-direction:column; gap:22px;
+    max-height:100vh; overflow-y:auto;
+  }
+  h1{font-size:15px; margin:0; letter-spacing:.02em}
+  h1 span{display:block; color:var(--muted); font-weight:400; font-size:12px; margin-top:4px}
+
+  fieldset{border:0; padding:0; margin:0; display:flex; flex-direction:column; gap:10px}
+  legend{
+    font-size:11px; text-transform:uppercase; letter-spacing:.1em;
+    color:var(--muted); padding:0 0 8px; width:100%;
+    border-bottom:1px solid var(--line); margin-bottom:4px;
+  }
+  label{font-size:12px; color:var(--muted); display:flex; flex-direction:column; gap:5px}
+
+  input[type=text],input[type=number],select{
+    background:#1c1c21; border:1px solid var(--line); color:var(--fg);
+    border-radius:6px; padding:7px 9px; font:inherit; font-size:13px; width:100%;
+  }
+  input[type=range]{width:100%; accent-color:var(--fg)}
+  input[type=file]{font-size:11px; color:var(--muted); width:100%}
+  input[type=file]::file-selector-button{
+    background:#1c1c21; border:1px solid var(--line); color:var(--fg);
+    border-radius:5px; padding:5px 9px; font:inherit; font-size:11px;
+    margin-right:8px; cursor:pointer;
+  }
+
+  .seg{display:flex; gap:0; border:1px solid var(--line); border-radius:6px; overflow:hidden}
+  .seg button{
+    flex:1; background:#1c1c21; border:0; color:var(--muted);
+    padding:7px 4px; font:inherit; font-size:12px; cursor:pointer;
+  }
+  .seg button[aria-pressed=true]{background:var(--fg); color:#000; font-weight:600}
+
+  .row{display:flex; gap:8px; align-items:center}
+  .check{flex-direction:row; align-items:center; gap:7px; color:var(--muted); font-size:12px}
+
+  .btn{
+    background:var(--fg); color:#000; border:0; border-radius:6px;
+    padding:11px 14px; font:inherit; font-weight:600; font-size:13px;
+    cursor:pointer; width:100%;
+  }
+  .btn.ghost{background:transparent; color:var(--fg); border:1px solid var(--line); font-weight:400}
+  .btn:active{transform:translateY(1px)}
+
+  main{display:flex; align-items:center; justify-content:center; padding:32px; overflow:auto}
+  .stage{
+    max-width:100%;
+    box-shadow:0 0 0 1px var(--line), 0 24px 60px rgba(0,0,0,.5);
+    border-radius:4px; overflow:hidden;
+    background-image:
+      linear-gradient(45deg,#1a1a1e 25%,transparent 25%),
+      linear-gradient(-45deg,#1a1a1e 25%,transparent 25%),
+      linear-gradient(45deg,transparent 75%,#1a1a1e 75%),
+      linear-gradient(-45deg,transparent 75%,#1a1a1e 75%);
+    background-size:16px 16px;
+    background-position:0 0,0 8px,8px -8px,-8px 0;
+  }
+  canvas{display:block; max-width:100%; height:auto}
+
+  .note{font-size:11px; line-height:1.6; color:var(--muted)}
+  .note b{color:#d8d8de; font-weight:600}
+  .warn{
+    border-left:2px solid #d9a441; padding-left:10px;
+    font-size:11px; line-height:1.6; color:var(--muted);
+  }
+</style>
+
+<div class="wrap">
+<aside>
+  <h1>Logo Lockup Generator<span>Titik Terang Teknologi &times; Partner</span></h1>
+
+  <fieldset>
+    <legend>Logo A (kiri)</legend>
+    <label>File logo (SVG / PNG transparan)
+      <input type="file" id="fileA" accept="image/*">
+    </label>
+    <label class="check"><input type="checkbox" id="invA"> Balik warna logo A</label>
+    <p class="note" id="noteA">Belum ada file — sementara pakai <b>rekonstruksi TTT</b> (perkiraan, ganti dengan file asli).</p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Logo B (kanan)</legend>
+    <label>File logo (SVG / PNG transparan)
+      <input type="file" id="fileB" accept="image/*">
+    </label>
+    <label class="check"><input type="checkbox" id="invB"> Balik warna logo B</label>
+    <p class="warn" id="noteB">Belum ada file. Upload berkas logo <b>resmi</b> dari partner — jangan hasil trace/screenshot.</p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Layout</legend>
+    <div class="seg" id="orient">
+      <button data-v="h" aria-pressed="true">Horizontal</button>
+      <button data-v="v" aria-pressed="false">Vertikal</button>
+    </div>
+    <div class="seg" id="divider">
+      <button data-v="x" aria-pressed="true">X</button>
+      <button data-v="cross" aria-pressed="false">&times;</button>
+      <button data-v="line" aria-pressed="false">Garis</button>
+      <button data-v="none" aria-pressed="false">Tanpa</button>
+    </div>
+    <label>Jarak antar logo <output id="gapOut">1.0&times;</output>
+      <input type="range" id="gap" min="20" max="220" value="100">
+    </label>
+    <label>Padding tepi <output id="padOut">1.0&times;</output>
+      <input type="range" id="pad" min="0" max="200" value="100">
+    </label>
+    <label>Skala logo B <output id="scaleBOut">100%</output>
+      <input type="range" id="scaleB" min="40" max="180" value="100">
+    </label>
+    <button class="btn ghost" id="swap">Tukar posisi A &harr; B</button>
+  </fieldset>
+
+  <fieldset>
+    <legend>Background</legend>
+    <div class="seg" id="bg">
+      <button data-v="black" aria-pressed="true">Hitam</button>
+      <button data-v="white" aria-pressed="false">Putih</button>
+      <button data-v="none" aria-pressed="false">Transparan</button>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Export</legend>
+    <label>Lebar output (px)
+      <input type="number" id="outW" value="2400" min="200" max="8000" step="100">
+    </label>
+    <p class="note">Tinggi mengikuti proporsi otomatis.</p>
+    <button class="btn" id="dl">Download PNG</button>
+    <button class="btn ghost" id="dlAll">Download 3 varian (hitam / putih / transparan)</button>
+  </fieldset>
+</aside>
+
+<main><div class="stage"><canvas id="cv"></canvas></div></main>
+</div>
+
+<script>
+(() => {
+  'use strict';
+
+  const $ = id => document.getElementById(id);
+  const cv = $('cv'), ctx = cv.getContext('2d');
+
+  const state = {
+    imgA: null, imgB: null,
+    invA: false, invB: false,
+    orient: 'h', divider: 'x',
+    gap: 1, pad: 1, scaleB: 1,
+    bg: 'black', swapped: false,
+  };
+
+  // Unit height every logo block is normalised to before layout.
+  const UNIT = 200;
+
+  /* ---------- Built-in reconstruction of the Titik Terang Teknologi mark ----------
+     Approximation drawn from the reference image: 3-line wordmark, hairline rule,
+     radial halftone dot circle. Replace with the real vector file when available. */
+  const TTT = {
+    w: 100, h: 176,
+    draw(c, ink) {
+      c.save();
+      c.fillStyle = ink;
+
+      // wordmark
+      const size = 21, lead = 23.5;
+      c.font = `600 ${size}px "Helvetica Neue", Helvetica, Arial, sans-serif`;
+      c.textAlign = 'left';
+      c.textBaseline = 'alphabetic';
+      ['Titik', 'Terang', 'Teknologi'].forEach((t, i) => {
+        c.fillText(t, 0, size + i * lead);
+      });
+
+      // hairline rule
+      const ruleY = size + 2 * lead + 16;
+      c.fillRect(0, ruleY, this.w, 1.6);
+
+      // radial halftone dot circle
+      const cx = this.w / 2, cy = ruleY + 12 + 41, R = 41, step = 9.6;
+      for (let i = -4; i <= 4; i++) {
+        for (let j = -4; j <= 4; j++) {
+          const x = i * step, y = j * step;
+          const dist = Math.hypot(x, y);
+          if (dist > R) continue;
+          const t = dist / R;                 // 0 at centre → 1 at rim
+          const r = 4.3 * (1 - 0.74 * t);
+          c.beginPath();
+          c.arc(cx + x, cy + y, r, 0, Math.PI * 2);
+          c.fill();
+        }
+      }
+      c.restore();
+    }
+  };
+
+  /* ---------- Blocks ---------- */
+
+  // Returns {w, h, draw(c, x, y, h)} normalised to a given height.
+  function block(kind) {
+    const img = kind === 'A' ? state.imgA : state.imgB;
+    const invert = kind === 'A' ? state.invA : state.invB;
+    const mul = kind === 'B' ? state.scaleB : 1;
+    const h = UNIT * mul;
+
+    if (img) {
+      const w = h * (img.naturalWidth / img.naturalHeight);
+      return {
+        w, h,
+        draw(c, x, y) {
+          c.save();
+          if (invert) c.filter = 'invert(1)';
+          c.drawImage(img, x, y, w, h);
+          c.restore();
+        }
+      };
+    }
+
+    if (kind === 'A') {
+      const s = h / TTT.h, w = TTT.w * s;
+      return {
+        w, h,
+        draw(c, x, y) {
+          c.save();
+          c.translate(x, y);
+          c.scale(s, s);
+          TTT.draw(c, ink());
+          c.restore();
+        }
+      };
+    }
+
+    // Placeholder slot for logo B until the official asset is supplied.
+    const w = h * 1.35;
+    return {
+      w, h,
+      draw(c, x, y) {
+        c.save();
+        c.strokeStyle = ink();
+        c.fillStyle = ink();
+        c.globalAlpha = 0.35;
+        c.setLineDash([h * 0.05, h * 0.04]);
+        c.lineWidth = Math.max(1, h * 0.012);
+        c.strokeRect(x, y, w, h);
+        c.setLineDash([]);
+        c.globalAlpha = 0.55;
+        c.font = `500 ${h * 0.1}px "Helvetica Neue", Helvetica, Arial, sans-serif`;
+        c.textAlign = 'center';
+        c.textBaseline = 'middle';
+        c.fillText('LOGO PARTNER', x + w / 2, y + h / 2 - h * 0.06);
+        c.font = `400 ${h * 0.068}px "Helvetica Neue", Helvetica, Arial, sans-serif`;
+        c.globalAlpha = 0.4;
+        c.fillText('upload file resmi', x + w / 2, y + h / 2 + h * 0.08);
+        c.restore();
+      }
+    };
+  }
+
+  function ink() { return state.bg === 'white' ? '#000000' : '#ffffff'; }
+
+  function dividerBlock() {
+    if (state.divider === 'none') return null;
+    const h = UNIT;
+    if (state.divider === 'line') {
+      return {
+        w: h * 0.02, h: h * 0.75,
+        draw(c, x, y, self) { c.save(); c.fillStyle = ink(); c.globalAlpha = .5;
+          c.fillRect(x, y, this.w, this.h); c.restore(); }
+      };
+    }
+    const glyph = state.divider === 'x' ? 'X' : '×';
+    const size = h * (state.divider === 'x' ? 0.26 : 0.42);
+    return {
+      w: size * 0.8, h: size,
+      draw(c, x, y) {
+        c.save();
+        c.fillStyle = ink();
+        c.font = `${state.divider === 'x' ? 700 : 300} ${size}px "Helvetica Neue", Helvetica, Arial, sans-serif`;
+        c.textAlign = 'center';
+        c.textBaseline = 'middle';
+        c.fillText(glyph, x + this.w / 2, y + this.h / 2);
+        c.restore();
+      }
+    };
+  }
+
+  /* ---------- Layout ---------- */
+
+  function layout() {
+    let a = block('A'), b = block('B');
+    if (state.swapped) [a, b] = [b, a];
+    const d = dividerBlock();
+    const items = d ? [a, d, b] : [a, b];
+    const gap = UNIT * 0.42 * state.gap;
+    const pad = UNIT * 0.34 * state.pad;
+
+    if (state.orient === 'h') {
+      const inner = items.reduce((s, it) => s + it.w, 0) + gap * (items.length - 1);
+      const tall = Math.max(...items.map(it => it.h));
+      const W = inner + pad * 2, H = tall + pad * 2;
+      let x = pad;
+      const placed = items.map(it => {
+        const p = { it, x, y: pad + (tall - it.h) / 2 };
+        x += it.w + gap;
+        return p;
+      });
+      return { W, H, placed };
+    }
+
+    const inner = items.reduce((s, it) => s + it.h, 0) + gap * (items.length - 1);
+    const wide = Math.max(...items.map(it => it.w));
+    const W = wide + pad * 2, H = inner + pad * 2;
+    let y = pad;
+    const placed = items.map(it => {
+      const p = { it, x: pad + (wide - it.w) / 2, y };
+      y += it.h + gap;
+      return p;
+    });
+    return { W, H, placed };
+  }
+
+  /* ---------- Render ---------- */
+
+  function render(canvas, outWidth) {
+    const { W, H, placed } = layout();
+    const scale = outWidth / W;
+    canvas.width = Math.round(W * scale);
+    canvas.height = Math.round(H * scale);
+
+    const c = canvas.getContext('2d');
+    c.clearRect(0, 0, canvas.width, canvas.height);
+    if (state.bg !== 'none') {
+      c.fillStyle = state.bg === 'white' ? '#ffffff' : '#000000';
+      c.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    c.save();
+    c.scale(scale, scale);
+    placed.forEach(p => p.it.draw(c, p.x, p.y));
+    c.restore();
+    return canvas;
+  }
+
+  function preview() { render(cv, 1400); }
+
+  /* ---------- Download ---------- */
+
+  function save(canvas, name) {
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = name;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }, 'image/png');
+  }
+
+  function stamp() {
+    return `lockup-${state.orient}-${state.bg}-${Date.now().toString(36)}.png`;
+  }
+
+  /* ---------- Wiring ---------- */
+
+  function segment(id, key, after) {
+    $(id).addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      state[key] = btn.dataset.v;
+      [...e.currentTarget.children].forEach(b =>
+        b.setAttribute('aria-pressed', String(b === btn)));
+      if (after) after();
+      preview();
+    });
+  }
+
+  segment('orient', 'orient');
+  segment('divider', 'divider');
+  segment('bg', 'bg');
+
+  function loadFile(input, slot, note) {
+    $(input).addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = () => { state[slot] = img; preview(); };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+      $(note).textContent = `Terpakai: ${file.name}`;
+      $(note).className = 'note';
+    });
+  }
+  loadFile('fileA', 'imgA', 'noteA');
+  loadFile('fileB', 'imgB', 'noteB');
+
+  $('invA').addEventListener('change', e => { state.invA = e.target.checked; preview(); });
+  $('invB').addEventListener('change', e => { state.invB = e.target.checked; preview(); });
+
+  function slider(id, key, out, fmt) {
+    $(id).addEventListener('input', e => {
+      state[key] = e.target.value / 100;
+      $(out).textContent = fmt(state[key]);
+      preview();
+    });
+  }
+  slider('gap', 'gap', 'gapOut', v => v.toFixed(1) + '×');
+  slider('pad', 'pad', 'padOut', v => v.toFixed(1) + '×');
+  slider('scaleB', 'scaleB', 'scaleBOut', v => Math.round(v * 100) + '%');
+
+  $('swap').addEventListener('click', () => { state.swapped = !state.swapped; preview(); });
+
+  $('dl').addEventListener('click', () => {
+    const off = document.createElement('canvas');
+    render(off, Math.max(200, Math.min(8000, +$('outW').value || 2400)));
+    save(off, stamp());
+  });
+
+  $('dlAll').addEventListener('click', () => {
+    const w = Math.max(200, Math.min(8000, +$('outW').value || 2400));
+    const keep = state.bg;
+    ['black', 'white', 'none'].forEach((bg, i) => {
+      setTimeout(() => {
+        state.bg = bg;
+        const off = document.createElement('canvas');
+        render(off, w);
+        save(off, `lockup-${state.orient}-${bg}.png`);
+        if (i === 2) { state.bg = keep; preview(); }
+      }, i * 350);
+    });
+  });
+
+  preview();
+})();
+</script>
