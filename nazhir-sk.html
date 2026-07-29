@@ -93,12 +93,28 @@
     function amankan(t) { const d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; }
     function tglHariIni() { const b = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']; const d = new Date(); return d.getDate() + ' ' + b[d.getMonth()] + ' ' + d.getFullYear(); }
 
+    function qrKode(seed, px) {
+      const N = 25, s = px || 96, cell = s / N, sd = String(seed || 'BWI');
+      let h = 2166136261;
+      for (let i = 0; i < sd.length; i++) { h ^= sd.charCodeAt(i); h = Math.imul(h, 16777619); }
+      function rnd(i) { let x = Math.imul((h ^ (i * 2654435761)) >>> 0, 2246822519); x ^= x >>> 13; return ((x >>> 0) % 1000) / 1000; }
+      const on = {}; const set = (x, y) => { on[x + '_' + y] = true; };
+      function finder(gx, gy) { for (let y = 0; y < 7; y++) for (let x = 0; x < 7; x++) { const edge = (x === 0 || x === 6 || y === 0 || y === 6), core = (x >= 2 && x <= 4 && y >= 2 && y <= 4); if (edge || core) set(gx + x, gy + y); } }
+      finder(0, 0); finder(N - 7, 0); finder(0, N - 7);
+      const inF = (x, y) => (x < 8 && y < 8) || (x >= N - 8 && y < 8) || (x < 8 && y >= N - 8);
+      let idx = 0;
+      for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) { if (inF(x, y)) continue; if (rnd(idx++) > 0.5) set(x, y); }
+      let r = '';
+      for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) if (on[x + '_' + y]) r += '<rect x="' + (x * cell).toFixed(2) + '" y="' + (y * cell).toFixed(2) + '" width="' + cell.toFixed(2) + '" height="' + cell.toFixed(2) + '"/>';
+      return '<svg width="' + s + '" height="' + s + '" viewBox="0 0 ' + s + ' ' + s + '" xmlns="http://www.w3.org/2000/svg" style="display:block"><rect width="' + s + '" height="' + s + '" fill="#fff"/><g fill="#0f172a">' + r + '</g></svg>';
+    }
     function skHTML(d) {
       const nama = amankan(d.namaBadanHukum || '-');
       const pic = amankan(d.pic || '-');
       const nib = amankan(d.nib || '-');
       const tgl = amankan(d.tglSertifikat || tglHariIni());
       const nomor = 'SK-' + (d.nib || 'NZHR-000') + '/BWI/' + (String(tgl).split(' ').pop() || '2026');
+      const namaKetua = amankan(d.ttdOleh || 'Prof. Dr. K.H. Noor Achmad, M.A.');
       return '' +
         '<div style="text-align:center;border-bottom:3px double #0f766e;padding-bottom:14px;margin-bottom:20px;">' +
           '<p style="margin:0;font-size:15px;font-weight:bold;letter-spacing:.5px;">BADAN WAKAF INDONESIA</p>' +
@@ -126,15 +142,17 @@
         '</table>' +
         '<div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:34px;">' +
           '<div style="text-align:center;">' +
-            '<div style="width:96px;height:96px;border:1px solid #cbd5e1;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-family:Arial,sans-serif;font-size:10px;">QR TTD<br>Digital</div>' +
-            '<p style="margin:6px 0 0;font-size:10px;color:#64748b;font-family:Arial,sans-serif;">Terverifikasi elektronik</p>' +
+            '<div style="width:104px;height:104px;padding:4px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;">' + qrKode(d.ttdId || d.nib || nomor, 96) + '</div>' +
+            '<p style="margin:6px 0 0;font-size:10px;font-weight:bold;color:#0f766e;font-family:Arial,sans-serif;">&#10003; Terverifikasi — Ketua BWI</p>' +
+            '<p style="margin:1px 0 0;font-size:9px;color:#94a3b8;font-family:Arial,sans-serif;">ID: ' + amankan(d.ttdId || '-') + '</p>' +
           '</div>' +
           '<div style="text-align:center;min-width:230px;">' +
             '<p style="margin:0;">Ditetapkan di Jakarta,</p>' +
             '<p style="margin:0 0 4px;">pada tanggal ' + tgl + '</p>' +
             '<p style="margin:0;">Ketua Badan Wakaf Indonesia,</p>' +
-            '<div style="height:64px;"></div>' +
-            '<p style="margin:0;font-weight:bold;text-decoration:underline;">Prof. Dr. K.H. Noor Achmad, M.A.</p>' +
+            '<div style="height:56px;"></div>' +
+            '<p style="margin:0;font-weight:bold;text-decoration:underline;">' + namaKetua + '</p>' +
+            '<p style="margin:2px 0 0;font-size:10px;color:#64748b;font-family:Arial,sans-serif;">Ditandatangani secara elektronik</p>' +
           '</div>' +
         '</div>';
     }

@@ -105,7 +105,7 @@
                 <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" /></svg></span>
                 <select id="filterStatus" onchange="render()" class="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pl-11 pr-9 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
                   <option value="">Semua Status</option>
-                  <option value="sekretariat">Perlu Diteruskan</option>
+                  <option value="perlu">Perlu Diteruskan</option>
                   <option value="ttd">Sudah Diteruskan (Menunggu TTD)</option>
                   <option value="aktif">Sudah Disahkan / Aktif</option>
                   <option value="lain">Masih Diproses Pusat</option>
@@ -122,7 +122,7 @@
                   <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">No</th>
                   <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Nama Nazhir / Badan Hukum</th>
                   <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Pemohon (PIC)</th>
-                  <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Disetujui Pusat</th>
+                  <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Hasil Wawancara</th>
                   <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Status</th>
                   <th class="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Aksi</th>
                 </tr></thead>
@@ -155,6 +155,27 @@
         </div>
       </div>
       <div id="dtAksi" class="flex items-center justify-end gap-2 border-t border-gray-100 bg-gray-50 px-6 py-4"></div>
+    </div>
+  </div>
+
+  <!-- Modal Preview Sertifikat (SK) -->
+  <div id="modalSK" class="fixed inset-0 z-[75] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60" onclick="tutupSK()"></div>
+    <div class="modal-in relative flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+      <div class="flex items-center justify-between gap-3 border-b border-gray-100 px-6 py-4">
+        <div class="flex items-center gap-2">
+          <svg class="h-5 w-5 text-brand-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>
+          <h3 class="text-base font-bold text-gray-800">Sertifikat / SK Nazhir</h3>
+        </div>
+        <button onclick="tutupSK()" class="text-gray-400 transition hover:text-gray-600"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg></button>
+      </div>
+      <div class="flex-1 overflow-y-auto bg-gray-100 px-4 py-6 sm:px-8">
+        <div id="skBody" class="mx-auto max-w-[720px] bg-white p-8 text-sm leading-relaxed text-gray-800 shadow-lg sm:p-12" style="font-family: 'Times New Roman', Georgia, serif;"></div>
+      </div>
+      <div class="flex items-center justify-end gap-2 border-t border-gray-100 bg-gray-50 px-6 py-3">
+        <button onclick="tutupSK()" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-600 transition hover:bg-gray-100">Tutup</button>
+        <button onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" /></svg>Cetak / PDF</button>
+      </div>
     </div>
   </div>
 
@@ -191,7 +212,7 @@
       ditolak: ['Ditolak', 'bg-red-50 text-red-600'],
       diverifikasi: ['Sudah Diverifikasi', 'bg-emerald-50 text-emerald-700'],
       terjadwal: ['Jadwal Wawancara', 'bg-blue-50 text-blue-700'],
-      persetujuan: ['Menunggu Persetujuan', 'bg-violet-50 text-violet-700'],
+      persetujuan: ['Perlu Diteruskan', 'bg-cyan-50 text-cyan-700'],
       sekretariat: ['Perlu Diteruskan', 'bg-cyan-50 text-cyan-700'],
       ttd: ['Menunggu TTD Ketua', 'bg-indigo-50 text-indigo-700'],
       aktif: ['Disahkan / Aktif', 'bg-brand-50 text-brand-700'],
@@ -220,10 +241,12 @@
       else { const arr = bacaDummy() || []; const i = arr.findIndex(x => String(x.id) === String(d.id)); if (i >= 0) { arr[i] = d; simpanDummy(arr); } }
     }
     function badge(st) { const s = STATUS[st] || ['-', 'bg-gray-100 text-gray-500']; return '<span class="inline-flex items-center rounded-full ' + s[1] + ' px-2.5 py-1 text-xs font-semibold">' + s[0] + '</span>'; }
+    // Dapat diteruskan ke Ketua = telah lulus wawancara & masuk tahap persetujuan (dulu 'sekretariat', kompatibel).
+    function perluTeruskan(d) { return d.status === 'persetujuan' || d.status === 'sekretariat'; }
 
     function ringkas() {
       const list = semua();
-      document.getElementById('cPerlu').textContent = list.filter(d => d.status === 'sekretariat').length;
+      document.getElementById('cPerlu').textContent = list.filter(perluTeruskan).length;
       document.getElementById('cTeruskan').textContent = list.filter(d => d.status === 'ttd').length;
       document.getElementById('cAktif').textContent = list.filter(d => d.status === 'aktif').length;
       document.getElementById('cTotal').textContent = list.length;
@@ -232,8 +255,10 @@
     function aksiRow(d, idAttr) {
       const lihat = '<button type="button" onclick="bukaDetail(\'' + idAttr + '\')" class="rounded-lg border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-600 transition hover:bg-gray-50">Lihat</button>';
       let utama = '';
-      if (d.status === 'sekretariat') {
-        utama = '<button type="button" onclick="teruskan(\'' + idAttr + '\')" class="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-brand-700"><svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" /></svg>Teruskan ke Ketua</button>';
+      if (perluTeruskan(d)) {
+        utama = '<button type="button" onclick="teruskan(\'' + idAttr + '\')" class="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-brand-700"><svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" /></svg>Teruskan ke Ketua BWI</button>';
+      } else if (d.status === 'aktif') {
+        utama = '<button type="button" onclick="bukaSK(\'' + idAttr + '\')" class="inline-flex items-center gap-1.5 rounded-lg border border-brand-200 bg-brand-50 px-3.5 py-2 text-xs font-semibold text-brand-700 transition hover:bg-brand-100"><svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>Lihat Sertifikat</button>';
       }
       return '<div class="inline-flex items-center justify-end gap-1.5">' + lihat + utama + '</div>';
     }
@@ -243,7 +268,8 @@
       const q = (document.getElementById('cari').value || '').trim().toLowerCase();
       const f = document.getElementById('filterStatus').value || '';
       let list = semua();
-      if (f === 'lain') list = list.filter(d => ['diajukan', 'revisi', 'diverifikasi', 'terjadwal', 'persetujuan'].indexOf(d.status) !== -1);
+      if (f === 'perlu') list = list.filter(perluTeruskan);
+      else if (f === 'lain') list = list.filter(d => ['diajukan', 'revisi', 'diverifikasi', 'terjadwal'].indexOf(d.status) !== -1);
       else if (f) list = list.filter(d => d.status === f);
       if (q) list = list.filter(d => ((d.namaBadanHukum || '') + ' ' + (d.pic || '') + ' ' + (d.email || '')).toLowerCase().indexOf(q) !== -1);
 
@@ -262,7 +288,7 @@
           '<td class="whitespace-nowrap px-5 py-4 text-gray-500 md:px-6">' + (i + 1) + '</td>' +
           '<td class="px-5 py-4 md:px-6"><p class="font-semibold text-gray-800">' + amankan(d.namaBadanHukum) + (d._real ? ' <span class="ml-1 rounded bg-brand-50 px-1.5 py-0.5 text-[10px] font-semibold text-brand-700">Baru</span>' : '') + '</p><p class="text-xs text-gray-400">' + amankan(d.email || '') + '</p></td>' +
           '<td class="whitespace-nowrap px-5 py-4 text-gray-600 md:px-6">' + amankan(d.pic || '-') + '</td>' +
-          '<td class="whitespace-nowrap px-5 py-4 text-gray-600 md:px-6">' + amankan(d.disetujuiPusat || '-') + '</td>' +
+          '<td class="whitespace-nowrap px-5 py-4 text-gray-600 md:px-6">' + amankan(d.hasilPresentasi || '-') + '</td>' +
           '<td class="px-5 py-4 md:px-6">' + badge(d.status) + '</td>' +
           '<td class="px-5 py-4 text-right md:px-6">' + aksiRow(d, idAttr) + '</td>';
         body.appendChild(tr);
@@ -273,7 +299,7 @@
     function teruskan(idAttr) {
       const d = cari(idAttr);
       if (!d) return;
-      if (d.status !== 'sekretariat') { showToast('Hanya pendaftaran yang telah disetujui Pusat yang dapat diteruskan.'); return; }
+      if (!perluTeruskan(d)) { showToast('Hanya pendaftaran yang lulus wawancara (tahap Persetujuan) yang dapat diteruskan.'); return; }
       if (!window.confirm('Teruskan pendaftaran "' + (d.namaBadanHukum || '') + '" ke Ketua BWI untuk ditandatangani?')) return;
       d.status = 'ttd';
       d.diteruskanOleh = SEKRETARIS_NAMA;
@@ -299,9 +325,10 @@
       document.getElementById('dtInfo').innerHTML = info.join('');
 
       const t = [];
-      if (d.disetujuiPusat) t.push('<li class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-brand-500"></span>Disetujui Pusat · <span class="font-medium">' + amankan(d.disetujuiPusat) + '</span></li>');
+      if (d.jadwalPresentasi) t.push('<li class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-blue-500"></span>Presentasi/Wawancara · <span class="font-medium">' + amankan(d.jadwalPresentasi) + '</span></li>');
+      if (d.hasilPresentasi) t.push('<li class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-brand-500"></span>Hasil wawancara: <span class="font-medium">' + amankan(d.hasilPresentasi) + '</span>' + (d.catatanHasil ? ' — ' + amankan(d.catatanHasil) : '') + '</li>');
       if (d.diteruskanOleh) t.push('<li class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-indigo-500"></span>Diteruskan ke Ketua oleh ' + amankan(d.diteruskanOleh) + ' · <span class="font-medium">' + amankan(d.tglTeruskan || '-') + '</span></li>');
-      if (d.ttdOleh) t.push('<li class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-emerald-500"></span>Ditandatangani Ketua · <span class="font-medium">' + amankan(d.tglTtd || '-') + '</span></li>');
+      if (d.ttdOleh) t.push('<li class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-emerald-500"></span>Ditandatangani Ketua (' + amankan(d.ttdOleh) + ') · <span class="font-medium">' + amankan(d.tglTtd || '-') + '</span></li>');
       document.getElementById('dtTimeline').innerHTML = t.length ? '<div class="rounded-xl border border-gray-100 bg-gray-50 px-4 py-3"><p class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Riwayat</p><ul class="space-y-1.5 text-xs text-gray-600">' + t.join('') + '</ul></div>' : '';
 
       const berkas = d.berkas || {};
@@ -313,16 +340,81 @@
 
       const aksi = document.getElementById('dtAksi');
       let btn = '<button type="button" onclick="tutupDetail()" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-600 transition hover:bg-gray-100">Tutup</button>';
-      if (d.status === 'sekretariat') btn += '<button type="button" onclick="teruskan(\'' + detailId + '\')" class="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" /></svg>Teruskan ke Ketua</button>';
+      if (perluTeruskan(d)) btn += '<button type="button" onclick="teruskan(\'' + detailId + '\')" class="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" /></svg>Teruskan ke Ketua BWI</button>';
+      else if (d.status === 'aktif') btn += '<button type="button" onclick="bukaSK(\'' + detailId + '\')" class="inline-flex items-center gap-1.5 rounded-lg border border-brand-200 bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-700 transition hover:bg-brand-100"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>Lihat Sertifikat</button>';
       aksi.innerHTML = btn;
 
       const m = document.getElementById('modalDetail'); m.classList.remove('hidden'); m.classList.add('flex');
     }
     function tutupDetail() { const m = document.getElementById('modalDetail'); if (m) { m.classList.add('hidden'); m.classList.remove('flex'); } }
 
+    /* ---------- Preview Sertifikat (SK) — read-only ---------- */
+    function qrKode(seed, px) {
+      const N = 25, s = px || 96, cell = s / N, sd = String(seed || 'BWI');
+      let h = 2166136261;
+      for (let i = 0; i < sd.length; i++) { h ^= sd.charCodeAt(i); h = Math.imul(h, 16777619); }
+      function rnd(i) { let x = Math.imul((h ^ (i * 2654435761)) >>> 0, 2246822519); x ^= x >>> 13; return ((x >>> 0) % 1000) / 1000; }
+      const on = {}; const set = (x, y) => { on[x + '_' + y] = true; };
+      function finder(gx, gy) { for (let y = 0; y < 7; y++) for (let x = 0; x < 7; x++) { const edge = (x === 0 || x === 6 || y === 0 || y === 6), core = (x >= 2 && x <= 4 && y >= 2 && y <= 4); if (edge || core) set(gx + x, gy + y); } }
+      finder(0, 0); finder(N - 7, 0); finder(0, N - 7);
+      const inF = (x, y) => (x < 8 && y < 8) || (x >= N - 8 && y < 8) || (x < 8 && y >= N - 8);
+      let idx = 0;
+      for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) { if (inF(x, y)) continue; if (rnd(idx++) > 0.5) set(x, y); }
+      let r = '';
+      for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) if (on[x + '_' + y]) r += '<rect x="' + (x * cell).toFixed(2) + '" y="' + (y * cell).toFixed(2) + '" width="' + cell.toFixed(2) + '" height="' + cell.toFixed(2) + '"/>';
+      return '<svg width="' + s + '" height="' + s + '" viewBox="0 0 ' + s + ' ' + s + '" xmlns="http://www.w3.org/2000/svg" style="display:block"><rect width="' + s + '" height="' + s + '" fill="#fff"/><g fill="#0f172a">' + r + '</g></svg>';
+    }
+    function skHTML(d) {
+      const nama = amankan(d.namaBadanHukum || '-');
+      const pic = amankan(d.pic || '-');
+      const nib = amankan(d.nib || '-');
+      const tgl = amankan(d.tglSertifikat || tglHariIni());
+      const nomor = 'SK-' + (d.nib || 'NZHR-000') + '/BWI/' + (String(tgl).split(' ').pop() || '2026');
+      const namaKetua = amankan(d.ttdOleh || 'Prof. Dr. K.H. Noor Achmad, M.A.');
+      return '' +
+        '<div style="text-align:center;border-bottom:3px double #0f766e;padding-bottom:14px;margin-bottom:20px;">' +
+          '<p style="margin:0;font-size:15px;font-weight:bold;letter-spacing:.5px;">BADAN WAKAF INDONESIA</p>' +
+          '<p style="margin:2px 0 0;font-size:11px;">Jl. Kebon Sirih Nomor 57, Jakarta Pusat 10340 · www.bwi.go.id</p>' +
+        '</div>' +
+        '<div style="text-align:center;margin-bottom:18px;">' +
+          '<p style="margin:0;font-weight:bold;text-decoration:underline;">SURAT KEPUTUSAN KETUA BADAN WAKAF INDONESIA</p>' +
+          '<p style="margin:4px 0;">Nomor: ' + amankan(nomor) + '</p>' +
+          '<p style="margin:8px 0 0;">TENTANG</p>' +
+          '<p style="margin:2px 0;font-weight:bold;">PENETAPAN DAN PENDAFTARAN NAZHIR WAKAF UANG</p>' +
+        '</div>' +
+        '<p style="margin:0 0 8px;">Ketua Badan Wakaf Indonesia, setelah melakukan verifikasi dokumen dan penilaian presentasi/wawancara, menetapkan:</p>' +
+        '<table style="width:100%;border-collapse:collapse;">' +
+          '<tr><td style="width:120px;vertical-align:top;padding:2px 0;">KESATU</td><td style="width:14px;vertical-align:top;">:</td><td style="padding:2px 0;">Menetapkan <b>' + nama + '</b> sebagai <b>Nazhir Wakaf Uang</b> yang terdaftar pada Badan Wakaf Indonesia.</td></tr>' +
+          '<tr><td style="vertical-align:top;padding:2px 0;">KEDUA</td><td style="vertical-align:top;">:</td><td style="padding:2px 0;">Nomor Induk Nazhir (NIB): <b>' + nib + '</b>, dengan penanggung jawab (PIC): ' + pic + '.</td></tr>' +
+          '<tr><td style="vertical-align:top;padding:2px 0;">KETIGA</td><td style="vertical-align:top;">:</td><td style="padding:2px 0;">Nazhir wajib menyampaikan laporan pengelolaan &amp; pengembangan harta benda wakaf secara berkala sesuai ketentuan.</td></tr>' +
+        '</table>' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:34px;">' +
+          '<div style="text-align:center;">' +
+            '<div style="width:104px;height:104px;padding:4px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;">' + qrKode(d.ttdId || d.nib || nomor, 96) + '</div>' +
+            '<p style="margin:6px 0 0;font-size:10px;font-weight:bold;color:#0f766e;font-family:Arial,sans-serif;">&#10003; Terverifikasi — Ketua BWI</p>' +
+            '<p style="margin:1px 0 0;font-size:9px;color:#94a3b8;font-family:Arial,sans-serif;">ID: ' + amankan(d.ttdId || '-') + '</p>' +
+          '</div>' +
+          '<div style="text-align:center;min-width:230px;">' +
+            '<p style="margin:0;">Ditetapkan di Jakarta,</p>' +
+            '<p style="margin:0 0 4px;">pada tanggal ' + tgl + '</p>' +
+            '<p style="margin:0;">Ketua Badan Wakaf Indonesia,</p>' +
+            '<div style="height:56px;"></div>' +
+            '<p style="margin:0;font-weight:bold;text-decoration:underline;">' + namaKetua + '</p>' +
+            '<p style="margin:2px 0 0;font-size:10px;color:#64748b;font-family:Arial,sans-serif;">Ditandatangani secara elektronik</p>' +
+          '</div>' +
+        '</div>';
+    }
+    function bukaSK(idAttr) {
+      const d = cari(idAttr);
+      if (!d || d.status !== 'aktif') { showToast('Sertifikat tersedia setelah ditandatangani Ketua BWI.'); return; }
+      document.getElementById('skBody').innerHTML = skHTML(d);
+      const m = document.getElementById('modalSK'); m.classList.remove('hidden'); m.classList.add('flex');
+    }
+    function tutupSK() { const m = document.getElementById('modalSK'); if (m) { m.classList.add('hidden'); m.classList.remove('flex'); } }
+
     function toggleSidebar() { const sb = document.getElementById('sidebar'), ov = document.getElementById('overlay'); const t = sb.classList.contains('-translate-x-full'); sb.classList.toggle('-translate-x-full', !t); ov.classList.toggle('hidden', !t); }
     function tutupSidebar() { document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('overlay').classList.add('hidden'); }
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') { tutupSidebar(); tutupDetail(); } });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { tutupSidebar(); tutupDetail(); tutupSK(); } });
     function logout() { window.location.href = 'kenazhiran-login.html'; }
     let toastTimer = null;
     function showToast(p) { const t = document.getElementById('toast'); document.getElementById('toastMsg').textContent = p; t.classList.remove('hidden'); t.classList.add('flex'); clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.classList.add('hidden'); t.classList.remove('flex'); }, 3200); }

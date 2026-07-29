@@ -30,7 +30,7 @@ Menyediakan satu sistem terintegrasi bagi ekosistem perwakafan Indonesia yang me
 | **Sekretaris BWI** | Meninjau **setiap** pendaftaran nazhir; **meneruskan** yang telah disetujui Pusat ke Ketua untuk ditandatangani. | `sekretaris@bwi.go.id` | `password` | `sekretaris-pendaftaran.html` |
 | **Ketua BWI** | **Menandatangani** (TTD digital + passphrase) pendaftaran yang telah diteruskan Sekretaris → menerbitkan NIB & SK. | `ketua@bwi.go.id` | `password` | `ketua-pendaftaran.html` |
 
-- Autentikasi berbasis **email + sandi** yang tersimpan di `localStorage` (`akun_kenazhiran_bwi_v2`). Calon Nazhir tersimpan di `pendaftaran_nazhir_bwi`.
+- Autentikasi berbasis **email/NIB + sandi** yang tersimpan di `localStorage` (`akun_kenazhiran_bwi_v2`). Calon Nazhir tersimpan di `pendaftaran_nazhir_bwi`. Login memakai **satu kolom identitas** (bukan pemilih peran) — peran dikenali otomatis dari akun yang cocok. **Nazhir aktif** boleh masuk memakai **email atau NIB** (akun demo nazhir: NIB `NZHR-BDG-170`). Calon Nazhir yang mendaftar langsung dapat login dengan email + sandi‑nya.
 - Sesi aktif: `sesi_kenazhiran = { mode, peran, nama }`.
 
 ---
@@ -92,7 +92,7 @@ Pendukung: `pusat-hierarki.html`. Halaman berikut **masih ada namun tidak lagi d
 
 | Kunci | Isi |
 |---|---|
-| `akun_kenazhiran_bwi_v2` | Array akun bawaan (nazhir, wilayah, pusat, **sekretaris, ketua**). Saat login, akun seed baru yang belum ada **digabung otomatis** ke storage lama (tanpa menimpa akun eksisting). |
+| `akun_kenazhiran_bwi_v2` | Array akun bawaan (nazhir, wilayah, pusat, **sekretaris, ketua**). Akun nazhir memiliki field **`nib`** (mis. `NZHR-BDG-170`) agar bisa login via NIB. Saat login, akun seed baru yang belum ada **digabung otomatis** ke storage lama (tanpa menimpa akun eksisting). |
 | `pendaftaran_nazhir_bwi` | Data + akun Calon Nazhir (berkas, status pendaftaran, jadwal, NIB, SK). Field rantai tanda tangan: `disetujuiPusat`, `diteruskanOleh`, `tglTeruskan`, `ttdOleh`, `tglTtd`, `ttdId`. |
 | `pendaftaran_dummy_bwi_v2` | Data dummy pipeline pendaftaran (dibagikan lintas peran Pusat/Sekretaris/Ketua). Status kini termasuk `sekretariat` & `ttd`. |
 | `sesi_kenazhiran` | Sesi aktif `{ mode, peran, nama }`. |
@@ -114,7 +114,7 @@ Pendukung: `pusat-hierarki.html`. Halaman berikut **masih ada namun tidak lagi d
 ## 5. Spesifikasi Menu (PRD per fitur)
 
 ### 5.1 Login & Pendaftaran
-- **Login:** email + sandi (localStorage). Panel "Akun demo" untuk auto‑isi. Diarahkan sesuai peran.
+- **Login:** kolom **Email atau NIB** + sandi (localStorage) — **tanpa pemilih/selektor peran** & tanpa panel "Akun demo". Peran dikenali otomatis; nazhir aktif bisa via email atau NIB. Diarahkan sesuai peran.
 - **Pendaftaran Calon Nazhir (2 fase):**
   - **Fase 1** (`kenazhiran-daftar.html`): nama badan hukum, email, PIC, HP, sandi + persetujuan → status `draft` → langsung masuk sebagai Calon.
   - **Fase 2** (`nazhir-pendaftaran.html`): checklist **16 berkas** dalam 4 kelompok (Administrasi & Legalitas, Pengurus & Kompetensi, Rencana & Keuangan, Surat Pernyataan) — layout **navigasi 30% / konten 70%**. Aksi: unggah/hapus, Simpan & Lanjutkan Nanti, **Ajukan Verifikasi**.
@@ -170,30 +170,34 @@ Mengelola **template pesan broadcast** ke Nazhir yang mengingatkan *"sudah saatn
 
 ### 5.10 Pusat — Pendaftaran Nazhir
 Pipeline verifikasi pendaftaran (tab **Histori / Verifikasi Dokumen / Jadwal / Hasil / Persetujuan**) + **filter status** + search. **Detail** dibuka di halaman (`pusat-pendaftaran-detail.html`), bukan modal — dengan aksi per tahap; setelah aksi → **toast + kembali ke tab semula**. Layout detail: Info Pemohon + Keputusan di atas, **Kelengkapan Berkas full‑width** di bawah.
-- **Persetujuan akhir kini bukan penerbitan SK langsung.** Tombol tahap Persetujuan menjadi **"Setujui & Teruskan ke Sekretariat"** → status `sekretariat` (bukan `aktif`). NIB & SK **baru terbit setelah Ketua menandatangani** (lihat §5.12–§5.13). Status `sekretariat`/`ttd` tampil sebagai info read‑only di panel keputusan Pusat.
+- **Wewenang Admin Pusat dibatasi s.d. input hasil wawancara.** Admin beraksi pada tahap **Verifikasi Dokumen → Jadwal → Input Hasil** saja. Saat hasil **Lulus** → status `persetujuan`. **Admin tidak lagi bisa menyetujui/menerbitkan SK** — tombol "Setujui" dihapus. Persetujuan menjadi wewenang **Sekretaris & Ketua BWI**.
+- **Tab "Persetujuan & Pengesahan" (pantau progres).** Tab ini menampilkan status `persetujuan` → `ttd` → `aktif` sebagai **read‑only** agar Admin tahu progres sampai mana. Saat sudah `aktif`, Admin dapat **Preview SK** (sertifikat ber‑QR terverifikasi).
 
 ### 5.11 Wilayah — read‑only
 Dashboard & inbox, buku induk nazhir daerah, rekapitulasi, dan tinjauan dokumen pelaporan — **tanpa aksi (read‑only)**.
 
 ### 5.12 Sekretaris BWI — Pendaftaran Nazhir (`sekretaris-pendaftaran.html`)
-- **Memantau setiap pendaftaran** nazhir (kartu ringkasan: Perlu Diteruskan / Sudah Diteruskan / Sudah Disahkan / Total) + search + **filter status**.
-- **Teruskan ke Ketua:** untuk pendaftaran berstatus `sekretariat` (telah disetujui Pusat), tombol **"Teruskan ke Ketua"** (dengan konfirmasi) → status `ttd`, mencatat `diteruskanOleh` + `tglTeruskan`.
-- **Detail (read‑only):** info pemohon, riwayat (disetujui Pusat → diteruskan → ditandatangani), dan kelengkapan berkas.
+- **Memantau setiap pendaftaran** nazhir dengan **informasi lengkap** (kartu ringkasan: Perlu Diteruskan / Sudah Diteruskan / Sudah Disahkan / Total) + search + **filter status**.
+- **Teruskan ke Ketua BWI:** untuk pendaftaran yang **lulus wawancara** (status `persetujuan`), tombol **"Teruskan ke Ketua BWI"** (dengan konfirmasi) → status `ttd`, mencatat `diteruskanOleh` + `tglTeruskan`.
+- **Detail (read‑only):** info pemohon, riwayat (presentasi/wawancara → hasil → diteruskan → ditandatangani), dan kelengkapan berkas.
+- **Lihat Sertifikat:** setelah `aktif`, Sekretaris dapat membuka **sertifikat/SK ber‑QR terverifikasi** (progres pengesahan ikut terlihat di sisinya).
 
 ### 5.13 Ketua BWI — Pengesahan Nazhir (`ketua-pendaftaran.html`)
-- **Antrean pengesahan:** kartu **Menunggu Tanda Tangan** (`ttd`) & **Sudah Ditandatangani** (`aktif`), search + filter.
-- **Tanda Tangan Digital (TTD + passphrase):** untuk status `ttd`, tombol **"Tandatangani"** membuka modal passphrase (demo: `bwi2026`). Passphrase benar → status `aktif`, terbit **NIB** + **SK** dengan metadata tanda tangan elektronik (`ttdOleh`, `tglTtd`, `ttdId`). **Preview SK** menampilkan blok e‑Sign (nama Ketua, tanggal, ID) — dan versi **Draf** ("Belum ditandatangani") saat masih `ttd`.
+- **Antrean pengesahan:** kartu **Menunggu Tanda Tangan** (`ttd`) & **Sudah Ditandatangani** (`aktif`), search + filter. Melihat pendaftaran yang **telah diteruskan Sekretaris** beserta informasi lengkap.
+- **Tanda Tangan Digital / e‑Sign (passphrase):** untuk status `ttd`, tombol **"Tandatangani"** membuka modal passphrase (demo: `bwi2026`). Passphrase benar → status `aktif`, terbit **NIB** + **SK/Sertifikat** dengan **QR Code terverifikasi** + metadata tanda tangan elektronik (`ttdOleh`, `tglTtd`, `ttdId`). **Preview SK** menampilkan QR terverifikasi + tanda tangan Ketua — dan versi **Draf** (QR "terbit setelah TTD") saat masih `ttd`.
 - SK dapat **dicetak/PDF**.
+- **Sertifikat muncul di semua sisi:** setelah ditandatangani, SK ber‑QR yang sama tampil di **Admin Pusat** (Preview SK), **Sekretaris** (Lihat Sertifikat), dan **Calon/Nazhir** (`nazhir-sk.html`).
 
 ---
 
 ## 6. Siklus Status (State Lifecycles)
 
 ### 6.1 Pendaftaran Nazhir
-`draft → diajukan → (revisi | ditolak | diverifikasi) → terjadwal → persetujuan → sekretariat → ttd → aktif`
-- **persetujuan → sekretariat:** Admin Pusat menyetujui & meneruskan ke Sekretariat (belum terbit SK).
-- **sekretariat → ttd:** **Sekretaris BWI** meneruskan ke Ketua (`diteruskanOleh`, `tglTeruskan`).
-- **ttd → aktif:** **Ketua BWI** menandatangani (TTD digital + passphrase) → terbit **NIB + SK** (`ttdOleh`, `tglTtd`, `ttdId`).
+`draft → diajukan → (revisi | ditolak | diverifikasi) → terjadwal → persetujuan → ttd → aktif`
+- **terjadwal → persetujuan:** Admin Pusat **input hasil wawancara LULUS** (batas akhir wewenang Admin; Admin tak bisa menyetujui/menerbitkan SK).
+- **persetujuan → ttd:** **Sekretaris BWI** meneruskan ke Ketua (`diteruskanOleh`, `tglTeruskan`).
+- **ttd → aktif:** **Ketua BWI** e‑Sign (passphrase) → terbit **NIB + SK/Sertifikat ber‑QR terverifikasi** (`ttdOleh`, `tglTtd`, `ttdId`) yang tampil di sisi Admin, Sekretaris, & Calon/Nazhir.
+- *(Status `sekretariat` dari revisi sebelumnya tak lagi dihasilkan; badge lama tetap dikenali demi kompatibilitas data.)*
 - **revisi** → calon perbaiki → ajukan ulang.
 - **ditolak** → daftar ulang dari awal.
 - **aktif** → graduasi: mode sesi menjadi `aktif`, NIB & SK terbit.
@@ -214,7 +218,7 @@ Periode kini **fleksibel** (rentang bulan bebas: bulanan/triwulan/semester/tahun
 ### 7.1 Otentikasi & Routing Peran
 ```mermaid
 flowchart TD
-  A[Login: email + sandi] -->|cocok calon?| B{pendaftaran_nazhir_bwi}
+  A[Login: email/NIB + sandi] -->|cocok calon? email/NIB| B{pendaftaran_nazhir_bwi}
   B -- ya --> C{status aktif?}
   C -- ya --> N1[Nazhir Aktif]
   C -- tidak --> N0[Calon Nazhir mode read-only]
@@ -238,12 +242,11 @@ flowchart LR
   V -- Tolak --> RX[Ditolak -> Daftar Ulang]
   V -- Verifikasi Dokumen --> J[Jadwalkan Presentasi]
   J --> H[Input Hasil Presentasi]
-  H -- Lulus --> S[Persetujuan]
+  H -- "Admin: Lulus (batas wewenang Admin)" --> S[Persetujuan: menunggu Sekretaris]
   H -- Tidak Lulus --> RX
-  S -- "Admin Pusat: Setujui & Teruskan" --> SEK[Sekretariat: menunggu diteruskan]
-  SEK -- "Sekretaris: Teruskan ke Ketua" --> TTD[Menunggu TTD Ketua]
-  TTD -- "Ketua: TTD digital + passphrase" --> A[Aktif: NIB + SK terbit]
-  A --> G[Nazhir graduasi -> banner + kartu SK]
+  S -- "Sekretaris: Teruskan ke Ketua BWI" --> TTD[Menunggu TTD Ketua]
+  TTD -- "Ketua: e-Sign + passphrase" --> A[Aktif: NIB + SK/Sertifikat ber-QR terverifikasi]
+  A --> G[Muncul di Admin, Sekretaris & Calon/Nazhir + banner graduasi]
 ```
 
 ### 7.3 Tambah HBW → SK Portofolio (tanpa persetujuan Pusat)

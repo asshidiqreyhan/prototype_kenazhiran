@@ -4,6 +4,35 @@ Ringkasan perubahan yang diterapkan pada `PRD-FLOW-DESIGN-KENAZHIRAN.md` beserta
 
 ---
 
+## 2026‑07‑29 — Login: hapus selektor akun, identitas Email/NIB
+
+**Bagian PRD terdampak:** §2 (Peran & Akun), §4 (Model Data), §5.1 (Login), §7.1 (diagram).
+
+**Apa yang berubah (di `kenazhiran-login.html`):**
+- **Panel "Akun demo" (selektor akun) dihapus.** Login murni **Email/NIB + kata sandi**; peran dikenali otomatis dari akun yang cocok (tanpa memilih peran).
+- **Nazhir aktif bisa login via email ATAU NIB.** Kolom diubah menjadi **"Email atau NIB"**; logika pencocokan menerima email maupun NIB (case‑insensitive) untuk akun bawaan **dan** untuk pendaftaran mandiri yang sudah `aktif`. Akun nazhir demo diberi field **`nib: 'NZHR-BDG-170'`**.
+- **Calon Nazhir yang mendaftar** langsung dikenali di login via **email + sandi** yang diisikannya saat daftar (tersimpan di `pendaftaran_nazhir_bwi`; mode `calon`, lalu `aktif` setelah disahkan Ketua).
+- Fungsi khusus panel demo (`renderAkunDemo`, `toggleAkunDemo`, `isiAkun`) dihapus; helper `daftarAkun()`/`seedAkun()` tetap.
+
+**File tersentuh:** `kenazhiran-login.html`, `PRD-FLOW-DESIGN-KENAZHIRAN.md`.
+
+---
+
+## 2026‑07‑29 — Revisi wewenang persetujuan (Admin memantau, Sekretaris & Ketua menyetujui) + Sertifikat ber‑QR
+
+**Bagian PRD terdampak:** §5.10 (Pendaftaran Nazhir), §5.12–§5.13 (Sekretaris & Ketua), §6.1 (siklus), §7.2 (diagram).
+
+**Apa yang berubah:**
+- **Admin Pusat dibatasi.** Wewenang Admin di menu Pendaftaran Nazhir kini **hanya s.d. input hasil wawancara** (Verifikasi → Jadwal → Hasil). Tombol **"Setujui" dihapus** — Admin **tidak bisa menyetujui/menerbitkan SK**. Tab **"Persetujuan"** diubah menjadi **"Persetujuan & Pengesahan"** yang **read‑only** dan menampilkan progres `persetujuan → ttd → aktif` (Admin tetap tahu progres; bisa Preview SK saat `aktif`).
+- **Rantai persetujuan disederhanakan:** `... → hasil Lulus → persetujuan → [Sekretaris] Teruskan ke Ketua → ttd → [Ketua] e‑Sign → aktif`. Status perantara `sekretariat` **tidak lagi dihasilkan** (Sekretaris kini beraksi langsung dari status `persetujuan`; badge lama tetap dikenali demi kompatibilitas).
+- **Sekretaris (`sekretaris-pendaftaran.html`):** meneruskan dari status `persetujuan` (kolom tabel "Disetujui Pusat" → **"Hasil Wawancara"**); dapat **"Lihat Sertifikat"** (SK ber‑QR) setelah `aktif`. Timeline detail memuat presentasi → hasil → diteruskan → ditandatangani.
+- **Ketua (`ketua-pendaftaran.html`):** e‑Sign menerbitkan **Sertifikat/SK dengan QR Code terverifikasi** (bukan sekadar kotak e‑Sign). Preview menampilkan QR + tanda tangan; versi Draf menampilkan "QR terbit setelah TTD".
+- **Sertifikat ber‑QR muncul di semua sisi:** fungsi `qrKode()` (SVG QR bergaya, offline) ditambahkan ke render SK di **`pusat-pendaftaran.html`**, **`sekretaris-pendaftaran.html`**, **`ketua-pendaftaran.html`**, dan **`nazhir-sk.html`** (sisi calon/nazhir) — semua memakai `ttdOleh`/`ttdId` sehingga konsisten "Terverifikasi — Ketua BWI".
+
+**File tersentuh:** `pusat-pendaftaran.html`, `pusat-pendaftaran-detail.html`, `sekretaris-pendaftaran.html`, `ketua-pendaftaran.html`, `nazhir-sk.html`, `PRD-FLOW-DESIGN-KENAZHIRAN.md`.
+
+---
+
 ## 2026‑07‑29 — Hierarki NIB: hapus tab "Semua" (hanya Wakaf Uang & Tanah)
 
 **Bagian PRD terdampak:** §5.6 (Master NIB / Hierarki).

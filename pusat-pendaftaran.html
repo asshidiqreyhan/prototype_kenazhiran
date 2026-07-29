@@ -196,7 +196,7 @@
       { key: 'diajukan', label: 'Verifikasi Dokumen', match: ['diajukan'] },
       { key: 'jadwal', label: 'Jadwal Presentasi & Wawancara', match: ['diverifikasi'] },
       { key: 'hasil', label: 'Hasil Presentasi & Wawancara', match: ['terjadwal'] },
-      { key: 'persetujuan', label: 'Persetujuan', match: ['persetujuan'] },
+      { key: 'persetujuan', label: 'Persetujuan & Pengesahan', match: ['persetujuan', 'sekretariat', 'ttd', 'aktif'] },
     ];
     // Tahap untuk stepper di modal
     const TAHAP = ['Verifikasi Dokumen', 'Jadwal Presentasi', 'Hasil Presentasi', 'Persetujuan'];
@@ -227,8 +227,8 @@
         { id: 'D5', namaBadanHukum: 'Baitul Wakaf Nusantara', pic: 'Dr. Fadli', email: 'bwnusantara@wakaf.id', hp: '081211110005', jenis: 'Wakaf Uang', status: 'persetujuan', tglAjukan: '20 Juni 2026', jadwalTanggal: '02 Juli 2026', jadwalWaktu: '13:00', jadwalTempat: 'Zoom Meeting (online)', jadwalPresentasi: '02 Juli 2026, 13:00 · Zoom (online)', hasilPresentasi: 'Lulus', berkas: berkasLengkap() },
         { id: 'D6', namaBadanHukum: 'Yayasan Peduli Wakaf', pic: 'Hj. Laila', email: 'peduli@wakaf.id', hp: '081211110006', jenis: 'Wakaf Uang', status: 'aktif', tglAjukan: '01 Juni 2026', hasilPresentasi: 'Lulus', nib: 'NZHR-SBY-410', tglSertifikat: '25 Juni 2026', berkas: berkasLengkap() },
         { id: 'D7', namaBadanHukum: 'Yayasan Harapan Bangsa', pic: 'H. Yusuf', email: 'harapan@wakaf.id', hp: '081211110007', jenis: 'Wakaf Uang', status: 'revisi', tglAjukan: '05 Juli 2026', catatanPusat: 'Sertifikat BNSP dan NPWP belum sesuai, mohon dilengkapi.', berkas: berkasLengkap() },
-        { id: 'D8', namaBadanHukum: 'Yayasan Amal Madani', pic: 'H. Ridwan', email: 'amalmadani@wakaf.id', hp: '081211110008', jenis: 'Wakaf Uang', status: 'sekretariat', tglAjukan: '18 Juni 2026', jadwalPresentasi: '30 Juni 2026, 10:00 · Gedung BWI Lt. 3', hasilPresentasi: 'Lulus', disetujuiPusat: '12 Juli 2026', berkas: berkasLengkap() },
-        { id: 'D9', namaBadanHukum: 'Yayasan Sinar Wakaf', pic: 'Dra. Kartika', email: 'sinarwakaf@wakaf.id', hp: '081211110009', jenis: 'Wakaf Uang', status: 'ttd', tglAjukan: '15 Juni 2026', jadwalPresentasi: '27 Juni 2026, 14:00 · Zoom (online)', hasilPresentasi: 'Lulus', disetujuiPusat: '10 Juli 2026', diteruskanOleh: 'Dr. H. Imam Nur Azis', tglTeruskan: '13 Juli 2026', berkas: berkasLengkap() },
+        { id: 'D8', namaBadanHukum: 'Yayasan Amal Madani', pic: 'H. Ridwan', email: 'amalmadani@wakaf.id', hp: '081211110008', jenis: 'Wakaf Uang', status: 'persetujuan', tglAjukan: '18 Juni 2026', jadwalPresentasi: '30 Juni 2026, 10:00 · Gedung BWI Lt. 3', hasilPresentasi: 'Lulus', catatanHasil: 'Presentasi baik, dokumen lengkap.', berkas: berkasLengkap() },
+        { id: 'D9', namaBadanHukum: 'Yayasan Sinar Wakaf', pic: 'Dra. Kartika', email: 'sinarwakaf@wakaf.id', hp: '081211110009', jenis: 'Wakaf Uang', status: 'ttd', tglAjukan: '15 Juni 2026', jadwalPresentasi: '27 Juni 2026, 14:00 · Zoom (online)', hasilPresentasi: 'Lulus', catatanHasil: 'Layak ditetapkan sebagai Nazhir.', diteruskanOleh: 'Dr. H. Imam Nur Azis', tglTeruskan: '13 Juli 2026', berkas: berkasLengkap() },
       ]);
     }
 
@@ -262,12 +262,12 @@
 
     function aksiRow(d, idAttr) {
       const detail = '<button type="button" onclick="bukaDetail(\'' + idAttr + '\')" class="rounded-lg border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-600 transition hover:bg-gray-50">Detail</button>';
-      const A = { verifikasi: ['Verifikasi', 'bg-brand-600 hover:bg-brand-700'], jadwalkan: ['Jadwalkan', 'bg-violet-600 hover:bg-violet-700'], hasil: ['Input Hasil', 'bg-violet-600 hover:bg-violet-700'], setujui: ['Setujui', 'bg-brand-600 hover:bg-brand-700'] };
+      const A = { verifikasi: ['Verifikasi', 'bg-brand-600 hover:bg-brand-700'], jadwalkan: ['Jadwalkan', 'bg-violet-600 hover:bg-violet-700'], hasil: ['Input Hasil', 'bg-violet-600 hover:bg-violet-700'] };
       let key = null;
       if (d.status === 'diajukan') key = 'verifikasi';
       else if (d.status === 'diverifikasi') key = 'jadwalkan';
       else if (d.status === 'terjadwal') key = 'hasil';
-      else if (d.status === 'persetujuan') key = 'setujui';
+      // Persetujuan/pengesahan (persetujuan/sekretariat/ttd) kini wewenang Sekretaris & Ketua — Admin hanya memantau.
       let aksi = '';
       if (key) { const a = A[key]; aksi = '<button type="button" onclick="bukaDetail(\'' + idAttr + '\')" class="rounded-lg ' + a[1] + ' px-3.5 py-2 text-xs font-semibold text-white transition">' + a[0] + '</button>'; }
       else if (d.status === 'aktif') { aksi = '<button type="button" onclick="previewSK(\'' + idAttr + '\')" class="inline-flex items-center gap-1.5 rounded-lg border border-brand-200 bg-brand-50 px-3.5 py-2 text-xs font-semibold text-brand-700 transition hover:bg-brand-100"><svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>Preview SK</button>'; }
@@ -382,12 +382,28 @@
     function tutupReview() { const m = document.getElementById('modalReview'); if (m) { m.classList.add('hidden'); m.classList.remove('flex'); } }
 
     /* ---------- Preview SK (Surat Keputusan) ---------- */
+    function qrKode(seed, px) {
+      const N = 25, s = px || 96, cell = s / N, sd = String(seed || 'BWI');
+      let h = 2166136261;
+      for (let i = 0; i < sd.length; i++) { h ^= sd.charCodeAt(i); h = Math.imul(h, 16777619); }
+      function rnd(i) { let x = Math.imul((h ^ (i * 2654435761)) >>> 0, 2246822519); x ^= x >>> 13; return ((x >>> 0) % 1000) / 1000; }
+      const on = {}; const set = (x, y) => { on[x + '_' + y] = true; };
+      function finder(gx, gy) { for (let y = 0; y < 7; y++) for (let x = 0; x < 7; x++) { const edge = (x === 0 || x === 6 || y === 0 || y === 6), core = (x >= 2 && x <= 4 && y >= 2 && y <= 4); if (edge || core) set(gx + x, gy + y); } }
+      finder(0, 0); finder(N - 7, 0); finder(0, N - 7);
+      const inF = (x, y) => (x < 8 && y < 8) || (x >= N - 8 && y < 8) || (x < 8 && y >= N - 8);
+      let idx = 0;
+      for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) { if (inF(x, y)) continue; if (rnd(idx++) > 0.5) set(x, y); }
+      let r = '';
+      for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) if (on[x + '_' + y]) r += '<rect x="' + (x * cell).toFixed(2) + '" y="' + (y * cell).toFixed(2) + '" width="' + cell.toFixed(2) + '" height="' + cell.toFixed(2) + '"/>';
+      return '<svg width="' + s + '" height="' + s + '" viewBox="0 0 ' + s + ' ' + s + '" xmlns="http://www.w3.org/2000/svg" style="display:block"><rect width="' + s + '" height="' + s + '" fill="#fff"/><g fill="#0f172a">' + r + '</g></svg>';
+    }
     function skHTML(d) {
       const nama = amankan(d.namaBadanHukum || '-');
       const pic = amankan(d.pic || '-');
       const nib = amankan(d.nib || '-');
       const tgl = amankan(d.tglSertifikat || tglHariIni());
       const nomor = 'SK-' + (d.nib || 'NZHR-000') + '/BWI/' + (String(tgl).split(' ').pop() || '2026');
+      const namaKetua = amankan(d.ttdOleh || 'Prof. Dr. K.H. Noor Achmad, M.A.');
       return '' +
         '<div style="text-align:center;border-bottom:3px double #0f766e;padding-bottom:14px;margin-bottom:20px;">' +
           '<p style="margin:0;font-size:15px;font-weight:bold;letter-spacing:.5px;">BADAN WAKAF INDONESIA</p>' +
@@ -415,15 +431,17 @@
         '</table>' +
         '<div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:34px;">' +
           '<div style="text-align:center;">' +
-            '<div style="width:96px;height:96px;border:1px solid #cbd5e1;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-family:Arial,sans-serif;font-size:10px;">QR TTD<br>Digital</div>' +
-            '<p style="margin:6px 0 0;font-size:10px;color:#64748b;font-family:Arial,sans-serif;">Terverifikasi elektronik</p>' +
+            '<div style="width:104px;height:104px;padding:4px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;">' + qrKode(d.ttdId || d.nib || nomor, 96) + '</div>' +
+            '<p style="margin:6px 0 0;font-size:10px;font-weight:bold;color:#0f766e;font-family:Arial,sans-serif;">&#10003; Terverifikasi — Ketua BWI</p>' +
+            '<p style="margin:1px 0 0;font-size:9px;color:#94a3b8;font-family:Arial,sans-serif;">ID: ' + amankan(d.ttdId || '-') + '</p>' +
           '</div>' +
           '<div style="text-align:center;min-width:230px;">' +
             '<p style="margin:0;">Ditetapkan di Jakarta,</p>' +
             '<p style="margin:0 0 4px;">pada tanggal ' + tgl + '</p>' +
             '<p style="margin:0;">Ketua Badan Wakaf Indonesia,</p>' +
-            '<div style="height:64px;"></div>' +
-            '<p style="margin:0;font-weight:bold;text-decoration:underline;">Prof. Dr. K.H. Noor Achmad, M.A.</p>' +
+            '<div style="height:56px;"></div>' +
+            '<p style="margin:0;font-weight:bold;text-decoration:underline;">' + namaKetua + '</p>' +
+            '<p style="margin:2px 0 0;font-size:10px;color:#64748b;font-family:Arial,sans-serif;">Ditandatangani secara elektronik</p>' +
           '</div>' +
         '</div>';
     }
@@ -457,14 +475,11 @@
           '<label class="mb-1.5 block text-xs font-semibold text-gray-600">Catatan hasil presentasi/wawancara</label><textarea id="rvNote" rows="2" placeholder="Ringkasan penilaian tim..." class="mb-3 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"></textarea>' +
           '<div class="flex flex-wrap justify-end gap-2">' + tombol('tidakLulus', 'Tidak Lulus', 'border border-red-200 text-red-600 hover:bg-red-50') + tombol('lulus', 'Lulus &rarr; Teruskan ke Persetujuan', 'bg-brand-600 text-white hover:bg-brand-700') + '</div>';
       }
-      if (d.status === 'persetujuan') {
-        return '<p class="mb-3 text-xs text-gray-500">Rekomendasi Pusat. Setujui untuk meneruskan ke <span class="font-semibold">Sekretaris BWI</span>, lalu Sekretaris meneruskan ke <span class="font-semibold">Ketua BWI</span> untuk ditandatangani (TTD digital). NIB &amp; SK terbit setelah Ketua menandatangani.</p><div class="flex flex-wrap justify-end gap-2">' + tombol('tolak', 'Tolak', 'border border-red-200 text-red-600 hover:bg-red-50') + tombol('setujui', 'Setujui &amp; Teruskan ke Sekretariat', 'bg-brand-600 text-white hover:bg-brand-700') + '</div>';
-      }
-      if (d.status === 'sekretariat' || d.status === 'ttd') {
-        const info = d.status === 'sekretariat'
-          ? 'Sudah disetujui Pusat. Menunggu <span class="font-semibold">Sekretaris BWI</span> meneruskan ke Ketua.'
-          : 'Sudah diteruskan Sekretaris' + (d.diteruskanOleh ? ' (' + amankan(d.diteruskanOleh) + ')' : '') + '. Menunggu <span class="font-semibold">Ketua BWI</span> menandatangani (TTD digital).';
-        return '<div class="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-600">' + info + '</div>';
+      if (d.status === 'persetujuan' || d.status === 'sekretariat' || d.status === 'ttd') {
+        const info = (d.status === 'ttd')
+          ? 'Sudah diteruskan Sekretaris' + (d.diteruskanOleh ? ' (' + amankan(d.diteruskanOleh) + ')' : '') + '. Menunggu <span class="font-semibold">Ketua BWI</span> menandatangani (e‑Sign).'
+          : 'Hasil wawancara <span class="font-semibold text-brand-700">LULUS</span>. Persetujuan kini menjadi wewenang <span class="font-semibold">Sekretaris</span> &amp; <span class="font-semibold">Ketua BWI</span> — menunggu Sekretaris meneruskan ke Ketua.';
+        return '<div class="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-600"><p class="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-400">Progres Pengesahan (pantau saja)</p>' + info + '</div>';
       }
       if (d.status === 'aktif') {
         return '<div class="flex flex-col gap-3">' +
@@ -495,12 +510,11 @@
       }
       else if (aksi === 'lulus') { d.status = 'persetujuan'; d.hasilPresentasi = 'Lulus'; d.catatanHasil = note; d.catatanPusat = ''; }
       else if (aksi === 'tidakLulus') { d.status = 'ditolak'; d.hasilPresentasi = 'Tidak Lulus'; d.catatanPusat = note || 'Tidak lulus presentasi/wawancara.'; }
-      else if (aksi === 'setujui') { d.status = 'sekretariat'; d.disetujuiPusat = tglHariIni(); d.catatanPusat = ''; }
 
       persist(d);
       tutupReview();
       render();
-      const pesan = { revisi: 'Dikembalikan untuk revisi.', tolak: 'Pengajuan ditolak.', verifikasi: 'Dokumen terverifikasi. Lanjut ke penjadwalan.', jadwalkan: 'Jadwal presentasi/wawancara tersimpan.', lulus: 'Lulus presentasi. Diteruskan ke Persetujuan.', tidakLulus: 'Ditandai tidak lulus presentasi.', setujui: 'Disetujui Pusat. Diteruskan ke Sekretaris BWI.' };
+      const pesan = { revisi: 'Dikembalikan untuk revisi.', tolak: 'Pengajuan ditolak.', verifikasi: 'Dokumen terverifikasi. Lanjut ke penjadwalan.', jadwalkan: 'Jadwal presentasi/wawancara tersimpan.', lulus: 'Lulus presentasi. Diteruskan ke tahap Persetujuan (Sekretaris & Ketua).', tidakLulus: 'Ditandai tidak lulus presentasi.' };
       showToast(pesan[aksi] || 'Keputusan tersimpan.');
     }
 
