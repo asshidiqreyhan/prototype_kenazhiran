@@ -197,14 +197,10 @@
               <h3 class="text-base font-bold text-gray-800">Status Periode Pelaporan</h3>
               <p class="text-xs text-gray-400">Ringkasan cut-off periode aktif dan status permohonan Anda.</p>
             </div>
-            <div class="grid grid-cols-1 gap-x-8 gap-y-5 p-5 sm:grid-cols-2 lg:grid-cols-4 md:p-6">
+            <div class="grid grid-cols-1 gap-x-8 gap-y-5 p-5 sm:grid-cols-3 md:p-6">
               <div>
                 <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Periode Aktif</p>
                 <p id="scPeriode" class="mt-1 text-sm font-semibold text-gray-800">&mdash;</p>
-              </div>
-              <div>
-                <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Batas Akhir (Deadline)</p>
-                <p id="scDeadline" class="mt-1 text-sm font-semibold text-gray-800">&mdash;</p>
               </div>
               <div>
                 <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Status Kunci</p>
@@ -219,20 +215,14 @@
             <div id="areaAksi" class="border-t border-gray-100 px-5 py-4 md:px-6"></div>
           </div>
 
-          <!-- Info periode aktif & deadline (kontekstual) -->
-          <div class="flex flex-col gap-4 rounded-2xl border border-brand-100 bg-brand-50/50 p-5 sm:flex-row sm:items-center sm:justify-between md:p-6">
-            <div class="flex items-start gap-3">
-              <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-100 text-brand-700">
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg>
-              </span>
-              <div>
-                <p class="text-sm font-bold text-gray-800">Periode pelaporan aktif: <span id="infoPeriode" class="text-brand-700">—</span></p>
-                <p class="mt-0.5 text-xs text-gray-500">Rentang bulan: <span id="infoRentang" class="font-semibold text-gray-700">—</span>. Lengkapi seluruh laporan sebelum batas akhir agar tidak terkena cut-off.</p>
-              </div>
-            </div>
-            <div class="shrink-0 rounded-xl border border-brand-100 bg-white px-5 py-3 text-center">
-              <p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Batas Akhir (Deadline)</p>
-              <p id="infoDeadline" class="mt-0.5 text-base font-bold text-brand-700">—</p>
+          <!-- Info periode aktif (kontekstual) -->
+          <div class="flex items-start gap-3 rounded-2xl border border-brand-100 bg-brand-50/50 p-5 md:p-6">
+            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-100 text-brand-700">
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg>
+            </span>
+            <div>
+              <p class="text-sm font-bold text-gray-800">Periode pelaporan aktif: <span id="infoPeriode" class="text-brand-700">—</span></p>
+              <p class="mt-0.5 text-xs text-gray-500">Rentang: <span id="infoRentang" class="font-semibold text-gray-700">—</span>. Lengkapi seluruh laporan pada periode ini. Bila periode terkunci (cut-off), ajukan pembukaan akses di bawah.</p>
             </div>
           </div>
 
@@ -385,11 +375,13 @@
       return d.getDate() + ' ' + bulan[d.getMonth()] + ' ' + d.getFullYear();
     }
 
-    // Rentang bulan dari label periode, mis. "Semester 1 - 2026" -> "Januari – Juni 2026"
+    // Rentang bulan dari label periode. Format baru sudah berupa rentang (mis. "Januari – Juni 2026");
+    // format lama "Semester X - YYYY" dikonversi.
     function rentangPeriode(periode) {
-      const m = String(periode || '').match(/Semester\s*(\d)\s*-\s*(\d{4})/i);
-      if (!m) return '—';
-      return (m[1] === '1' ? 'Januari – Juni ' : 'Juli – Desember ') + m[2];
+      const s = String(periode || '');
+      const m = s.match(/Semester\s*(\d)\s*-\s*(\d{4})/i);
+      if (m) return (m[1] === '1' ? 'Januari – Juni ' : 'Juli – Desember ') + m[2];
+      return s || '—';
     }
     // Deadline: pakai nilai cut-off bila ada; jika belum, default akhir bulan setelah semester.
     function deadlineInfo(c) {
@@ -408,13 +400,11 @@
     function render() {
       const c = bacaCutoff();
       document.getElementById('scPeriode').textContent = c.periode || '—';
-      document.getElementById('scDeadline').textContent = tglSingkat(c.deadline);
       document.getElementById('scKunci').innerHTML = c.terkunci ? badge('red', 'Terkunci') : badge('emerald', 'Terbuka');
       // Kartu info kontekstual
       const setTxt = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
       setTxt('infoPeriode', c.periode || '—');
       setTxt('infoRentang', rentangPeriode(c.periode));
-      setTxt('infoDeadline', deadlineInfo(c));
 
       const st = statusBukaSaya(c.periode);
       const petaStatus = { disetujui: ['brand', 'Disetujui'], menunggu: ['amber', 'Menunggu'], ditolak: ['red', 'Ditolak'] };

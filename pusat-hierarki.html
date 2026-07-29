@@ -113,20 +113,12 @@
               </a>
             </li>
 
-            <!-- 3. Kelola Cut-Off Periode -->
-            <li>
-              <a href="pusat-cutoff.html"
-                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
-                <!-- Ikon: gembok / cut-off -->
-                <svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
-                </svg>
-                <span>Kelola Cut-Off Periode</span>
-              </a>
-            </li>
+            <li><a href="pusat-periode.html" class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white"><svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg><span>Periode Laporan</span></a></li>
+            <li><a href="pusat-broadcast.html" class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white"><svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 0 1-1.44-4.282m3.102.069a18.03 18.03 0 0 1-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 0 1 8.835 2.535M10.34 6.66a23.847 23.847 0 0 0 8.835-2.535m0 0A23.74 23.74 0 0 0 18.795 3m.38 1.125a23.91 23.91 0 0 1 1.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 0 0 1.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 0 1 0 3.46" /></svg><span>Kelola Broadcast</span></a></li>
 
             <!-- 4. Pengajuan Portofolio -->
+            <!-- MENU DISEMBUNYIKAN (HBW tanpa persetujuan Pusat) -->
+            <!--
             <li>
               <a href="pusat-portofolio.html"
                 class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white">
@@ -137,6 +129,7 @@
                 <span>Pengajuan Portofolio</span>
               </a>
             </li>
+            -->
             <!-- Pendaftaran Nazhir -->
             <li>
               <a href="pusat-pendaftaran.html"
@@ -384,12 +377,17 @@
                 <h3 class="text-base font-bold text-gray-800">Daftar Sub-ID Portofolio Aktif</h3>
                 <p class="text-xs text-gray-400">Seluruh aset turunan yang terikat pada NIB Induk (read-only).</p>
               </div>
-              <span class="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1.5 text-xs font-semibold text-brand-700">
+              <span id="badgeTotalSubId" class="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1.5 text-xs font-semibold text-brand-700">
                 <span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> 2 Sub-ID
               </span>
             </div>
 
-            <!-- Tabel sub-id -->
+            <!-- Tabs kategori: pisahkan Wakaf Uang vs Wakaf Tanah -->
+            <div class="border-b border-gray-100 bg-white">
+              <nav id="tabsHierarki" class="flex min-w-max gap-1 overflow-x-auto px-2"></nav>
+            </div>
+
+            <!-- Tabel sub-id (dirender via JS agar tab berfungsi) -->
             <div class="overflow-x-auto">
               <table class="w-full min-w-[820px] text-sm">
                 <thead>
@@ -397,59 +395,11 @@
                     <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Sub-ID Aset</th>
                     <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Kategori Wakaf</th>
                     <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Rincian / Lokasi</th>
-                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Saldo / Luas Terkini</th>
+                    <th id="thNilaiTerkini" class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Saldo Terkini</th>
                     <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Status</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100">
-
-                  <!-- Sub-ID 1: Wakaf Uang -->
-                  <tr class="transition hover:bg-gray-50">
-                    <td class="whitespace-nowrap px-5 py-4 font-mono text-xs font-semibold text-gray-700 md:px-6">NZHR-BDG-001</td>
-                    <td class="px-5 py-4 md:px-6">
-                      <span class="inline-flex items-center gap-1.5 rounded-md bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700">
-                        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                          <circle cx="8" cy="8" r="6" /><path stroke-linecap="round" stroke-linejoin="round" d="M18.09 10.37A6 6 0 1 1 10.34 18M7 6h1v4m8.71 3.88.7.71-2.82 2.82" />
-                        </svg>
-                        Wakaf Uang
-                      </span>
-                    </td>
-                    <td class="px-5 py-4 md:px-6">
-                      <p class="font-medium text-gray-800">BSI KCP Sudirman</p>
-                      <p class="text-xs text-gray-400">Rek. Wakaf Produktif</p>
-                    </td>
-                    <td class="whitespace-nowrap px-5 py-4 font-semibold text-gray-800 md:px-6">Rp 130.000.000</td>
-                    <td class="px-5 py-4 md:px-6">
-                      <span class="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700">
-                        <span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> Tervalidasi
-                      </span>
-                    </td>
-                  </tr>
-
-                  <!-- Sub-ID 2: Wakaf Tanah -->
-                  <tr class="transition hover:bg-gray-50">
-                    <td class="whitespace-nowrap px-5 py-4 font-mono text-xs font-semibold text-gray-700 md:px-6">NZHR-BDG-002</td>
-                    <td class="px-5 py-4 md:px-6">
-                      <span class="inline-flex items-center gap-1.5 rounded-md bg-purple-50 px-2.5 py-1 text-xs font-medium text-purple-700">
-                        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="m17 14 3 3.3a1 1 0 0 1-.7 1.7H4.7a1 1 0 0 1-.7-1.7L7 14h-.3a1 1 0 0 1-.7-1.7L9 9h-.2A1 1 0 0 1 8 7.3L12 3l4 4.3a1 1 0 0 1-.8 1.7H15l3 3.3a1 1 0 0 1-.7 1.7H17Z" />
-                        </svg>
-                        Wakaf Tanah
-                      </span>
-                    </td>
-                    <td class="px-5 py-4 md:px-6">
-                      <p class="font-medium text-gray-800">Tanah Jl. Merdeka</p>
-                      <p class="text-xs text-gray-400">Semarang, Jawa Tengah</p>
-                    </td>
-                    <td class="whitespace-nowrap px-5 py-4 font-semibold text-gray-800 md:px-6">500 M&sup2;</td>
-                    <td class="px-5 py-4 md:px-6">
-                      <span class="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700">
-                        <span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> Tervalidasi
-                      </span>
-                    </td>
-                  </tr>
-
-                </tbody>
+                <tbody id="tbodyHierarki" class="divide-y divide-gray-100"></tbody>
               </table>
             </div>
 
@@ -554,6 +504,101 @@
         toast.classList.remove('flex');
       }, 3200);
     }
+  </script>
+
+  <!-- =========================================================
+       DAFTAR SUB-ID PORTOFOLIO — render tabel + tab kategori.
+       Read-only. Field pembeda kategori: `kategori` ('uang' | 'tanah').
+       ========================================================= -->
+  <script>
+    // Seed data Sub-ID (sama dengan data contoh sebelumnya, kini terstruktur).
+    // kategori: 'uang' -> nilai = saldo (Rupiah) | 'tanah' -> nilai = luas (M²)
+    const SUBID_PORTOFOLIO = [
+      { id: 'NZHR-BDG-001', kategori: 'uang', rincian: 'BSI KCP Sudirman', lokasi: 'Rek. Wakaf Produktif', nilai: 130000000, status: 'Tervalidasi' },
+      { id: 'NZHR-BDG-002', kategori: 'tanah', rincian: 'Tanah Jl. Merdeka', lokasi: 'Semarang, Jawa Tengah', nilai: 500, status: 'Tervalidasi' },
+    ];
+
+    const TABS_HIERARKI = [
+      { key: 'uang', label: 'Wakaf Uang' },
+      { key: 'tanah', label: 'Wakaf Tanah' },
+    ];
+    let tabHierAktif = 'uang';
+
+    function amankanH(t) { const d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; }
+
+    // Nilai terkini sesuai kategori — jangan pernah campur satuan dalam satu sel.
+    function nilaiTerkiniSubId(d) {
+      if (d.kategori === 'uang') return 'Rp ' + Number(d.nilai).toLocaleString('id-ID');
+      return Number(d.nilai).toLocaleString('id-ID') + ' M²';
+    }
+
+    function badgeKategoriSubId(kat) {
+      if (kat === 'uang') {
+        return '<span class="inline-flex items-center gap-1.5 rounded-md bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700">' +
+          '<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><circle cx="8" cy="8" r="6" /><path stroke-linecap="round" stroke-linejoin="round" d="M18.09 10.37A6 6 0 1 1 10.34 18M7 6h1v4m8.71 3.88.7.71-2.82 2.82" /></svg>' +
+          'Wakaf Uang</span>';
+      }
+      return '<span class="inline-flex items-center gap-1.5 rounded-md bg-purple-50 px-2.5 py-1 text-xs font-medium text-purple-700">' +
+        '<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m17 14 3 3.3a1 1 0 0 1-.7 1.7H4.7a1 1 0 0 1-.7-1.7L7 14h-.3a1 1 0 0 1-.7-1.7L9 9h-.2A1 1 0 0 1 8 7.3L12 3l4 4.3a1 1 0 0 1-.8 1.7H15l3 3.3a1 1 0 0 1-.7 1.7H17Z" /></svg>' +
+        'Wakaf Tanah</span>';
+    }
+
+    function badgeStatusSubId(status) {
+      return '<span class="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700">' +
+        '<span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> ' + amankanH(status) + '</span>';
+    }
+
+    function hitungSubId(key) {
+      return SUBID_PORTOFOLIO.filter(d => d.kategori === key).length;
+    }
+
+    function renderTabsHierarki() {
+      document.getElementById('tabsHierarki').innerHTML = TABS_HIERARKI.map(t => {
+        const n = hitungSubId(t.key);
+        const aktif = t.key === tabHierAktif;
+        return '<button type="button" onclick="pilihTabHierarki(\'' + t.key + '\')" class="flex items-center gap-2 whitespace-nowrap border-b-2 px-4 py-3.5 text-sm font-semibold transition ' +
+          (aktif ? 'border-brand-600 text-brand-700' : 'border-transparent text-gray-500 hover:text-gray-700') + '">' +
+          amankanH(t.label) +
+          '<span class="inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs font-bold ' +
+          (aktif ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-500') + '">' + n + '</span></button>';
+      }).join('');
+    }
+
+    function pilihTabHierarki(key) { tabHierAktif = key; renderHierarki(); }
+
+    function renderHierarki() {
+      renderTabsHierarki();
+
+      // Header kolom nilai menyesuaikan tab aktif (portofolio selalu terpisah per jenis).
+      const th = document.getElementById('thNilaiTerkini');
+      th.textContent = tabHierAktif === 'tanah' ? 'Luas Terkini' : 'Saldo Terkini';
+
+      const list = SUBID_PORTOFOLIO.filter(d => d.kategori === tabHierAktif);
+
+      const body = document.getElementById('tbodyHierarki');
+      if (list.length === 0) {
+        body.innerHTML = '<tr><td colspan="5" class="px-6 py-14 text-center">' +
+          '<div class="flex flex-col items-center gap-2 text-gray-400">' +
+          '<svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H6.911a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661Z" /></svg>' +
+          '<span class="text-sm font-medium text-gray-500">Belum ada Sub-ID pada kategori ini</span></div></td></tr>';
+      } else {
+        body.innerHTML = list.map(d => {
+          return '<tr class="transition hover:bg-gray-50">' +
+            '<td class="whitespace-nowrap px-5 py-4 font-mono text-xs font-semibold text-gray-700 md:px-6">' + amankanH(d.id) + '</td>' +
+            '<td class="px-5 py-4 md:px-6">' + badgeKategoriSubId(d.kategori) + '</td>' +
+            '<td class="px-5 py-4 md:px-6"><p class="font-medium text-gray-800">' + amankanH(d.rincian) + '</p><p class="text-xs text-gray-400">' + amankanH(d.lokasi) + '</p></td>' +
+            '<td class="whitespace-nowrap px-5 py-4 font-semibold text-gray-800 md:px-6">' + nilaiTerkiniSubId(d) + '</td>' +
+            '<td class="px-5 py-4 md:px-6">' + badgeStatusSubId(d.status) + '</td>' +
+            '</tr>';
+        }).join('');
+      }
+
+      // Badge total pada kepala card (selalu total keseluruhan Sub-ID).
+      document.getElementById('badgeTotalSubId').innerHTML =
+        '<span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> ' + SUBID_PORTOFOLIO.length + ' Sub-ID';
+    }
+
+    document.addEventListener('DOMContentLoaded', renderHierarki);
   </script>
 </body>
 

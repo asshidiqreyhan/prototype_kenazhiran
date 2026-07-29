@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Periode Laporan | Modul Kenazhiran BWI Superapps</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Outfit', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+          colors: { brand: { 50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 300: '#5eead4', 400: '#2dd4bf', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a' } },
+          maxWidth: { 'screen-2xl': '1536px' },
+          boxShadow: { 'card': '0px 1px 3px rgba(0,0,0,0.06), 0px 1px 2px rgba(0,0,0,0.04)' }
+        }
+      }
+    }
+  </script>
+  <style>
+    body, html { font-family: 'Outfit', sans-serif !important; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+    #sidebar ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.18); }
+    @keyframes modalIn { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .modal-in { animation: modalIn .22s cubic-bezier(.4,0,.2,1); }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 antialiased">
+  <div class="flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="absolute left-0 top-0 z-50 flex h-screen w-[290px] flex-col overflow-y-hidden bg-brand-900 duration-300 ease-linear lg:static lg:translate-x-0 -translate-x-full">
+      <div class="flex items-center justify-between gap-2 px-6 py-5.5 h-[72px] lg:py-6.5">
+        <a href="pusat-dashboard.html" class="flex items-center gap-3">
+          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
+            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 0 0 2.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 0 1 2.916.52 6.003 6.003 0 0 1-5.395 4.972m0 0a6.726 6.726 0 0 1-2.749 1.35m0 0a6.772 6.772 0 0 1-3.044 0" /></svg>
+          </span>
+          <span class="leading-tight"><span class="block text-base font-bold text-white">BWI Superapps</span><span class="block text-[11px] font-medium text-brand-300">Administrator Pusat</span></span>
+        </a>
+        <button onclick="tutupSidebar()" class="block lg:hidden text-white/70 hover:text-white"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg></button>
+      </div>
+      <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
+        <nav class="mt-1 px-4 py-4 lg:px-6">
+          <h3 class="mb-4 ml-3 text-xs font-semibold uppercase tracking-wider text-brand-400">Menu Pusat</h3>
+          <ul class="mb-6 flex flex-col gap-1.5">
+            <li><a href="pusat-dashboard.html" class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white"><svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" /></svg><span>Dashboard Nasional</span></a></li>
+            <li><a href="pusat-master.html" class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white"><svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm.375 0h.007v.008h-.007V12Zm-3.75 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z" /></svg><span>Master NIB Tunggal</span></a></li>
+            <li><a href="pusat-periode.html" class="flex w-full items-center gap-3 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm duration-300 ease-in-out"><svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg><span>Periode Laporan</span></a></li>
+            <li><a href="pusat-broadcast.html" class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white"><svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 0 1-1.44-4.282m3.102.069a18.03 18.03 0 0 1-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 0 1 8.835 2.535M10.34 6.66a23.847 23.847 0 0 0 8.835-2.535m0 0A23.74 23.74 0 0 0 18.795 3m.38 1.125a23.91 23.91 0 0 1 1.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 0 0 1.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 0 1 0 3.46" /></svg><span>Kelola Broadcast</span></a></li>
+            <!-- MENU DISEMBUNYIKAN (HBW tanpa persetujuan Pusat) -->
+            <!--
+            <li><a href="pusat-portofolio.html" class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white"><svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H6.911a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661Z" /></svg><span>Pengajuan Portofolio</span></a></li>
+            -->
+            <li><a href="pusat-pendaftaran.html" class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white"><svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" /></svg><span>Pendaftaran Nazhir</span></a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="mt-auto border-t border-white/10 p-4 lg:p-6">
+        <button onclick="logout()" class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 transition hover:bg-white/10 hover:text-white"><svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" /></svg>Keluar</button>
+      </div>
+    </aside>
+    <div id="overlay" onclick="tutupSidebar()" class="fixed inset-0 z-40 hidden bg-black/40 lg:hidden"></div>
+
+    <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+      <header class="sticky top-0 z-30 flex h-[72px] items-center gap-3 border-b border-gray-200 bg-white px-4 md:px-6">
+        <button onclick="toggleSidebar()" class="text-gray-500 hover:text-gray-700 lg:hidden"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg></button>
+        <div class="min-w-0"><h1 class="truncate text-lg font-bold leading-tight text-gray-800">Periode Laporan</h1><p class="truncate text-xs text-gray-400">Kelola periode pelaporan, aktivasi, &amp; penguncian otomatis via deadline</p></div>
+        <div class="ml-auto flex items-center gap-3">
+          <span class="hidden text-right sm:block"><span class="block text-sm font-semibold text-gray-700">Mas Raji</span><span class="block text-xs text-gray-400">Administrator Pusat</span></span>
+          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">MR</span>
+        </div>
+      </header>
+
+      <main>
+        <div class="mx-auto max-w-screen-2xl space-y-6 p-4 md:p-6">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 class="text-xl font-bold text-gray-800 md:text-2xl">Periode Laporan</h2>
+              <p class="mt-1 text-sm text-gray-500">Tambah periode pelaporan. Periode yang <span class="font-semibold text-brand-700">diaktifkan</span> otomatis mengisi kolom Periode pada laporan Nazhir. Terkunci otomatis bila melewati deadline.</p>
+            </div>
+            <button onclick="bukaModal()" class="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.9" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+              Tambah Periode
+            </button>
+          </div>
+
+          <!-- Ringkasan periode aktif -->
+          <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-800 to-brand-600 p-6 text-white shadow-card md:p-7">
+            <div class="flex items-center gap-2 text-sm font-medium text-brand-100">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg>
+              Periode Aktif Saat Ini
+            </div>
+            <p id="ringkasPeriode" class="mt-2 text-3xl font-bold tracking-tight">&mdash;</p>
+            <p id="ringkasRentang" class="mt-1 text-sm text-brand-100">&mdash;</p>
+            <div class="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-sm">
+              <div><span class="text-brand-200">Status:</span> <span id="ringkasKunci" class="font-semibold">&mdash;</span></div>
+            </div>
+          </div>
+
+          <!-- Tabel periode -->
+          <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 px-5 py-4 md:px-6">
+              <div>
+                <h3 class="text-base font-bold text-gray-800">Daftar Periode Laporan</h3>
+                <p class="text-xs text-gray-400">Seluruh periode yang telah ditetapkan.</p>
+              </div>
+              <div class="relative w-full sm:w-48">
+                <select id="filterStatusPeriode" onchange="render()"
+                  class="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pl-4 pr-10 text-sm text-gray-700 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+                  <option value="">Semua Status</option>
+                  <option value="aktif">Aktif</option>
+                  <option value="nonaktif">Nonaktif</option>
+                </select>
+                <span class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg></span>
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[780px] text-sm">
+                <thead>
+                  <tr class="border-b border-gray-100 bg-gray-50 text-left">
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Periode</th>
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Status Kunci</th>
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Aktif</th>
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Jumlah Laporan</th>
+                    <th class="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody" class="divide-y divide-gray-100"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ===== Permohonan Buka Kunci (dipindah dari Kelola Cut-Off) ===== -->
+          <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 px-5 py-4 md:px-6">
+              <div>
+                <h3 class="text-base font-bold text-gray-800">Permohonan Buka Kunci</h3>
+                <p class="text-xs text-gray-400">Pengajuan Nazhir yang telat lapor &mdash; setujui untuk membuka akses <span class="font-semibold">per-Nazhir</span> (bukan nasional).</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span id="badgeMenunggu" class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700">0 Menunggu</span>
+                <div class="relative w-40">
+                  <select id="filterStatusBuka" onchange="renderInbox()"
+                    class="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2 pl-3 pr-9 text-sm text-gray-700 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+                    <option value="">Semua Status</option>
+                    <option value="menunggu">Menunggu</option>
+                    <option value="disetujui">Disetujui</option>
+                    <option value="ditolak">Ditolak</option>
+                  </select>
+                  <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg></span>
+                </div>
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[820px] text-sm">
+                <thead>
+                  <tr class="border-b border-gray-100 bg-gray-50 text-left">
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Nazhir / Lembaga</th>
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Periode</th>
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Alasan</th>
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Diajukan</th>
+                    <th class="px-5 py-3.5 text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Status</th>
+                    <th class="px-5 py-3.5 text-right text-xs font-semibold uppercase tracking-wide text-gray-500 md:px-6">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="inboxBukaBody" class="divide-y divide-gray-100"></tbody>
+              </table>
+            </div>
+            <div class="flex items-start gap-3 border-t border-gray-100 bg-gray-50 px-5 py-4 md:px-6">
+              <svg class="mt-0.5 h-5 w-5 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>
+              <p class="text-xs text-gray-500">Pembukaan kembali akses pelaporan dilakukan <span class="font-semibold text-gray-600">per-Nazhir</span> melalui persetujuan permohonan di atas.</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ===== Modal Tambah/Edit Periode ===== -->
+  <div id="modal" class="fixed inset-0 z-[70] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/50" onclick="tutupModal()"></div>
+    <div class="modal-in relative w-full max-w-lg rounded-2xl bg-white shadow-2xl">
+      <div class="flex items-start justify-between gap-3 border-b border-gray-100 px-6 py-5">
+        <div>
+          <h3 id="judulModal" class="text-lg font-bold text-gray-800">Tambah Periode</h3>
+          <p class="mt-0.5 text-xs text-gray-400">Tetapkan rentang bulan &amp; tahun periode pelaporan.</p>
+        </div>
+        <button onclick="tutupModal()" class="text-gray-400 transition hover:text-gray-600"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg></button>
+      </div>
+      <div class="space-y-5 px-6 py-5">
+        <!-- Toggle aktif -->
+        <div class="flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-4 py-3">
+          <div>
+            <p class="text-sm font-semibold text-gray-700">Aktifkan periode ini</p>
+            <p class="text-xs text-gray-400">Jika aktif, semua laporan Nazhir memakai periode ini otomatis.</p>
+          </div>
+          <button type="button" id="toggleAktif" onclick="toggleAktifBtn()" role="switch" aria-checked="false"
+            class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full bg-gray-300 transition-colors">
+            <span id="toggleKnob" class="pointer-events-none absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform"></span>
+          </button>
+        </div>
+
+        <!-- Rentang bulan (dari – sampai) -->
+        <div>
+          <label class="mb-1.5 block text-sm font-semibold text-gray-700">Rentang Periode <span class="text-red-500">*</span></label>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="relative">
+              <select id="selBulanMulai" class="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pl-4 pr-10 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"></select>
+              <span class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg></span>
+            </div>
+            <div class="relative">
+              <select id="selBulanAkhir" class="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pl-4 pr-10 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"></select>
+              <span class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg></span>
+            </div>
+          </div>
+          <p class="mt-1.5 text-xs text-gray-400">Bebas: bulanan, <span class="font-medium">triwulan</span> (mis. Januari – Maret), atau <span class="font-medium">semester</span> (Januari – Juni), dst. Bulan mulai &le; bulan akhir.</p>
+        </div>
+
+        <!-- Tahun counter -->
+        <div>
+          <label class="mb-1.5 block text-sm font-semibold text-gray-700">Tahun <span class="text-red-500">*</span></label>
+          <div class="inline-flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-1.5">
+            <button type="button" onclick="ubahTahun(-1)" class="flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 text-gray-600 transition hover:bg-gray-50"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" /></svg></button>
+            <input id="inTahun" type="text" inputmode="numeric" readonly
+              class="w-20 border-0 bg-transparent text-center text-lg font-bold text-gray-800 outline-none">
+            <button type="button" onclick="ubahTahun(1)" class="flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 text-gray-600 transition hover:bg-gray-50"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14" /></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 border-t border-gray-100 px-6 py-4">
+        <button type="button" onclick="tutupModal()" class="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-600 transition hover:bg-gray-50">Batal</button>
+        <button type="button" onclick="simpanPeriode()" class="rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">Simpan Periode</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Modal Hapus ===== -->
+  <div id="modalHapus" class="fixed inset-0 z-[75] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/50" onclick="tutupHapus()"></div>
+    <div class="modal-in relative w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-2xl">
+      <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-50 text-red-600">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397" /></svg>
+      </div>
+      <h3 class="text-base font-bold text-gray-800">Hapus Periode?</h3>
+      <p id="hapusTeks" class="mt-1 text-sm text-gray-500">Periode ini akan dihapus.</p>
+      <div class="mt-5 flex justify-center gap-2">
+        <button type="button" onclick="tutupHapus()" class="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-600 transition hover:bg-gray-50">Batal</button>
+        <button type="button" onclick="konfirmasiHapus()" class="rounded-lg bg-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700">Ya, Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-6 right-6 z-[80] hidden max-w-md items-center gap-3 rounded-xl bg-gray-900 px-5 py-3 text-sm font-medium text-white shadow-2xl">
+    <svg class="h-5 w-5 shrink-0 text-brand-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+    <span id="toastMsg"></span>
+  </div>
+
+  <script>
+    const KUNCI_CUTOFF = 'cutoff_bwi';
+    const BULAN = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+    function amankan(t) { const d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; }
+    // Label periode fleksibel: rentang bulan + tahun (mis. "Januari – Juni 2027", "Januari – Maret 2027", "April 2027")
+    function labelPeriode(m1, m2, th) { return (m1 === m2 ? BULAN[m1] : BULAN[m1] + ' – ' + BULAN[m2]) + ' ' + th; }
+    function namaBulanIdx(nama) { return BULAN.findIndex(b => b.toLowerCase() === String(nama).toLowerCase()); }
+    // Terima format baru & lama (Semester X - YYYY) -> {m1, m2, th}
+    function parseLabel(label) {
+      const s = String(label);
+      const semm = s.match(/Semester\s*(\d)\s*-\s*(\d{4})/i);
+      if (semm) return semm[1] === '2' ? { m1: 6, m2: 11, th: parseInt(semm[2], 10) } : { m1: 0, m2: 5, th: parseInt(semm[2], 10) };
+      const thm = s.match(/(\d{4})/);
+      const th = thm ? parseInt(thm[1], 10) : new Date().getFullYear();
+      const re = new RegExp('(' + BULAN.join('|') + ')', 'gi');
+      const found = []; let mm;
+      while ((mm = re.exec(s)) !== null) { const i = namaBulanIdx(mm[1]); if (i >= 0) found.push(i); }
+      return found.length ? { m1: found[0], m2: found[found.length - 1], th: th } : { m1: 0, m2: 5, th: th };
+    }
+    function infoItem(label, it) {
+      if (it && typeof it.bulanMulai === 'number') return { m1: it.bulanMulai, m2: it.bulanAkhir, th: it.tahun };
+      return parseLabel(label);
+    }
+    function rentangTeks(inf) { return (inf.m1 === inf.m2 ? BULAN[inf.m1] : BULAN[inf.m1] + ' – ' + BULAN[inf.m2]) + ' ' + inf.th; }
+    function jenisPeriode(inf) {
+      const n = inf.m2 - inf.m1 + 1;
+      const t = n === 1 ? 'Bulanan' : n === 3 ? 'Triwulan' : n === 6 ? 'Semester' : n === 12 ? 'Tahunan' : (n + ' Bulan');
+      return t + ' · ' + n + ' bulan';
+    }
+    // Jumlah laporan Nazhir yang memakai periode ini
+    const KUNCI_LAPORAN = 'data_laporan_program_bwi';
+    function hitungLaporan(label) {
+      let arr = [];
+      try { arr = JSON.parse(localStorage.getItem(KUNCI_LAPORAN)) || []; } catch (e) { }
+      if (!Array.isArray(arr)) return 0;
+      return arr.filter(d => String(d.periode) === String(label)).length;
+    }
+
+    function bacaCutoff() {
+      let o = null; try { o = JSON.parse(localStorage.getItem(KUNCI_CUTOFF)); } catch (e) { }
+      if (o && o.items && typeof o.items === 'object') return o;
+      // Seed default bila belum ada (semester berjalan)
+      const th = new Date().getFullYear();
+      const lbl = labelPeriode(0, 5, th);
+      const items = {}; items[lbl] = { bulanMulai: 0, bulanAkhir: 5, tahun: th, terkunci: false };
+      return { periodeAktif: lbl, items: items };
+    }
+    function simpanCutoff(o) { try { localStorage.setItem(KUNCI_CUTOFF, JSON.stringify(o)); } catch (e) { } }
+
+    // Urutkan periode berdasarkan tahun lalu bulan mulai (terbaru dulu)
+    function daftarUrut(c) {
+      return Object.keys(c.items).sort((a, b) => {
+        const ia = infoItem(a, c.items[a]), ib = infoItem(b, c.items[b]);
+        return (ib.th - ia.th) || (ib.m1 - ia.m1);
+      });
+    }
+
+    let cutoff = bacaCutoff();
+
+    function render() {
+      cutoff = bacaCutoff();
+
+      // Ringkasan periode aktif
+      const per = cutoff.periodeAktif;
+      const itAktif = per && cutoff.items[per];
+      document.getElementById('ringkasPeriode').textContent = per || 'Belum ada periode aktif';
+      document.getElementById('ringkasRentang').textContent = itAktif ? jenisPeriode(infoItem(per, itAktif)) : 'Aktifkan salah satu periode di bawah.';
+      document.getElementById('ringkasKunci').innerHTML = itAktif
+        ? '<span class="rounded bg-white/25 px-2 py-0.5 text-xs">Terbuka</span>'
+        : '—';
+
+      // Tabel (dengan filter status Aktif/Nonaktif)
+      const body = document.getElementById('tbody');
+      const fStatus = (document.getElementById('filterStatusPeriode') || {}).value || '';
+      const keys = daftarUrut(cutoff).filter(k => {
+        if (!fStatus) return true;
+        const isAktif = k === cutoff.periodeAktif;
+        return fStatus === 'aktif' ? isAktif : !isAktif;
+      });
+      body.innerHTML = '';
+      if (keys.length === 0) {
+        const pesan = fStatus ? 'Tidak ada periode dengan status tersebut.' : 'Belum ada periode. Klik "Tambah Periode" untuk membuat.';
+        body.innerHTML = '<tr><td colspan="5" class="px-6 py-14 text-center text-sm text-gray-400">' + pesan + '</td></tr>';
+        return;
+      }
+      keys.forEach(k => {
+        const it = cutoff.items[k]; const inf = infoItem(k, it);
+        const aktif = k === cutoff.periodeAktif;
+        const jmlLaporan = hitungLaporan(k);
+        // Status kunci pada daftar periode selalu "Terbuka" (penguncian cut-off dikelola terpisah)
+        const badgeKunci = '<span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700"><span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>Terbuka</span>';
+        const badgeAktif = aktif
+          ? '<span class="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700">Aktif</span>'
+          : '<span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-500">Nonaktif</span>';
+        const tombolAktifkan = aktif ? '' :
+          '<button type="button" onclick="aktifkan(\'' + amankan(k) + '\')" class="rounded-lg border border-brand-300 px-3 py-1.5 text-xs font-semibold text-brand-700 transition hover:bg-brand-50">Aktifkan</button>';
+        const tr = document.createElement('tr');
+        tr.className = 'transition hover:bg-gray-50';
+        tr.innerHTML =
+          '<td class="whitespace-nowrap px-5 py-4 font-semibold text-gray-800 md:px-6">' + amankan(k) + '</td>' +
+          '<td class="px-5 py-4 md:px-6">' + badgeKunci + '</td>' +
+          '<td class="px-5 py-4 md:px-6">' + badgeAktif + '</td>' +
+          '<td class="whitespace-nowrap px-5 py-4 md:px-6"><span class="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-700"><svg class="h-3.5 w-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>' + jmlLaporan + ' laporan</span></td>' +
+          '<td class="px-5 py-4 md:px-6"><div class="flex items-center justify-end gap-1.5">' + tombolAktifkan +
+          '<button type="button" onclick="editPeriode(\'' + amankan(k) + '\')" class="rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-600 transition hover:bg-gray-50">Edit</button>' +
+          '<button type="button" onclick="bukaHapus(\'' + amankan(k) + '\')" title="Hapus" class="inline-flex items-center justify-center rounded-lg border border-gray-300 p-1.5 text-gray-400 transition hover:border-red-300 hover:bg-red-50 hover:text-red-600"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397" /></svg></button>' +
+          '</div></td>';
+        body.appendChild(tr);
+      });
+    }
+
+    /* ---------- Modal Tambah/Edit ---------- */
+    let idEdit = null;   // label periode yang diedit (null = tambah)
+    let aktifPilih = false;
+
+    function setToggle(on) {
+      aktifPilih = !!on;
+      const t = document.getElementById('toggleAktif'), k = document.getElementById('toggleKnob');
+      t.setAttribute('aria-checked', aktifPilih ? 'true' : 'false');
+      t.classList.toggle('bg-brand-600', aktifPilih);
+      t.classList.toggle('bg-gray-300', !aktifPilih);
+      k.classList.toggle('translate-x-5', aktifPilih);
+    }
+    function toggleAktifBtn() { setToggle(!aktifPilih); }
+    function ubahTahun(d) {
+      const el = document.getElementById('inTahun');
+      let th = parseInt(el.value, 10); if (isNaN(th)) th = new Date().getFullYear();
+      th += d; if (th < 2020) th = 2020; if (th > 2100) th = 2100;
+      el.value = th;
+    }
+    // Isi kedua dropdown bulan (0..11)
+    function isiDropdownBulan() {
+      const opsi = BULAN.map((b, i) => '<option value="' + i + '">' + b + '</option>').join('');
+      const a = document.getElementById('selBulanMulai'), z = document.getElementById('selBulanAkhir');
+      if (a && !a.innerHTML) a.innerHTML = opsi;
+      if (z && !z.innerHTML) z.innerHTML = opsi;
+    }
+
+    function bukaModal() {
+      idEdit = null;
+      document.getElementById('judulModal').textContent = 'Tambah Periode';
+      isiDropdownBulan();
+      document.getElementById('selBulanMulai').value = '0';   // Januari
+      document.getElementById('selBulanAkhir').value = '5';   // Juni (default 1 semester)
+      document.getElementById('inTahun').value = new Date().getFullYear();
+      setToggle(false);
+      buka('modal');
+    }
+    function editPeriode(label) {
+      const it = cutoff.items[label]; if (!it) return;
+      const inf = infoItem(label, it);
+      idEdit = label;
+      document.getElementById('judulModal').textContent = 'Edit Periode';
+      isiDropdownBulan();
+      document.getElementById('selBulanMulai').value = String(inf.m1);
+      document.getElementById('selBulanAkhir').value = String(inf.m2);
+      document.getElementById('inTahun').value = inf.th;
+      setToggle(label === cutoff.periodeAktif);
+      buka('modal');
+    }
+    function simpanPeriode() {
+      const m1 = parseInt(document.getElementById('selBulanMulai').value, 10);
+      const m2 = parseInt(document.getElementById('selBulanAkhir').value, 10);
+      const th = parseInt(document.getElementById('inTahun').value, 10);
+      if (!th) { showToast('Tahun tidak valid.'); return; }
+      if (isNaN(m1) || isNaN(m2)) { showToast('Pilih rentang bulan terlebih dahulu.'); return; }
+      if (m2 < m1) { showToast('Bulan akhir tidak boleh sebelum bulan mulai.'); return; }
+      const label = labelPeriode(m1, m2, th);
+
+      // Cegah duplikat (kecuali sedang mengedit periode yang sama)
+      if (label !== idEdit && cutoff.items[label]) { showToast('Periode ' + label + ' sudah ada.'); return; }
+
+      // Bila edit & label berubah (ganti rentang/tahun), hapus key lama
+      if (idEdit && idEdit !== label) {
+        delete cutoff.items[idEdit];
+        if (cutoff.periodeAktif === idEdit) cutoff.periodeAktif = '';
+      }
+      cutoff.items[label] = { bulanMulai: m1, bulanAkhir: m2, tahun: th, terkunci: false };
+
+      if (aktifPilih) cutoff.periodeAktif = label;
+      else if (cutoff.periodeAktif === label) cutoff.periodeAktif = '';
+
+      simpanCutoff(cutoff);
+      tutupModal();
+      render();
+      showToast(idEdit ? 'Periode diperbarui.' : 'Periode ditambahkan.');
+    }
+
+    /* ---------- Aktifkan ---------- */
+    function aktifkan(label) {
+      if (!cutoff.items[label]) return;
+      cutoff.periodeAktif = label;
+      cutoff.items[label].terkunci = false;   // periode aktif = terbuka untuk pelaporan
+      simpanCutoff(cutoff);
+      render();
+      showToast(label + ' kini menjadi periode aktif.');
+    }
+
+    /* ---------- Hapus ---------- */
+    let hapusLabel = null;
+    function bukaHapus(label) {
+      hapusLabel = label;
+      document.getElementById('hapusTeks').textContent = 'Periode "' + label + '" akan dihapus. Tindakan ini tidak dapat dibatalkan.';
+      buka('modalHapus');
+    }
+    function tutupHapus() { tutup('modalHapus'); hapusLabel = null; }
+    function konfirmasiHapus() {
+      if (hapusLabel && cutoff.items[hapusLabel]) {
+        delete cutoff.items[hapusLabel];
+        if (cutoff.periodeAktif === hapusLabel) cutoff.periodeAktif = '';
+        simpanCutoff(cutoff);
+      }
+      tutupHapus();
+      render();
+      showToast('Periode dihapus.');
+    }
+
+    /* ---------- Util ---------- */
+    function buka(id) { const m = document.getElementById(id); m.classList.remove('hidden'); m.classList.add('flex'); }
+    function tutup(id) { const m = document.getElementById(id); m.classList.add('hidden'); m.classList.remove('flex'); }
+    function tutupModal() { tutup('modal'); }
+    function toggleSidebar() { const sb = document.getElementById('sidebar'), ov = document.getElementById('overlay'); const t = sb.classList.contains('-translate-x-full'); sb.classList.toggle('-translate-x-full', !t); ov.classList.toggle('hidden', !t); }
+    function tutupSidebar() { document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('overlay').classList.add('hidden'); }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { tutupSidebar(); tutupModal(); tutupHapus(); } });
+    function logout() { window.location.href = 'kenazhiran-login.html'; }
+    let toastTimer = null;
+    function showToast(p) { const t = document.getElementById('toast'); document.getElementById('toastMsg').textContent = p; t.classList.remove('hidden'); t.classList.add('flex'); clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.classList.add('hidden'); t.classList.remove('flex'); }, 3200); }
+
+    /* ===================================================================
+       Permohonan Buka Kunci (dipindah dari Kelola Cut-Off Periode)
+       Sumber data: 'buka_kunci_bwi' (diisi Nazhir dari halaman Permohonan Buka Kunci)
+       =================================================================== */
+    const KUNCI_BUKA = 'buka_kunci_bwi';
+    function bacaPermohonan() {
+      try { const a = JSON.parse(localStorage.getItem(KUNCI_BUKA)); if (Array.isArray(a)) return a; } catch (e) { }
+      return null;
+    }
+    function simpanPermohonan(a) { try { localStorage.setItem(KUNCI_BUKA, JSON.stringify(a)); } catch (e) { } }
+    function seedPermohonan() {
+      if (bacaPermohonan() !== null) return;
+      simpanPermohonan([
+        { id: 'BK-DEMO-1', nazhir: 'Yayasan Amal Sejahtera', lembaga: 'NZHR-JKT-812', periode: 'Semester 1 - 2025', alasan: 'Konsolidasi data keuangan yayasan terlambat karena proses audit internal.', tanggal: '2 Agustus 2025', status: 'menunggu', catatan: '' },
+      ]);
+    }
+    function badgePermohonan(s) {
+      const map = { menunggu: ['bg-amber-50 text-amber-700', 'Menunggu'], disetujui: ['bg-brand-50 text-brand-700', 'Disetujui'], ditolak: ['bg-red-50 text-red-600', 'Ditolak'] };
+      const m = map[s] || map.menunggu;
+      return '<span class="inline-flex items-center rounded-full ' + m[0] + ' px-2.5 py-1 text-xs font-semibold">' + m[1] + '</span>';
+    }
+    function renderInbox() {
+      const body = document.getElementById('inboxBukaBody');
+      if (!body) return;
+      const semua = bacaPermohonan() || [];
+      const fStatus = (document.getElementById('filterStatusBuka') || {}).value || '';
+      const list = fStatus ? semua.filter(p => p.status === fStatus) : semua;
+      body.innerHTML = '';
+      if (list.length === 0) {
+        const pesan = fStatus ? 'Tidak ada permohonan dengan status tersebut.' : 'Belum ada permohonan buka kunci.';
+        body.innerHTML = '<tr><td colspan="6" class="px-6 py-10 text-center text-sm text-gray-400">' + pesan + '</td></tr>';
+      } else {
+        list.forEach(p => {
+          const aksi = (p.status === 'menunggu')
+            ? '<div class="inline-flex justify-end gap-1.5">' +
+                '<button type="button" onclick="putusanPermohonan(\'' + amankan(p.id) + '\',\'ditolak\')" class="rounded-lg border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-600 transition hover:bg-red-50">Tolak</button>' +
+                '<button type="button" onclick="putusanPermohonan(\'' + amankan(p.id) + '\',\'disetujui\')" class="rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-brand-700">Setujui &amp; Buka</button>' +
+              '</div>'
+            : '<span class="text-xs text-gray-400">Selesai</span>';
+          const tr = document.createElement('tr');
+          tr.className = 'transition hover:bg-gray-50';
+          tr.innerHTML =
+            '<td class="px-5 py-4 md:px-6"><p class="font-semibold text-gray-800">' + amankan(p.nazhir) + '</p><p class="font-mono text-xs text-gray-400">' + amankan(p.lembaga) + '</p></td>' +
+            '<td class="whitespace-nowrap px-5 py-4 text-gray-600 md:px-6">' + amankan(p.periode) + '</td>' +
+            '<td class="px-5 py-4 md:px-6"><p class="max-w-xs text-xs text-gray-600">' + amankan(p.alasan) + '</p></td>' +
+            '<td class="whitespace-nowrap px-5 py-4 text-gray-600 md:px-6">' + amankan(p.tanggal) + '</td>' +
+            '<td class="px-5 py-4 md:px-6">' + badgePermohonan(p.status) + '</td>' +
+            '<td class="px-5 py-4 text-right md:px-6">' + aksi + '</td>';
+          body.appendChild(tr);
+        });
+      }
+      const menunggu = semua.filter(p => p.status === 'menunggu').length;
+      const badge = document.getElementById('badgeMenunggu');
+      if (badge) badge.textContent = menunggu + ' Menunggu';
+    }
+    function putusanPermohonan(id, keputusan) {
+      const list = bacaPermohonan() || [];
+      const idx = list.findIndex(p => String(p.id) === String(id));
+      if (idx < 0) return;
+      list[idx].status = keputusan;
+      simpanPermohonan(list);
+      renderInbox();
+      showToast(keputusan === 'disetujui'
+        ? 'Akses ' + list[idx].nazhir + ' untuk ' + list[idx].periode + ' dibuka.'
+        : 'Permohonan ' + list[idx].nazhir + ' ditolak.');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      seedPermohonan();
+      render();
+      renderInbox();
+    });
+  </script>
+</body>
+
+</html>

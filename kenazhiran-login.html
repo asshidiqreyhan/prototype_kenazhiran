@@ -237,6 +237,8 @@
       { email: 'yayasannusantara@bwi.go.id', sandi: 'password', peran: 'nazhir', nama: 'Yayasan Wakaf Nusantara', label: 'Nazhir Aktif', tujuan: 'nazhir-dashboard.html' },
       { email: 'perwakilan@bwi.go.id', sandi: 'password', peran: 'wilayah', nama: 'Mas Udin — BWI Perwakilan Pusat', label: 'BWI Perwakilan', tujuan: 'wilayah-dashboard.html' },
       { email: 'adminpusat@bwi.go.id', sandi: 'password', peran: 'pusat', nama: 'Mas Raji — Administrator Pusat', label: 'Administrator Pusat', tujuan: 'pusat-dashboard.html' },
+      { email: 'sekretaris@bwi.go.id', sandi: 'password', peran: 'sekretaris', nama: 'Dr. H. Imam Nur Azis — Sekretaris BWI', label: 'Sekretaris BWI', tujuan: 'sekretaris-pendaftaran.html' },
+      { email: 'ketua@bwi.go.id', sandi: 'password', peran: 'ketua', nama: 'Prof. Dr. K.H. Noor Achmad, M.A. — Ketua BWI', label: 'Ketua BWI', tujuan: 'ketua-pendaftaran.html' },
     ];
     function seedAkun() {
       let ada = null;
@@ -245,6 +247,12 @@
         try { localStorage.setItem(KUNCI_AKUN, JSON.stringify(AKUN_SEED)); } catch (e) { /* */ }
         return AKUN_SEED.slice();
       }
+      // Gabungkan akun seed yang belum ada (mis. peran baru: sekretaris/ketua) tanpa menimpa akun lama.
+      let berubah = false;
+      AKUN_SEED.forEach(s => {
+        if (!ada.some(a => String(a.email).toLowerCase() === s.email.toLowerCase())) { ada.push(s); berubah = true; }
+      });
+      if (berubah) { try { localStorage.setItem(KUNCI_AKUN, JSON.stringify(ada)); } catch (e) { /* */ } }
       return ada;
     }
     function daftarAkun() {
@@ -253,7 +261,7 @@
       return Array.isArray(arr) ? arr : AKUN_SEED.slice();
     }
     /* Peta mode sesi per peran (dipakai calon-guard di halaman nazhir) */
-    const MODE_PERAN = { nazhir: 'aktif', wilayah: 'wilayah', pusat: 'pusat' };
+    const MODE_PERAN = { nazhir: 'aktif', wilayah: 'wilayah', pusat: 'pusat', sekretaris: 'sekretaris', ketua: 'ketua' };
 
     /* Simulasi otentikasi: spinner ~0.8 detik lalu redirect. */
     function mulaiMasuk(tombol, tujuan) {

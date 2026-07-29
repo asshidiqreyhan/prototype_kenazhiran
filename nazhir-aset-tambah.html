@@ -141,6 +141,7 @@
       tanah: [
         { key: 'bpn', label: 'Sertifikat / Bukti Legalitas Tanah', hint: 'Sertifikat BPN, AIW, girik, atau bukti legalitas lain sesuai status legalitas di atas' },
         { key: 'aiw', label: 'AIW (Akta Ikrar Wakaf)', hint: 'Akta Ikrar Wakaf yang dibuat di hadapan PPAIW' },
+        { key: 'stbpn', label: 'STBPN (Surat Tanda Bukti Pendaftaran Nazhir)', hint: 'Surat Tanda Bukti Pendaftaran Nazhir dari BWI setempat sesuai luasan tanah.' },
       ],
     };
 
@@ -175,6 +176,21 @@
       'DJKN',
       'KJPP (Penilai Publik)',
       'Penilaian Internal Nazhir',
+      'Lainnya',
+    ];
+    // BWI penerbit STBPN / register tanah wakaf (combobox searchable, boleh ditambah user)
+    const OPSI_BWI = [
+      'BWI Pusat',
+      'BWI Prov. DKI Jakarta',
+      'BWI Prov. Jawa Barat',
+      'BWI Prov. Jawa Tengah',
+      'BWI Prov. Jawa Timur',
+      'BWI Prov. Banten',
+      'BWI Prov. DI Yogyakarta',
+      'BWI Kota Bandung',
+      'BWI Kab. Bandung',
+      'BWI Kota Semarang',
+      'BWI Kota Surabaya',
       'Lainnya',
     ];
     // Jenis program peruntukan — khusus Wakaf Uang
@@ -217,12 +233,10 @@
       { id: 'uang-temporer-panjang', jenis: 'uang', nama: 'Wakaf Uang Temporer Jangka Panjang', ikon: 'uang', satuan: 'Rp', keterangan: 'Wakaf uang berjangka waktu panjang.' },
     ];
 
-    // Alur status pengajuan portofolio — Sub-ID baru TIDAK langsung aktif
+    // Alur status pengajuan portofolio — Sub-ID baru LANGSUNG aktif (tanpa verifikasi Pusat)
     const STATUS = {
-      draft:   { label: 'Draft',         warna: 'bg-gray-100 text-gray-600',   titik: 'bg-gray-400',  ket: 'Belum diajukan — masih dapat diedit kapan saja.' },
-      review:  { label: 'Verifikasi Pusat', warna: 'bg-amber-50 text-amber-700',  titik: 'bg-amber-500', ket: 'Sedang diverifikasi BWI Pusat.' },
-      ditolak: { label: 'Ditolak',       warna: 'bg-red-50 text-red-600',      titik: 'bg-red-500',   ket: 'Berkas dikembalikan — perbaiki lalu ajukan ulang.' },
-      aktif:   { label: 'Aktif',         warna: 'bg-brand-50 text-brand-700',  titik: 'bg-brand-500', ket: 'Disetujui Pusat — Sub-ID resmi terdaftar.' },
+      draft:   { label: 'Draft',         warna: 'bg-gray-100 text-gray-600',   titik: 'bg-gray-400',  ket: 'Belum disimpan final — masih dapat diedit kapan saja.' },
+      aktif:   { label: 'Aktif',         warna: 'bg-brand-50 text-brand-700',  titik: 'bg-brand-500', ket: 'Sub-ID resmi terdaftar & langsung aktif tanpa perlu persetujuan BWI Pusat.' },
     };
 
     // Label & placeholder isian menyesuaikan kategori wakaf yang dipilih
@@ -620,16 +634,16 @@
           {/* Alur status pengajuan */}
           <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-card">
             <h4 className="mb-1 text-sm font-bold text-gray-800">Alur Status Pengajuan</h4>
-            <p className="mb-4 text-xs text-gray-400">Sub-ID baru tidak langsung aktif — perlu persetujuan BWI Pusat.</p>
+            <p className="mb-4 text-xs text-gray-400">Sub-ID baru langsung aktif — tidak perlu persetujuan BWI Pusat.</p>
 
             <ol className="space-y-3">
-              {['draft', 'review', 'aktif'].map((k, i) => (
+              {['draft', 'aktif'].map((k, i, arr) => (
                 <li key={k} className="flex gap-3">
                   <div className="flex flex-col items-center">
                     <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${STATUS[k].warna}`}>
                       {i + 1}
                     </span>
-                    {i < 2 && <span className="mt-1 h-6 w-px bg-gray-200"></span>}
+                    {i < arr.length - 1 && <span className="mt-1 h-6 w-px bg-gray-200"></span>}
                   </div>
                   <div className="pb-1">
                     <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS[k].warna}`}>
@@ -642,11 +656,11 @@
               ))}
             </ol>
 
-            <div className="mt-3 flex items-start gap-2 rounded-lg border border-red-100 bg-red-50 px-3 py-2.5">
-              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-red-500"></span>
-              <p className="text-xs leading-relaxed text-red-700">
-                <span className="font-semibold">Ditolak</span> — bila berkas tidak memenuhi syarat, pengajuan
-                dikembalikan untuk diperbaiki lalu diajukan ulang.
+            <div className="mt-3 flex items-start gap-2 rounded-lg border border-brand-100 bg-brand-50 px-3 py-2.5">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-500"></span>
+              <p className="text-xs leading-relaxed text-brand-800">
+                <span className="font-semibold">Langsung aktif</span> — begitu disimpan &amp; diaktifkan, Sub-ID
+                baru resmi terdaftar tanpa menunggu verifikasi BWI Pusat.
               </p>
             </div>
           </div>
@@ -702,6 +716,14 @@
       const [syarat, setSyarat] = useState({ laporBulanan: false, bersediaAudit: false });
       // Field detail & legalitas tanah wakaf (nomor AIW, koordinat, peruntukan, dll)
       const [detail, setDetail] = useState(EDIT ? (EDIT.detailTanah || {}) : {});
+      // --- Combobox BWI Penerbit (searchable + tambah data baru) — khusus tanah ---
+      const [bwiCari, setBwiCari] = useState('');
+      const [bwiBuka, setBwiBuka] = useState(false);
+      const [bwiOpsi, setBwiOpsi] = useState(
+        (EDIT && EDIT.detailTanah && EDIT.detailTanah.bwiPenerbit && OPSI_BWI.indexOf(EDIT.detailTanah.bwiPenerbit) === -1)
+          ? OPSI_BWI.concat([EDIT.detailTanah.bwiPenerbit])
+          : OPSI_BWI.slice()
+      );
       const [sentuh, setSentuh] = useState(false);
       const [toast, setToast] = useState('');
 
@@ -746,6 +768,26 @@
         setInstrumen(bersih);
         setInstrumenCari('');
         setInstrumenBuka(false);
+      };
+
+      // --- Combobox BWI Penerbit (searchable + tambah data baru) ---
+      const bwiTersaring = bwiOpsi.filter(
+        (o) => o.toLowerCase().indexOf(bwiCari.trim().toLowerCase()) !== -1
+      );
+      const pilihBwi = (o) => {
+        ubahDetail('bwiPenerbit', o);
+        setBwiCari('');
+        setBwiBuka(false);
+      };
+      const tambahBwi = (namaBaru) => {
+        const bersih = String(namaBaru || '').trim();
+        if (!bersih) return;
+        setBwiOpsi((prev) =>
+          prev.some((x) => x.toLowerCase() === bersih.toLowerCase()) ? prev : prev.concat([bersih])
+        );
+        ubahDetail('bwiPenerbit', bersih);
+        setBwiCari('');
+        setBwiBuka(false);
       };
 
       const pilihBerkas = (key, file) => {
@@ -857,12 +899,12 @@
         setTimeout(() => { window.location.href = 'nazhir-aset.html?jenis=' + JENIS_HBW; }, 1400);
       };
 
-      // Ajukan -> masuk status "Verifikasi Pusat" untuk diverifikasi BWI
+      // Simpan & Aktifkan -> Sub-ID baru LANGSUNG aktif tanpa verifikasi BWI Pusat
       const ajukan = () => {
         setSentuh(true);
         if (!bolehSimpan) return;
-        tulisRecord('review');
-        setToast(`Pengajuan ${SUB_ID_BARU} terkirim. Menunggu verifikasi BWI Pusat.`);
+        tulisRecord('aktif');
+        setToast(`Sub-ID ${SUB_ID_BARU} berhasil ditambahkan & langsung aktif.`);
         setTimeout(() => { window.location.href = 'nazhir-aset.html?jenis=' + JENIS_HBW; }, 1400);
       };
 
@@ -905,7 +947,7 @@
                     </h2>
                     <p className="mt-0.5 text-sm text-gray-500">
                       {MODE_UBAH
-                        ? 'Lengkapi atau perbaiki draft ' + SUB_ID_BARU + ' sebelum diajukan ke BWI Pusat.'
+                        ? 'Lengkapi atau perbaiki draft ' + SUB_ID_BARU + ' lalu simpan & aktifkan.'
                         : 'Daftarkan aset wakaf baru sebagai Sub-ID di bawah NIB lembaga Anda.'}
                     </p>
                   </div>
@@ -1172,6 +1214,64 @@
                               placeholder="mis. Kantah Kab. Bandung"
                               className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100" />
                           </div>
+                          <div>
+                            <label className="mb-1.5 block text-sm font-semibold text-gray-700">Nomor Register <span className="font-normal text-gray-400">(bila ada)</span></label>
+                            <input type="text" name="nomorRegister" value={detail.nomorRegister || ''} onChange={(e) => ubahDetail('nomorRegister', e.target.value)}
+                              placeholder="mis. REG-JB-2026-00123"
+                              className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100" />
+                            <p className="mt-1.5 text-xs text-gray-400">Nomor register STBPN / pendaftaran nazhir dari BWI penerbit.</p>
+                          </div>
+                          <div>
+                            <label className="mb-1.5 block text-sm font-semibold text-gray-700">BWI Penerbit <span className="font-normal text-gray-400">(bila ada)</span></label>
+                            <div className="relative">
+                              <input
+                                type="text"
+                                autoComplete="off"
+                                value={bwiBuka ? bwiCari : (detail.bwiPenerbit || '')}
+                                onFocus={() => { setBwiBuka(true); setBwiCari(''); }}
+                                onChange={(e) => { setBwiCari(e.target.value); setBwiBuka(true); }}
+                                onBlur={() => window.setTimeout(() => setBwiBuka(false), 150)}
+                                placeholder="Cari / pilih BWI penerbit…"
+                                className="w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-4 pr-10 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                              />
+                              <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400">
+                                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                              </span>
+                              {bwiBuka && (
+                                <div className="absolute left-0 right-0 z-20 mt-1 max-h-56 overflow-auto rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
+                                  {bwiTersaring.map((o) => (
+                                    <button
+                                      type="button"
+                                      key={o}
+                                      onMouseDown={(e) => e.preventDefault()}
+                                      onClick={() => pilihBwi(o)}
+                                      className="flex w-full items-center justify-between gap-2 px-4 py-2 text-left text-sm text-gray-700 transition hover:bg-brand-50"
+                                    >
+                                      <span>{o}</span>
+                                      {detail.bwiPenerbit === o && (
+                                        <svg className="h-4 w-4 text-brand-600" fill="none" viewBox="0 0 24 24" strokeWidth="2.2" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                                      )}
+                                    </button>
+                                  ))}
+                                  {bwiTersaring.length === 0 && bwiCari.trim() !== '' && (
+                                    <button
+                                      type="button"
+                                      onMouseDown={(e) => e.preventDefault()}
+                                      onClick={() => tambahBwi(bwiCari)}
+                                      className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm font-semibold text-brand-700 transition hover:bg-brand-50"
+                                    >
+                                      <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                                      <span>Tambahkan "{bwiCari.trim()}" sebagai data baru</span>
+                                    </button>
+                                  )}
+                                  {bwiTersaring.length === 0 && bwiCari.trim() === '' && (
+                                    <p className="px-4 py-2 text-sm text-gray-400">Ketik untuk mencari BWI penerbit…</p>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                            <p className="mt-1.5 text-xs text-gray-400">BWI setempat yang menerbitkan STBPN sesuai luasan tanah.</p>
+                          </div>
                           <div className="md:col-span-2">
                             <div className="rounded-xl border border-brand-100 bg-brand-50/60 p-4">
                               <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-brand-700">Nilai Aset Tanah (Penilaian)</p>
@@ -1360,7 +1460,7 @@
                         <p className="flex items-center gap-1.5 text-xs text-gray-400">
                           <Icon name="gembok" className="h-4 w-4 shrink-0" />
                           {bolehSimpan
-                            ? 'Semua persyaratan terpenuhi — pengajuan siap dikirim.'
+                            ? 'Semua persyaratan terpenuhi — Sub-ID siap diaktifkan.'
                             : 'Belum lengkap? Simpan dulu sebagai draft, lanjutkan nanti.'}
                         </p>
 
@@ -1395,7 +1495,7 @@
                             }`}
                           >
                             <Icon name="centang" className="h-5 w-5" />
-                            Ajukan untuk Verifikasi
+                            Simpan &amp; Aktifkan
                           </button>
                         </div>
                       </div>
@@ -1404,9 +1504,9 @@
                         <Icon name="info" className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
                         <p className="text-xs leading-relaxed text-gray-500">
                           <span className="font-semibold text-gray-600">Draft</span> tersimpan tanpa masuk antrean dan
-                          masih bisa diedit. <span className="font-semibold text-gray-600">Ajukan</span> mengirim berkas
-                          ke status <span className="font-semibold text-amber-700">Verifikasi Pusat</span> — Sub-ID baru
-                          menjadi <span className="font-semibold text-brand-700">Aktif</span> hanya setelah disetujui BWI Pusat.
+                          masih bisa diedit. <span className="font-semibold text-gray-600">Simpan &amp; Aktifkan</span> menjadikan
+                          Sub-ID baru langsung <span className="font-semibold text-brand-700">Aktif</span> dan resmi terdaftar
+                          tanpa perlu persetujuan BWI Pusat.
                         </p>
                       </div>
                     </div>
