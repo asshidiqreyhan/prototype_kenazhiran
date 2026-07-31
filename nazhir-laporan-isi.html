@@ -3156,11 +3156,12 @@
       var NAMA = reg.namaBadanHukum || sesi.nama || 'Calon Nazhir';
       function esc(t) { var d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; }
       function inisial(n) { var p = String(n || 'CN').trim().split(/\s+/); return ((p[0] || 'C')[0] + ((p[1] || p[0] || 'N')[0] || 'N')).toUpperCase().slice(0, 2); }
-      function progres() { var ada = 0; try { ada = Object.keys(reg.berkas || {}).length; } catch (e) { } return { ada: ada, total: 16, persen: Math.round((ada / 16) * 100) }; }
+      function progres() { var ada = 0; try { ada = Object.keys(reg.berkas || {}).length; } catch (e) { } var total = (reg.jenisNazhir === 'tanah') ? 10 : 17; return { ada: ada, total: total, persen: Math.round((ada / total) * 100) }; }
       var CEK = '<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>';
 
       var editable = ['draft', 'revisi', 'ditolak'].indexOf(STATUS) !== -1;
       var CTA = editable ? (STATUS === 'ditolak' ? 'Daftar Ulang' : (STATUS === 'revisi' ? 'Perbaiki Berkas' : 'Lanjutkan Pendaftaran')) : 'Lihat Detail Pendaftaran';
+      var CTA_WARNA = editable ? 'bg-brand-600 text-white hover:bg-brand-700' : 'border border-brand-600 bg-white text-brand-700 hover:bg-brand-50';
 
       function bannerConf() {
         var cat = reg.catatanPusat ? ' <span class="font-semibold">Catatan Pusat:</span> ' + esc(reg.catatanPusat) : '';
@@ -3187,7 +3188,7 @@
         return '<div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl border ' + c[0] + ' px-5 py-4">' +
           '<div class="flex items-start gap-3"><svg class="mt-0.5 h-5 w-5 shrink-0 ' + c[1] + '" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>' +
           '<div><p class="text-sm font-bold ' + c[2] + '">' + b[1] + '</p><p class="mt-0.5 text-xs ' + c[2] + '">' + b[2] + '</p></div></div>' +
-          '<a href="nazhir-pendaftaran.html" class="shrink-0 rounded-lg bg-brand-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-brand-700">' + CTA + '</a></div>';
+          '<a href="nazhir-pendaftaran.html" class="shrink-0 rounded-lg ' + CTA_WARNA + ' px-4 py-2 text-xs font-semibold transition">' + CTA + '</a></div>';
       }
       function barProgres(p) {
         return '<div><div class="flex items-center justify-between text-sm"><span class="font-semibold text-gray-700">' + p.ada + ' dari ' + p.total + ' berkas terunggah</span><span class="font-bold text-brand-700">' + p.persen + '%</span></div>' +
@@ -3213,19 +3214,27 @@
           '<p class="text-sm text-gray-400">Selamat datang,</p><h2 class="text-xl font-bold text-gray-800">' + esc(NAMA) + '</h2>' +
           '<div class="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2">' +
           '<div class="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-4"><p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Nomor Induk BWI (NIB)</p><p class="mt-1 font-mono text-lg font-bold text-gray-400">Belum Terbit</p><p class="mt-0.5 text-xs text-gray-400">NIB terbit otomatis setelah pendaftaran disetujui BWI Pusat.</p></div>' +
-          '<div class="rounded-xl border border-gray-200 p-4">' + barProgres(p) + '<a href="nazhir-pendaftaran.html" class="mt-3 inline-flex rounded-lg bg-brand-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-brand-700">' + CTA + '</a></div>' +
+          '<div class="rounded-xl border border-gray-200 p-4">' + barProgres(p) + '<a href="nazhir-pendaftaran.html" class="mt-3 inline-flex rounded-lg ' + CTA_WARNA + ' px-4 py-2 text-xs font-semibold transition">' + CTA + '</a></div>' +
           '</div></div>' +
           '<div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-card"><h3 class="text-base font-bold text-gray-800">Tahapan menuju Nazhir Aktif</h3>' +
           '<ol class="mt-4 grid grid-cols-1 gap-3 text-sm sm:grid-cols-2 lg:grid-cols-5">' + stepsDash() + '</ol></div></div>';
       }
       function isiKosong(p) {
+        var pj = (new URLSearchParams(location.search).get('jenis') || '').toLowerCase();
+        var beda = (pj === 'tanah' || pj === 'uang') && (reg.jenisNazhir === 'tanah' || reg.jenisNazhir === 'uang') && pj !== reg.jenisNazhir;
+        var lblPj = pj === 'tanah' ? 'Tanah' : 'Uang';
+        var lblReg = reg.jenisNazhir === 'tanah' ? 'Tanah' : 'Uang';
+        var isi = beda
+          ? '<p class="mt-1 max-w-md text-sm text-gray-500">Anda sedang mendaftar sebagai <span class="font-semibold text-gray-700">Nazhir Wakaf ' + lblReg + '</span>. Menu Wakaf ' + lblPj + ' akan tersedia setelah akun aktif; pendaftaran jenis lain dapat dilakukan setelah akun aktif.</p>' +
+            '<a href="nazhir-dashboard.html" class="mt-5 inline-flex rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700">Ke Dashboard</a>'
+          : '<p class="mt-1 max-w-md text-sm text-gray-500">Menu ini akan berisi data setelah pendaftaran Anda disetujui BWI Pusat dan akun menjadi Nazhir Aktif.</p>' +
+            '<div class="mt-5 w-full max-w-sm">' + barProgres(p) + '</div>' +
+            '<a href="nazhir-pendaftaran.html" class="mt-5 inline-flex rounded-lg ' + CTA_WARNA + ' px-5 py-2.5 text-sm font-semibold transition">' + CTA + '</a>';
         return '<div class="mx-auto max-w-screen-2xl space-y-6 p-4 md:p-6">' + banner() +
           '<div class="flex flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white px-6 py-16 text-center shadow-card">' +
           '<span class="flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 text-gray-400"><svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg></span>' +
           '<h3 class="mt-4 text-lg font-bold text-gray-800">Fitur tersedia setelah akun aktif</h3>' +
-          '<p class="mt-1 max-w-md text-sm text-gray-500">Menu ini akan berisi data setelah pendaftaran Anda disetujui BWI Pusat dan akun menjadi Nazhir Aktif.</p>' +
-          '<div class="mt-5 w-full max-w-sm">' + barProgres(p) + '</div>' +
-          '<a href="nazhir-pendaftaran.html" class="mt-5 inline-flex rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700">' + CTA + '</a>' +
+          isi +
           '</div></div>';
       }
       function gantiTeks(dari, ke) {
@@ -3252,6 +3261,95 @@
         main.innerHTML = (path === 'nazhir-dashboard.html') ? isiDashboard(p) : isiKosong(p);
       });
     })();
+  </script>
+
+  <!-- Gating HBW jenis-lawan: menu TIDAK dikunci; halaman jenis belum-aktif tampil empty-state + tombol daftar HBW tambahan -->
+  <script>
+(function () {
+  if (window.__gatingHBW) return; window.__gatingHBW = true;
+  var sesi = {}, reg = {}, tambah = {};
+  try { sesi = JSON.parse(localStorage.getItem('sesi_kenazhiran')) || {}; } catch (e) { sesi = {}; }
+  try { reg = JSON.parse(localStorage.getItem('pendaftaran_nazhir_bwi')) || {}; } catch (e) { reg = {}; }
+  try { tambah = JSON.parse(localStorage.getItem('pendaftaran_tambahan_bwi')) || {}; } catch (e) { tambah = {}; }
+  var jenis = reg.jenisNazhir;
+  // Gating hanya utk nazhir mandiri (punya data pendaftaran sendiri & sesi cocok). Akun demo bawaan tanpa data -> lewati.
+  if ((sesi.mode !== 'aktif' && sesi.mode !== 'calon') || (jenis !== 'tanah' && jenis !== 'uang') || sesi.nama !== reg.namaBadanHukum) return;
+
+  function labelJenis(x) { return x === 'tanah' ? 'Tanah' : 'Uang'; }
+  var STATUS_LABEL = { draft: 'Draft', diajukan: 'Menunggu Verifikasi', revisi: 'Revisi', ditolak: 'Ditolak', diverifikasi: 'Sudah Diverifikasi', terjadwal: 'Jadwal Wawancara', persetujuan: 'Menunggu Persetujuan', sekretariat: 'Menunggu Sekretaris', ttd: 'Menunggu TTD Ketua', aktif: 'Aktif' };
+
+  // jenisAktifSet = daftar jenis HBW yang SUDAH disetujui untuk nazhir ini.
+  function jenisAktifSet(r) {
+    var arr = [];
+    if (r && Array.isArray(r.jenisAktif)) arr = r.jenisAktif.slice();
+    if (arr.length === 0 && r && r.status === 'aktif' && (r.jenisNazhir === 'tanah' || r.jenisNazhir === 'uang')) arr = [r.jenisNazhir];
+    if (tambah && tambah.status === 'aktif' && (tambah.jenisNazhir === 'tanah' || tambah.jenisNazhir === 'uang') && arr.indexOf(tambah.jenisNazhir) === -1) arr.push(tambah.jenisNazhir);
+    return arr;
+  }
+  window.jenisAktifSet = jenisAktifSet;
+
+  // Mulai pendaftaran HBW tambahan untuk jenis x (salin identitas dari pendaftaran utama).
+  window.daftarHBWTambahan = function (x) {
+    if (x !== 'tanah' && x !== 'uang') return;
+    var main = {};
+    try { main = JSON.parse(localStorage.getItem('pendaftaran_nazhir_bwi')) || {}; } catch (e) { main = {}; }
+    var b = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    var dt = new Date(); var tgl = dt.getDate() + ' ' + b[dt.getMonth()] + ' ' + dt.getFullYear();
+    var rec = {
+      namaBadanHukum: main.namaBadanHukum || sesi.nama || '', email: main.email || '',
+      pic: main.pic || '', hp: main.hp || '', sandi: main.sandi || '',
+      jenisNazhir: x, jenis: 'Wakaf ' + labelJenis(x), status: 'draft', berkas: {}, tglDaftar: tgl
+    };
+    try { localStorage.setItem('pendaftaran_tambahan_bwi', JSON.stringify(rec)); } catch (e) { }
+    location.href = 'nazhir-pendaftaran.html?tambah=1';
+  };
+
+  // Empty-state untuk halaman jenis yang belum aktif (khusus nazhir AKTIF).
+  function gantiMain() {
+    if (sesi.mode !== 'aktif') return;   // calon: overlay read-only lama yang menanganinya
+    var path = (location.pathname.split('/').pop() || '').toLowerCase();
+    if (path !== 'nazhir-aset.html' && path !== 'nazhir-laporan-program.html') return;
+    var qj = (new URLSearchParams(location.search).get('jenis') || '').toLowerCase();
+    if (qj !== 'tanah' && qj !== 'uang') return;
+    if (jenisAktifSet(reg).indexOf(qj) !== -1) return;   // jenis ini sudah aktif -> tampil normal
+    var main = document.querySelector('main');
+    if (!main) return;
+    var lbl = labelJenis(qj);
+    var punyaTambah = !!(tambah && tambah.jenisNazhir === qj && tambah.status);
+    var diproses = punyaTambah && tambah.status !== 'aktif' && tambah.status !== 'draft';
+    var draftTambah = punyaTambah && tambah.status === 'draft';
+    var judul, aksiHTML;
+    if (diproses) {
+      var stl = STATUS_LABEL[tambah.status] || tambah.status;
+      judul = 'Pendaftaran Wakaf ' + lbl + ' Sedang Diproses';
+      aksiHTML = '<p class="mt-1 max-w-md text-sm text-gray-500">Pendaftaran Nazhir Wakaf ' + lbl + ' sedang diproses (status: ' + stl + ').</p>' +
+        '<div class="mt-5 flex flex-wrap items-center justify-center gap-2">' +
+        '<a href="nazhir-dashboard.html" class="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>Lihat Progres</a>' +
+        '</div>';
+    } else if (draftTambah) {
+      judul = 'Lanjutkan Pendaftaran Wakaf ' + lbl;
+      aksiHTML = '<p class="mt-1 max-w-md text-sm text-gray-500">Anda telah memulai pendaftaran sebagai Nazhir Wakaf ' + lbl + ' namun belum diajukan. Lanjutkan untuk melengkapi berkas.</p>' +
+        '<div class="mt-5 flex flex-wrap items-center justify-center gap-2">' +
+        '<a href="nazhir-pendaftaran.html?tambah=1" class="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Z" /></svg>Lanjutkan Pendaftaran</a>' +
+        '</div>';
+    } else {
+      judul = 'Belum Terdaftar sebagai Nazhir Wakaf ' + lbl;
+      aksiHTML = '<p class="mt-1 max-w-md text-sm text-gray-500">Anda belum terdaftar sebagai Nazhir Wakaf ' + lbl + '. Daftarkan sekarang untuk mengelola Harta Benda Wakaf Wakaf ' + lbl + ' (Master HBW &amp; Laporan HBW).</p>' +
+        '<div class="mt-5 flex flex-wrap items-center justify-center gap-2">' +
+        '<button type="button" onclick="daftarHBWTambahan(\'' + qj + '\')" class="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>Daftar Nazhir Wakaf ' + lbl + '</button>' +
+        '</div>';
+    }
+    main.innerHTML = '<div class="mx-auto max-w-screen-2xl space-y-6 p-4 md:p-6">' +
+      '<div class="flex flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white px-6 py-16 text-center shadow-card">' +
+      '<span class="flex h-14 w-14 items-center justify-center rounded-full bg-brand-50 text-brand-600"><svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg></span>' +
+      '<h3 class="mt-4 text-lg font-bold text-gray-800">' + judul + '</h3>' +
+      aksiHTML +
+      '</div></div>';
+  }
+  function jalan() { gantiMain(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', jalan);
+  else jalan();
+})();
   </script>
 
 </body>

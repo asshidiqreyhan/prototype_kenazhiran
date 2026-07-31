@@ -48,7 +48,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
           </svg>
         </span>
-        <h1 class="mt-4 text-2xl font-bold text-white">Pendaftaran Nazhir Wakaf Uang</h1>
+        <h1 id="judulJenis" class="mt-4 text-2xl font-bold text-white">Buat Akun Nazhir</h1>
         <p class="mt-1 text-sm font-medium text-brand-300">Badan Wakaf Indonesia</p>
       </div>
 
@@ -61,7 +61,7 @@
         </span>
 
         <h2 class="mt-5 text-xl font-bold text-slate-800">Buat Akun Calon Nazhir</h2>
-        <p class="mt-1 text-sm text-slate-500">Cukup isi data dasar dulu. Kelengkapan 16 berkas persyaratan dapat Anda lengkapi secara bertahap setelah masuk.</p>
+        <p id="teksBerkas" class="mt-1 text-sm text-slate-500">Cukup isi data dasar dulu. Setelah masuk, Anda memilih jenis nazhir (Wakaf Tanah / Wakaf Uang) lalu melengkapi berkas persyaratannya.</p>
 
         <form id="formDaftar" class="mt-6 space-y-4" novalidate>
           <div>
@@ -94,14 +94,14 @@
 
           <label class="flex cursor-pointer items-start gap-2.5 text-sm text-slate-600">
             <input id="setuju" type="checkbox" class="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500">
-            <span>Saya menyatakan data yang diisi benar dan menyetujui ketentuan pendaftaran Nazhir Wakaf Uang BWI.</span>
+            <span id="teksSetuju">Saya menyatakan data yang diisi benar dan menyetujui ketentuan pendaftaran Nazhir BWI.</span>
           </label>
 
           <p id="pesanError" class="hidden text-sm font-medium text-red-600"></p>
 
           <button type="submit"
             class="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-300 focus:ring-offset-2">
-            Buat Akun &amp; Lanjut Lengkapi Berkas
+            Buat Akun &amp; Masuk
           </button>
         </form>
 
@@ -109,7 +109,7 @@
           <svg class="mt-0.5 h-4 w-4 shrink-0 text-brand-600" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
           </svg>
-          <p class="text-xs text-brand-800">Pendaftaran nazhir wakaf uang ditujukan ke <span class="font-semibold">BWI Pusat</span>. Salah satu berkas (Rekomendasi BWI Perwakilan) diurus manual ke BWI daerah, lalu diunggah di langkah berikutnya.</p>
+          <p id="teksCatatan" class="text-xs text-brand-800">Setelah membuat akun &amp; masuk, di dashboard Anda memilih <span class="font-semibold">jenis nazhir</span> (Wakaf Tanah / Wakaf Uang). Pilihan tersebut menentukan berkas persyaratan &amp; menu yang tersedia.</p>
         </div>
       </div>
 
@@ -121,6 +121,8 @@
 
   <script>
     const KUNCI_DAFTAR = 'pendaftaran_nazhir_bwi';
+
+    // Jenis nazhir (Wakaf Tanah/Uang) TIDAK dipilih di sini — dipilih setelah login di dashboard.
 
     document.getElementById('formDaftar').addEventListener('submit', function (e) {
       e.preventDefault();
@@ -146,7 +148,8 @@
         namaBadanHukum: namaBH,
         email: email, pic: pic, hp: hp,
         sandi: sandi,                              // simulasi (mockup) — untuk login akun terdaftar
-        jenis: 'Wakaf Uang',
+        jenis: lama.jenis || '',                   // 'Wakaf Tanah'/'Wakaf Uang' — diisi saat pilih jenis di dashboard
+        jenisNazhir: lama.jenisNazhir || '',       // '' = belum pilih; 'tanah' | 'uang' setelah dipilih di dashboard
         status: 'draft',                          // draft -> diajukan -> verifikasi -> ...
         berkas: (lama && lama.berkas) ? lama.berkas : {},
         tglDaftar: lama.tglDaftar || tanggalHariIni(),

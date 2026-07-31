@@ -48,62 +48,131 @@
       background-image: radial-gradient(rgba(255, 255, 255, .07) 1px, transparent 1px);
       background-size: 24px 24px;
     }
+
+    @keyframes shake {
+
+      10%,
+      90% {
+        transform: translateX(-1px);
+      }
+
+      20%,
+      80% {
+        transform: translateX(2px);
+      }
+
+      30%,
+      50%,
+      70% {
+        transform: translateX(-4px);
+      }
+
+      40%,
+      60% {
+        transform: translateX(4px);
+      }
+    }
+
+    .animate-shake {
+      animation: shake .4s cubic-bezier(.36, .07, .19, .97) both;
+    }
   </style>
 </head>
 
-<body class="min-h-screen bg-slate-900 text-slate-100 antialiased">
+<body class="min-h-screen bg-white text-slate-800 antialiased">
 
-  <!-- Latar premium: Slate 900 -> Teal 950 + ornamen -->
-  <div
-    class="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-slate-900 to-brand-950 px-4 py-10">
+  <div class="flex min-h-screen">
 
-    <!-- Pola titik -->
-    <div class="pola-titik absolute inset-0"></div>
+    <!-- ============ KIRI: Panel Brand (desktop) ============ -->
+    <aside
+      class="relative hidden w-1/2 flex-col justify-between overflow-hidden bg-gradient-to-br from-brand-800 via-brand-900 to-slate-900 p-10 text-white lg:flex xl:p-14">
+      <div class="pola-titik absolute inset-0"></div>
+      <div class="absolute -right-24 -top-24 h-80 w-80 rounded-full bg-brand-500/20 blur-3xl"></div>
+      <div class="absolute -bottom-32 -left-16 h-96 w-96 rounded-full bg-brand-400/10 blur-3xl"></div>
 
-    <!-- Ornamen cahaya -->
-    <div class="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-brand-600/20 blur-3xl"></div>
-    <div class="absolute -bottom-40 -left-24 h-96 w-96 rounded-full bg-brand-500/10 blur-3xl"></div>
-
-    <!-- ============ CENTER CARD LOGIN ============ -->
-    <div class="relative z-10 w-full max-w-md animate-fadeIn">
-
-      <!-- Logo + brand di atas card -->
-      <div class="mb-6 flex flex-col items-center text-center">
-        <span
-          class="flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-600 shadow-lg shadow-brand-900/50 ring-1 ring-white/10">
-          <!-- Logo BWI: building-library -->
-          <svg class="h-9 w-9 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
+      <!-- Logo lockup -->
+      <div class="relative z-10 flex items-center gap-3">
+        <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/15">
+          <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round"
               d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
           </svg>
         </span>
-        <h1 class="mt-4 text-2xl font-bold text-white">Sistem Informasi Kenazhiran Nasional</h1>
-        <p class="mt-1 text-sm font-medium text-brand-300">Badan Wakaf Indonesia</p>
+        <span class="leading-tight"><span class="block text-base font-bold">BWI Superapps</span><span
+            class="block text-xs font-medium text-brand-300">Modul Kenazhiran</span></span>
       </div>
 
-      <!-- Kartu form -->
-      <div class="rounded-2xl border border-white/10 bg-white p-7 shadow-2xl md:p-8">
+      <!-- Heading + fitur -->
+      <div class="relative z-10 max-w-md animate-fadeIn">
+        <h1 class="text-3xl font-bold leading-tight xl:text-[2.5rem]">Sistem Informasi Kenazhiran Nasional</h1>
+        <p class="mt-3 text-sm leading-relaxed text-brand-100/80">Kelola pendaftaran, sertifikasi, dan pelaporan kinerja
+          Nazhir wakaf secara terpadu dalam satu platform Badan Wakaf Indonesia.</p>
+        <ul class="mt-8 space-y-3.5">
+          <li class="flex items-start gap-3">
+            <svg class="mt-0.5 h-5 w-5 shrink-0 text-brand-300" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <span class="text-sm text-white/90">Pendaftaran &amp; sertifikasi Nazhir digital</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg class="mt-0.5 h-5 w-5 shrink-0 text-brand-300" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <span class="text-sm text-white/90">Pelaporan HBW Wakaf Tanah &amp; Wakaf Uang</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg class="mt-0.5 h-5 w-5 shrink-0 text-brand-300" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <span class="text-sm text-white/90">Tanda tangan &amp; SK elektronik ber-QR</span>
+          </li>
+        </ul>
+      </div>
+
+      <p class="relative z-10 text-xs text-white/50">&copy; 2026 Badan Wakaf Indonesia &middot; Titik Terang OS</p>
+    </aside>
+
+    <!-- ============ KANAN: Form Login ============ -->
+    <main class="flex w-full flex-col justify-center px-6 py-10 sm:px-10 lg:w-1/2 xl:px-16">
+      <div class="mx-auto w-full max-w-md animate-fadeIn">
+
+        <!-- Logo (mobile) -->
+        <div class="mb-8 flex items-center gap-3 lg:hidden">
+          <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-600 shadow-sm">
+            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
+            </svg>
+          </span>
+          <span class="leading-tight"><span class="block text-base font-bold text-slate-800">BWI Superapps</span><span
+              class="block text-xs font-medium text-brand-600">Modul Kenazhiran</span></span>
+        </div>
 
         <!-- Lencana Modul -->
-        <span
+        <!-- <span
           class="inline-flex items-center gap-1.5 rounded-full border border-brand-100 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
-          <!-- Heroicons: identification -->
           <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round"
               d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z" />
           </svg>
           Modul Kenazhiran
-        </span>
+        </span> -->
 
-        <h2 class="mt-5 text-xl font-bold text-slate-800">Masuk ke Sistem</h2>
-        <p class="mt-1 text-sm text-slate-500">Gunakan kredensial resmi Anda untuk mengelola pelaporan kinerja Nazhir.</p>
+        <h2 class="mt-5 text-2xl font-bold text-slate-800">Masuk ke Sistem</h2>
+        <p class="mt-1.5 text-sm text-slate-500"> Masuk menggunakan ID atau email Anda.</p>
 
         <!-- Form -->
         <form id="formLogin" class="mt-6 space-y-5" novalidate>
 
           <!-- Email / NIB -->
           <div>
-            <label for="email" class="mb-1.5 block text-sm font-medium text-slate-700">Email atau NIB</label>
+            <label for="email" class="mb-1.5 block text-sm font-medium text-slate-700">Email / ID nazhir</label>
             <div class="relative">
               <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">
                 <!-- Heroicons: identification -->
@@ -112,10 +181,13 @@
                     d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z" />
                 </svg>
               </span>
-              <input id="email" type="text" autocomplete="username" placeholder="nama@bwi.go.id atau NIB (mis. NZHR-BDG-170)"
+              <input id="email" type="text" autocomplete="username"
+                placeholder="nama@bwi.go.id atau NIB (mis. NZHR-BDG-170)"
                 class="w-full rounded-lg border border-slate-300 bg-white py-3 pl-11 pr-4 text-sm text-slate-800 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
             </div>
-            <p class="mt-1.5 text-[11px] text-slate-400">Nazhir aktif dapat masuk memakai <span class="font-medium text-slate-500">email</span> atau <span class="font-medium text-slate-500">NIB</span>.</p>
+            <p class="mt-1.5 text-[11px] text-slate-400">Nazhir aktif dapat masuk memakai <span
+                class="font-medium text-slate-500">email</span> atau <span
+                class="font-medium text-slate-500">NIB</span>.</p>
           </div>
 
           <!-- Kata Sandi -->
@@ -144,7 +216,15 @@
             </div>
           </div>
 
-          <p id="pesanLogin" class="hidden rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-600"></p>
+          <div id="pesanLogin" role="alert"
+            class="hidden items-start gap-2.5 rounded-lg border border-red-200 bg-red-50 px-3.5 py-2.5">
+            <svg class="mt-0.5 h-5 w-5 shrink-0 text-red-500" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+            </svg>
+            <span id="pesanLoginText" class="text-sm font-medium text-red-700"></span>
+          </div>
 
           <!-- Ingat saya + lupa sandi -->
           <div class="flex items-center justify-between">
@@ -168,33 +248,37 @@
         </form>
 
         <!-- Catatan keamanan -->
-        <div class="mt-3 flex items-start gap-2.5 rounded-lg border border-slate-200 bg-slate-50 p-3.5">
+        <!-- <div class="mt-5 flex items-start gap-2.5 rounded-lg border border-slate-200 bg-slate-50 p-3.5">
           <svg class="mt-0.5 h-4 w-4 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="1.7"
             stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round"
               d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
           </svg>
           <p class="text-xs text-slate-500">
-            Halaman ini merupakan simulasi antarmuka (mockup). Autentikasi menggunakan akun email &amp; sandi yang tersimpan di localStorage peramban &mdash; bukan server. Data tidak dienkripsi.
+            Halaman ini merupakan simulasi antarmuka (mockup). Autentikasi menggunakan akun email &amp; sandi yang
+            tersimpan di localStorage peramban &mdash; bukan server. Data tidak dienkripsi.
           </p>
-        </div>
+        </div> -->
 
         <!-- CTA: Pendaftaran calon nazhir baru -->
         <div class="mt-6 border-t border-slate-100 pt-5 text-center">
           <p class="text-sm text-slate-600">Yayasan/lembaga baru dan belum terdaftar sebagai Nazhir?</p>
+          <!-- <p class="mt-0.5 text-xs text-slate-400">Buat akun dulu — jenis nazhir (Wakaf Tanah / Uang) dipilih setelah masuk.</p> -->
           <a href="kenazhiran-daftar.html"
             class="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-brand-600 px-4 py-2.5 text-sm font-semibold text-brand-700 transition hover:bg-brand-50">
             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
             </svg>
-            Daftar sebagai Nazhir Wakaf Uang
+            Daftar sebagai Nazhir
           </a>
         </div>
-      </div>
 
-      <!-- Kaki -->
-      <p class="mt-6 text-center text-xs text-slate-500">&copy; 2026 Badan Wakaf Indonesia &middot; Titik Terang OS &middot; Modul Kenazhiran</p>
-    </div>
+        <!-- Kaki (mobile) -->
+        <p class="mt-8 text-center text-xs text-slate-400 lg:hidden">&copy; 2026 Badan Wakaf Indonesia &middot; Titik
+          Terang OS &middot; Modul Kenazhiran</p>
+      </div>
+    </main>
   </div>
 
   <!-- =========================================================
@@ -261,6 +345,26 @@
     function cocokIdentitas(nilaiTersimpan, idLower) {
       return !!nilaiTersimpan && String(nilaiTersimpan).toLowerCase() === idLower;
     }
+    /* Tampilkan / sembunyikan pesan kesalahan login (dengan ikon + animasi getar). */
+    function tampilErrorLogin(pesan) {
+      const box = document.getElementById('pesanLogin');
+      document.getElementById('pesanLoginText').textContent = pesan;
+      box.classList.remove('hidden');
+      box.classList.add('flex');
+      box.classList.remove('animate-shake');
+      void box.offsetWidth; // paksa reflow agar animasi terpicu ulang
+      box.classList.add('animate-shake');
+    }
+    function sembunyiErrorLogin() {
+      const box = document.getElementById('pesanLogin');
+      box.classList.add('hidden');
+      box.classList.remove('flex', 'animate-shake');
+    }
+    // Bersihkan pesan saat pengguna mulai mengetik lagi.
+    ['email', 'sandi'].forEach(function (id) {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', sembunyiErrorLogin);
+    });
 
     document.getElementById('formLogin').addEventListener('submit', e => {
       e.preventDefault();
@@ -269,14 +373,12 @@
 
       const idInput = document.getElementById('email').value.trim();
       const sandi = document.getElementById('sandi').value;
-      const err = document.getElementById('pesanLogin');
-      err.classList.add('hidden');
+      sembunyiErrorLogin();
 
-      if (!idInput || !sandi) {
-        err.textContent = 'Email/NIB dan kata sandi wajib diisi.';
-        err.classList.remove('hidden');
-        return;
-      }
+      // Validasi kolom kosong (spesifik).
+      if (!idInput && !sandi) { return tampilErrorLogin('Email/NIB dan kata sandi wajib diisi.'); }
+      if (!idInput) { return tampilErrorLogin('Email atau NIB wajib diisi.'); }
+      if (!sandi) { return tampilErrorLogin('Kata sandi wajib diisi.'); }
       const idLower = idInput.toLowerCase();
 
       // 1) CALON / NAZHIR yang mendaftar sendiri (pendaftaran_nazhir_bwi).
@@ -285,9 +387,7 @@
       try { calon = JSON.parse(localStorage.getItem('pendaftaran_nazhir_bwi')); } catch (e2) { calon = null; }
       if (calon && (cocokIdentitas(calon.email, idLower) || (calon.status === 'aktif' && cocokIdentitas(calon.nib, idLower)))) {
         if (!calon.sandi || sandi !== calon.sandi) {
-          err.textContent = 'Kata sandi salah.';
-          err.classList.remove('hidden');
-          return;
+          return tampilErrorLogin('Kata sandi salah. Periksa kembali kata sandi Anda.');
         }
         const modeCalon = calon.status === 'aktif' ? 'aktif' : 'calon';
         try { localStorage.setItem('sesi_kenazhiran', JSON.stringify({ mode: modeCalon, peran: modeCalon === 'aktif' ? 'nazhir' : 'calon', nama: calon.namaBadanHukum })); } catch (e3) { /* */ }
@@ -298,14 +398,10 @@
       //    Nazhir aktif dapat masuk memakai email ATAU NIB.
       const akun = daftarAkun().find(a => cocokIdentitas(a.email, idLower) || cocokIdentitas(a.nib, idLower));
       if (!akun) {
-        err.textContent = 'Email/NIB tidak terdaftar. Periksa kembali atau daftar sebagai Nazhir baru.';
-        err.classList.remove('hidden');
-        return;
+        return tampilErrorLogin('Email/NIB "' + idInput + '" tidak terdaftar. Periksa kembali atau daftar sebagai Nazhir baru.');
       }
       if (sandi !== akun.sandi) {
-        err.textContent = 'Kata sandi salah.';
-        err.classList.remove('hidden');
-        return;
+        return tampilErrorLogin('Kata sandi salah untuk ' + (akun.label || idInput) + '. Periksa kembali kata sandi Anda.');
       }
       try { localStorage.setItem('sesi_kenazhiran', JSON.stringify({ mode: MODE_PERAN[akun.peran] || 'aktif', peran: akun.peran, nama: akun.nama })); } catch (e4) { /* */ }
       mulaiMasuk(tombol, akun.tujuan);

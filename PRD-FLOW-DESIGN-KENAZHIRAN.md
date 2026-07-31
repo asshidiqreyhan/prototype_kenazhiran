@@ -5,6 +5,7 @@
 - **Produk:** Modul Kenazhiran — pengelolaan Nazhir, Harta Benda Wakaf (HBW), pelaporan, dan tata kelola nasional.
 - **Identitas visual:** Deep Teal (`brand` 50→900), font Outfit, ikon inline SVG (tanpa emoji), shell TailAdmin (sidebar + topbar).
 - **Bahasa UI:** Indonesia.
+- **Konvensi tabel (global, semua role):** setiap tabel data memakai **pagination default 5 baris/halaman** — footer "Menampilkan {from}–{to} dari {total}" + Sebelumnya/Berikutnya (disabled di ujung); halaman **reset ke 1** saat search/filter/tab berubah; nomor urut kontinu antar‑halaman.
 
 ---
 
@@ -58,13 +59,15 @@ Halaman pendukung (tanpa menu langsung): `nazhir-aset-tambah.html` (tambah HBW),
 > Catatan: menu **Master Program** disembunyikan (halaman `nazhir-program.html` masih ada namun tidak ditautkan).
 
 ### 3.3 Role: BWI Pusat (Administrator)
-| Menu | Halaman |
-|---|---|
-| **Dashboard Nasional** | `pusat-dashboard.html` |
-| **Master NIB Tunggal** | `pusat-master.html` |
-| **Periode Laporan** | `pusat-periode.html` |
-| **Kelola Broadcast** | `pusat-broadcast.html` |
-| **Pendaftaran Nazhir** | `pusat-pendaftaran.html` → detail `pusat-pendaftaran-detail.html` |
+Urutan menu disusun mengikuti alur/tupoksi: monitor → siklus nazhir & akun → konfigurasi pelaporan → komunikasi.
+| # | Menu | Halaman |
+|---|---|---|
+| 1 | **Dashboard** | `pusat-dashboard.html` |
+| 2 | **Pendaftaran Nazhir** | `pusat-pendaftaran.html` → detail `pusat-pendaftaran-detail.html` |
+| 3 | **NIB Nazhir** | `pusat-master.html` |
+| 4 | **Master Pengguna** | `pusat-master-pengguna.html` |
+| 5 | **Periode Laporan** | `pusat-periode.html` |
+| 6 | **Kelola Broadcast** | `pusat-broadcast.html` |
 
 Pendukung: `pusat-hierarki.html`. Halaman berikut **masih ada namun tidak lagi ditautkan** dari menu: `pusat-cutoff.html` (menu "Kelola Cut‑Off Periode" dihapus — beririsan dengan Periode Laporan) dan `pusat-portofolio.html`/`pusat-portofolio-review.html` (menu **"Pengajuan Portofolio" disembunyikan** karena penambahan HBW oleh Nazhir kini langsung aktif tanpa persetujuan Pusat — lihat §5.9).
 
@@ -93,7 +96,8 @@ Pendukung: `pusat-hierarki.html`. Halaman berikut **masih ada namun tidak lagi d
 | Kunci | Isi |
 |---|---|
 | `akun_kenazhiran_bwi_v2` | Array akun bawaan (nazhir, wilayah, pusat, **sekretaris, ketua**). Akun nazhir memiliki field **`nib`** (mis. `NZHR-BDG-170`) agar bisa login via NIB. Saat login, akun seed baru yang belum ada **digabung otomatis** ke storage lama (tanpa menimpa akun eksisting). |
-| `pendaftaran_nazhir_bwi` | Data + akun Calon Nazhir (berkas, status pendaftaran, jadwal, NIB, SK). Field rantai tanda tangan: `disetujuiPusat`, `diteruskanOleh`, `tglTeruskan`, `ttdOleh`, `tglTtd`, `ttdId`. |
+| `pendaftaran_nazhir_bwi` | Data + akun Calon Nazhir (berkas, status pendaftaran, jadwal, NIB, SK). Field rantai tanda tangan: `disetujuiPusat`, `diteruskanOleh`, `tglTeruskan`, `ttdOleh`, `tglTtd`, `ttdId`. Juga `tglDaftar` (timestamp), `jenisNazhir` (`'tanah'`/`'uang'`), & **`jenisAktif`** (array jenis HBW yang disetujui). |
+| `pendaftaran_tambahan_bwi` | Pendaftaran HBW **jenis kedua** oleh Nazhir aktif (identitas disalin dari record utama; `jenisNazhir`, `status`, `berkas`, dst). Mengalir di pipeline sebagai pemohon `REAL2`; saat disahkan Ketua, jenisnya ditambahkan ke `pendaftaran_nazhir_bwi.jenisAktif`. |
 | `pendaftaran_dummy_bwi_v2` | Data dummy pipeline pendaftaran (dibagikan lintas peran Pusat/Sekretaris/Ketua). Status kini termasuk `sekretariat` & `ttd`. |
 | `sesi_kenazhiran` | Sesi aktif `{ mode, peran, nama }`. |
 | `graduasi_baru_bwi` | Flag satu‑kali banner "akun aktif" pasca‑persetujuan. |
@@ -115,14 +119,21 @@ Pendukung: `pusat-hierarki.html`. Halaman berikut **masih ada namun tidak lagi d
 
 ### 5.1 Login & Pendaftaran
 - **Login:** kolom **Email atau NIB** + sandi (localStorage) — **tanpa pemilih/selektor peran** & tanpa panel "Akun demo". Peran dikenali otomatis; nazhir aktif bisa via email atau NIB. Diarahkan sesuai peran.
+- **Buat akun dulu, pilih jenis setelah login.** Halaman login punya **satu tombol "Daftar sebagai Nazhir"** → `kenazhiran-daftar.html` (pembuatan akun **tanpa** memilih jenis). Setelah login, **dashboard** menampilkan pemilih jenis (lihat §5.2). `jenisNazhir` awalnya kosong dan diisi saat memilih di dashboard; nilainya menentukan set berkas **serta** hak akses menu HBW (§5.3/§5.4 gating).
 - **Pendaftaran Calon Nazhir (2 fase):**
-  - **Fase 1** (`kenazhiran-daftar.html`): nama badan hukum, email, PIC, HP, sandi + persetujuan → status `draft` → langsung masuk sebagai Calon.
-  - **Fase 2** (`nazhir-pendaftaran.html`): checklist **16 berkas** dalam 4 kelompok (Administrasi & Legalitas, Pengurus & Kompetensi, Rencana & Keuangan, Surat Pernyataan) — layout **navigasi 30% / konten 70%**. Aksi: unggah/hapus, Simpan & Lanjutkan Nanti, **Ajukan Verifikasi**.
+  - **Fase 1** (`kenazhiran-daftar.html`): buat akun — nama badan hukum, email, PIC, HP, sandi + persetujuan → status `draft`, `jenisNazhir` **kosong**, `tglDaftar` distempel → masuk sebagai Calon ke dashboard.
+  - **Fase 2** (`nazhir-pendaftaran.html`): checklist berkas **menyesuaikan jenis** — layout **navigasi 30% / konten 70%** tetap, penamaan **mengikuti e‑service BWI eksisting**:
+    - **Wakaf Uang (17 berkas — 16 wajib + 1 opsional)**, 4 kelompok (Administrasi & Legalitas, Pengurus & Kompetensi, Rencana & Keuangan, Surat Pernyataan): Akta Pendirian, Pengesahan Kemenkumham, NPWP, Surat Keterangan Domisili, Rekomendasi BWI Perwakilan, Rekomendasi LKSPWU, STBPN sebelumnya *(opsional)*, Data Pengurus + Surat Pernyataan, Sertifikat Kompetensi Pengelola Wakaf, Company Profile, Rencana Kerja, Biaya Operasional min. 30 juta, Surat Permohonan, Setia NKRI, Laporan Data Wakaf Bulanan, Bersedia Diaudit, Laporan Pelaksanaan per 6 bulan.
+    - **Wakaf Tanah (10 berkas, semua wajib)**, 3 kelompok (Legalitas & Wakaf, Data Nazhir, Permohonan KUA): Foto Copy Surat Pengesahan Nazhir, Foto Copy Sertifikat Wakaf, Foto Copy AIW/APAIW, Jenis Harta Benda Wakaf, Foto Copy KTP Nazhir, Daftar Riwayat Hidup Nazhir, Kegiatan Nazhir, Keterangan Alamat Sekretariat/Telepon/Fax, Surat Permohonan kepada KUA setempat, Surat Pengantar Permohonan dari KUA.
+  - Daftar & `key` dokumen **sinkron** di sisi Nazhir, Admin Pusat, & Sekretaris (checklist verifikasi memilih set via `berkasUntuk(record.jenisNazhir)`). Aksi: unggah/hapus, Simpan & Lanjutkan Nanti, **Ajukan Verifikasi**.
 
 ### 5.2 Nazhir — Dashboard NIB
 Ringkasan NIB lembaga, jumlah Sub‑ID/portofolio aktif, status verifikasi, dan (untuk hasil graduasi) **kartu akses SK** + banner "Selamat, akun aktif" (satu kali). Mode **Calon** menampilkan banner status kontekstual + CTA dinamis (Lanjutkan Pendaftaran / Perbaiki Berkas / Daftar Ulang / Lihat Detail).
+- **Pemilih jenis (akun baru, `jenisNazhir` kosong):** dashboard menampilkan pesan *"Anda sudah masuk sebagai Calon Nazhir — menu lain belum aktif"* + **2 kartu pilihan**: **Nazhir Wakaf Uang** (17 berkas) & **Nazhir Wakaf Tanah** (10 berkas). Memilih → `pilihJenisNazhir()` menyetel `jenisNazhir`+`jenis` di `pendaftaran_nazhir_bwi` lalu mengarahkan ke `nazhir-pendaftaran.html` untuk melengkapi berkas. Setelah jenis dipilih, dashboard kembali menampilkan progres pendaftaran normal. **Guard:** `nazhir-pendaftaran.html` mengalihkan Calon yang belum memilih jenis kembali ke dashboard.
 
 ### 5.3 Nazhir — Master HBW (Wakaf Tanah / Wakaf Uang)
+> **Rincian lengkap (field‑level):** lihat [PRD-MASTER-HBW-KENAZHIRAN.md](PRD-MASTER-HBW-KENAZHIRAN.md) dan spesifikasi UI [FLOW-DESIGN-HBW-KENAZHIRAN.md](FLOW-DESIGN-HBW-KENAZHIRAN.md).
+> **Gating jenis (akses terbuka + CTA daftar tambahan):** menu **Master HBW** untuk jenis yang **belum** ada di `jenisAktif` **tetap dapat diakses** (tidak dikunci). Halaman `nazhir-aset.html?jenis=<lawan>` menampilkan **empty‑state informatif** *"Belum Terdaftar sebagai Nazhir Wakaf <lawan>"* + tombol **"Daftar Nazhir Wakaf <lawan>"** (`daftarHBWTambahan()`) → memulai **pendaftaran HBW tambahan**. Bila pendaftaran tambahan sedang diproses → tampil status + "Lihat Progres"; bila masih draft → "Lanjutkan Pendaftaran". Lihat §5.15. Akun demo bawaan (tanpa data pendaftaran) tidak digating.
 - Daftar Sub‑ID aset di bawah satu NIB, **difilter per jenis** (dari submenu) + **search bar** + filter status.
 - **Tambah Portofolio HBW** (`nazhir-aset-tambah.html?jenis=`): 
   - **Kategori** berupa **dropdown** sesuai jenis:
@@ -134,6 +145,8 @@ Ringkasan NIB lembaga, jumlah Sub‑ID/portofolio aktif, status verifikasi, dan 
 - **Riwayat SK Portofolio** (`nazhir-aset-sk.html`): SK per Sub‑ID aktif (Nomor SK, preview, cetak).
 
 ### 5.4 Nazhir — Laporan HBW
+> **Rincian lengkap (field‑level & formula):** lihat [PRD-LAPORAN-HBW-KENAZHIRAN.md](PRD-LAPORAN-HBW-KENAZHIRAN.md) dan spesifikasi UI [FLOW-DESIGN-HBW-KENAZHIRAN.md](FLOW-DESIGN-HBW-KENAZHIRAN.md).
+> **Gating jenis (akses terbuka + CTA):** submenu **Laporan HBW** jenis lawan **tetap bisa diakses**; `nazhir-laporan-program.html?jenis=<lawan>` menampilkan empty‑state "Belum Terdaftar…" + tombol **"Daftar Nazhir Wakaf <lawan>"** (pendaftaran tambahan, §5.15). **Pelaporan Mutasi Aset** tidak digating.
 - **Pelaporan Wakaf Uang** (`?jenis=uang`): pilih **HBW yang Dilaporkan** (bukan program) → **Periode** terisi otomatis & terkunci → **Nilai Terakhir** (SSOT) → input **Nilai Terbaru**, **Penghimpunan Baru**; **Imbal Hasil** otomatis; **Penyaluran** (MAQ, Operasional, Pengembangan) ≤ imbal hasil + persentase; **Jumlah MAQ** (penerima). Draft dapat diedit.
 - **Pelaporan Wakaf Tanah** (`?jenis=tanah`): pilih **HBW yang Ingin Dilaporkan** → Periode otomatis+terkunci → Nilai Terakhir (dari **nilai estimasi Rp** HBW) → input **Penyaluran (Rp)** + **Jumlah Mauquf Alaih**. Tanpa penerimaan/imbal hasil/perubahan nilai. Tabel riwayat: kolom Harta Benda Wakaf · Periode · Penyaluran · Jumlah MAQ · Status.
 - **Pelaporan Mutasi Aset** (`nazhir-laporan.html`): pelaporan mutasi/aset tanah, dengan enforcement cut‑off.
@@ -145,13 +158,13 @@ Ringkasan NIB lembaga, jumlah Sub‑ID/portofolio aktif, status verifikasi, dan 
 ### 5.6 Pusat — Dashboard, Master NIB, Hierarki
 - **Dashboard Nasional:** metrik agregat nasional.
 - **Master NIB Tunggal:** buku induk NIB; termasuk **bekukan/aktifkan** lembaga. Tombol **"Lihat Hierarki"** membuka `pusat-hierarki.html`.
-- **Hierarki (`pusat-hierarki.html`):** peta relasi NIB → Sub‑ID → program. Tabel **"Daftar Sub‑ID Portofolio Aktif"** dipisah **tab** — **hanya Wakaf Uang & Wakaf Tanah** (tanpa tab "Semua"; portofolio selalu terpisah per jenis), badge jumlah per tab, default **Wakaf Uang**. Kolom nilai **tidak mencampur satuan**: header **"Saldo Terkini"** (Rp) di tab Wakaf Uang, **"Luas Terkini"** (M²) di tab Wakaf Tanah. Read‑only; dibedakan via field `kategori` (`'uang'`/`'tanah'`).
+- **Hierarki (`pusat-hierarki.html`):** peta relasi NIB → Sub‑ID → program. Tabel **"Daftar Sub‑ID Portofolio Aktif"** dipisah **tab** — **hanya Wakaf Uang & Wakaf Tanah** (tanpa tab "Semua"; portofolio selalu terpisah per jenis), badge jumlah per tab, default **Wakaf Uang**. Kolom nilai **tidak mencampur satuan**: header **"Saldo Terkini"** (Rp) di tab Wakaf Uang, **"Luas Terkini"** (M²) di tab Wakaf Tanah. Kolom tambahan: **"Jumlah Laporan"** (berapa kali HBW dilaporkan — live dari `data_laporan_program_bwi`, min. seed) & **"Mulai Dikelola"** (tanggal awal HBW dikelola). **Tanpa kolom "Status"** (penambahan HBW tidak divalidasi Pusat). Read‑only; dibedakan via field `kategori` (`'uang'`/`'tanah'`).
 
 ### 5.7 Pusat — Kelola Broadcast
 Mengelola **template pesan broadcast** ke Nazhir yang mengingatkan *"sudah saatnya menyiapkan laporan"* (`pusat-broadcast.html`, menu **"Kelola Broadcast"**).
 - **Tambah/Edit template** (modal lebar, layout 2‑kolom agar ringkas): **Judul/Nama Template**, **Isi Pesan** (textarea), **Target Periode** berupa **dropdown checklist + searchbar** (bisa dicari sekaligus multi‑pilih: *Semua Periode* atau **satu/beberapa** periode) — daftar periode **sinkron otomatis** dari menu Periode Laporan (`cutoff_bwi.items`), dan **toggle Aktif/Nonaktif**.
 - **Status & pengiriman otomatis:** kolom **Aksi** hanya berisi tombol **dinamis Aktifkan/Nonaktifkan** (tidak ada tombol "Kirim"). Saat template **menjadi Aktif** (dibuat aktif atau di‑toggle Aktif), broadcast **otomatis terkirim** ke Nazhir. Nonaktifkan untuk menghentikan.
-- **CRUD** pada tabel (**Judul Template** saja — tanpa cuplikan isi; Target Periode, Status Aktif, Terkirim, Aksi): **toggle aktif** (dinamis), **lihat** (pratinjau isi lengkap), **edit**, **hapus**. Kolom **Target Periode** menampilkan *Semua Periode*, label tunggal, atau `"<periode pertama> +N lainnya"` bila multi (daftar lengkap muncul saat hover). Kartu ringkasan: Total / Aktif / Terkirim.
+- **Tabel** (Judul Template, Target Periode, Status Aktif, Terkirim, Aksi): kolom **Aksi = satu tombol "Lihat Detail"**. **Edit / Aktifkan‑Nonaktifkan / Hapus dilakukan di dalam modal Detail** (diperbesar, footer aksi: Hapus di kiri; Tutup · Edit · toggle di kanan). Kolom **Target Periode** menampilkan *Semua Periode*, label tunggal, atau `"<periode pertama> +N lainnya"` bila multi (hover = daftar lengkap). **Ringkasan = 3 kartu** (Total Template / Aktif / Sudah Terkirim).
 - **Integrasi notifikasi Nazhir:** aktivasi mendorong entri ke `notifikasi_bwi` (`{ id, lembaga: '*', judul, pesan, periode, tanggal, tipe: 'broadcast' }`) → tampil di lonceng Nazhir (`periode` = daftar label target, atau kosong bila "Semua Periode"). Cara Nazhir membaca notifikasi tidak diubah.
 - **Penyimpanan:** kunci `broadcast_alert_bwi` (target `'semua'` **atau array label periode**).
 
@@ -187,6 +200,23 @@ Dashboard & inbox, buku induk nazhir daerah, rekapitulasi, dan tinjauan dokumen 
 - **Tanda Tangan Digital / e‑Sign (passphrase):** untuk status `ttd`, tombol **"Tandatangani"** membuka modal passphrase (demo: `bwi2026`). Passphrase benar → status `aktif`, terbit **NIB** + **SK/Sertifikat** dengan **QR Code terverifikasi** + metadata tanda tangan elektronik (`ttdOleh`, `tglTtd`, `ttdId`). **Preview SK** menampilkan QR terverifikasi + tanda tangan Ketua — dan versi **Draf** (QR "terbit setelah TTD") saat masih `ttd`.
 - SK dapat **dicetak/PDF**.
 - **Sertifikat muncul di semua sisi:** setelah ditandatangani, SK ber‑QR yang sama tampil di **Admin Pusat** (Preview SK), **Sekretaris** (Lihat Sertifikat), dan **Calon/Nazhir** (`nazhir-sk.html`).
+
+### 5.14 Pusat — Master Pengguna (`pusat-master-pengguna.html`)
+Pengelolaan akun pengguna oleh Admin Pusat — terutama saat Nazhir lupa email/ID atau kata sandi.
+- **Tanpa "Tambah Akun".** Nazhir hanya bisa masuk lewat pendaftaran mandiri; Admin **tidak dapat membuat akun Nazhir manual**. Aksi tersedia: **Lihat · Edit · Reset Password · Hapus**.
+- **Hanya akun AKTIF.** Berisi seluruh `akun_kenazhiran_bwi_v2` (akun bawaan) + Nazhir mandiri dari `pendaftaran_nazhir_bwi` **hanya bila `status === 'aktif'`** (dedupe bila email sama). **Calon yang masih mendaftar (draft/diajukan/…) TIDAK muncul di sini — mereka ada di menu "Pendaftaran Nazhir"** hingga disahkan Ketua. Kartu ringkasan: Total Pengguna / Nazhir / Akun Internal. Toolbar: search (nama/email/NIB) + filter peran (Semua/Nazhir/Internal).
+- **Tabel:** Nama · Email/ID · NIB · Peran · Status · **Terdaftar** (`tglDaftar` → fallback `tglAjukan` → "—") · Aksi.
+- **Reset Password (di dalam Detail):** kolom Aksi hanya **Lihat · Edit · Hapus** (tanpa tombol Reset di kolom). Reset sandi ada **di dalam modal Detail** — isi **Kata Sandi Baru + Konfirmasi** (min. 6 karakter, harus cocok) lalu **Simpan Sandi Baru** → ditulis ke `sandi` akun bawaan **atau** `pendaftaran_nazhir_bwi.sandi`; **langsung berlaku untuk login**.
+- **Hapus:** akun `adminpusat@bwi.go.id` **dilindungi** (tak bisa dihapus agar tak terkunci); Nazhir mandiri → `removeItem` pendaftaran; akun bawaan → dikeluarkan dari array. Akun internal lain diberi peringatan hati‑hati.
+- **Timestamp pendaftaran:** `kenazhiran-daftar.html` menstempel `tglDaftar` (format "D Bulan YYYY") saat pendaftaran dibuat.
+
+### 5.15 Nazhir — Pendaftaran HBW Tambahan (jenis kedua)
+Nazhir aktif yang baru terdaftar satu jenis dapat **mendaftar mengelola jenis HBW lainnya** tanpa membuat akun baru.
+- **Jenis yang disetujui** dilacak di `pendaftaran_nazhir_bwi.jenisAktif` (array; fallback `[jenisNazhir]` bila kosong & status aktif, digabung jenis dari pendaftaran tambahan yang sudah aktif).
+- **Mulai daftar:** dari empty‑state menu jenis lawan → tombol **"Daftar Nazhir Wakaf X"** → `daftarHBWTambahan('X')` membuat **`pendaftaran_tambahan_bwi`** (identitas disalin dari record utama, `jenisNazhir='X'`, `status:'draft'`, `berkas:{}`) lalu ke `nazhir-pendaftaran.html?tambah=1`.
+- **Lengkapi berkas:** dalam mode `?tambah=1`, halaman berkas beroperasi pada `pendaftaran_tambahan_bwi` (set berkas sesuai jenis X). **Ajukan** → status tambahan `diajukan`, masuk pipeline.
+- **Verifikasi:** pendaftaran tambahan muncul di Admin Pusat / Sekretaris / Ketua sebagai pemohon **`REAL2`** (badge "HBW Tambahan"), melalui alur sama: verifikasi → jadwal → hasil → Sekretaris teruskan → **Ketua e‑Sign**.
+- **Approval:** saat Ketua menandatangani `REAL2` → status tambahan `aktif` + jenis X **ditambahkan ke `jenisAktif`** → menu Master & Laporan Wakaf X aktif penuh bagi Nazhir.
 
 ---
 
@@ -235,7 +265,7 @@ flowchart TD
 ### 7.2 Pendaftaran Nazhir → SK/NIB
 ```mermaid
 flowchart LR
-  R1[Calon daftar Fase 1] --> R2[Lengkapi 16 berkas Fase 2]
+  R1[Calon daftar Fase 1] --> R2[Lengkapi 17 berkas Fase 2]
   R2 --> R3[Ajukan Verifikasi]
   R3 --> V{Admin Pusat}
   V -- Revisi --> R2

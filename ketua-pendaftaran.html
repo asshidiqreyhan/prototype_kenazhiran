@@ -91,11 +91,11 @@
             <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
               <div class="relative w-full sm:w-64">
                 <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg></span>
-                <input id="cari" oninput="render()" type="text" placeholder="Cari nama / badan hukum / PIC..." class="w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-11 pr-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+                <input id="cari" oninput="halaman=1;render()" type="text" placeholder="Cari nama / badan hukum / PIC..." class="w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-11 pr-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
               </div>
               <div class="relative w-full sm:w-56">
                 <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" /></svg></span>
-                <select id="filterStatus" onchange="render()" class="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pl-11 pr-9 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+                <select id="filterStatus" onchange="halaman=1;render()" class="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pl-11 pr-9 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
                   <option value="antrean">Perlu Ditandatangani</option>
                   <option value="ttd">Menunggu TTD</option>
                   <option value="aktif">Sudah Ditandatangani</option>
@@ -118,6 +118,14 @@
                 </tr></thead>
                 <tbody id="tbody" class="divide-y divide-gray-100"></tbody>
               </table>
+            </div>
+            <!-- Kaki card: kontrol pagination -->
+            <div id="pagBar" class="hidden flex-col items-center justify-between gap-3 border-t border-gray-100 bg-gray-50 px-5 py-3.5 sm:flex-row md:px-6" style="display:none;">
+              <p id="pagInfo" class="text-xs text-gray-500">&mdash;</p>
+              <div class="flex items-center gap-1">
+                <button id="pagPrev" type="button" onclick="ubahHal(-1)" class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50">Sebelumnya</button>
+                <button id="pagNext" type="button" onclick="ubahHal(1)" class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50">Berikutnya</button>
+              </div>
             </div>
           </div>
         </div>
@@ -192,6 +200,8 @@
   <script>
     const KETUA_NAMA = 'Prof. Dr. K.H. Noor Achmad, M.A.';
     const KETUA_PASSPHRASE = 'bwi2026';
+    const PER_HAL = 5;
+    let halaman = 1;
     const KUNCI_DAFTAR = 'pendaftaran_nazhir_bwi';
     const KUNCI_DUMMY = 'pendaftaran_dummy_bwi_v2';
     const STATUS = {
@@ -208,6 +218,10 @@
 
     function bacaDaftar() { try { const o = JSON.parse(localStorage.getItem(KUNCI_DAFTAR)); if (o && typeof o === 'object') return o; } catch (e) {} return null; }
     function simpanDaftar(o) { try { localStorage.setItem(KUNCI_DAFTAR, JSON.stringify(o)); } catch (e) {} }
+    // Pendaftaran HBW tambahan (jenis lawan) — id REAL2.
+    const KUNCI_TAMBAHAN = 'pendaftaran_tambahan_bwi';
+    function bacaTambahan() { try { const o = JSON.parse(localStorage.getItem(KUNCI_TAMBAHAN)); if (o && typeof o === 'object') return o; } catch (e) {} return null; }
+    function simpanTambahan(o) { try { localStorage.setItem(KUNCI_TAMBAHAN, JSON.stringify(o)); } catch (e) {} }
     function bacaDummy() { try { const a = JSON.parse(localStorage.getItem(KUNCI_DUMMY)); if (Array.isArray(a)) return a; } catch (e) {} return null; }
     function simpanDummy(a) { try { localStorage.setItem(KUNCI_DUMMY, JSON.stringify(a)); } catch (e) {} }
     function amankan(t) { const d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; }
@@ -217,16 +231,32 @@
       const list = [];
       const real = bacaDaftar();
       if (real && real.status && real.status !== 'draft') list.push(Object.assign({ _real: true }, real));
+      const tbh = bacaTambahan();
+      if (tbh && tbh.status && tbh.status !== 'draft') list.push(Object.assign({ _real2: true }, tbh));
       (bacaDummy() || []).forEach(d => list.push(d));
       return list;
     }
     function cari(idAttr) {
       if (idAttr === 'REAL') { const r = bacaDaftar(); return r ? Object.assign({ _real: true }, r) : null; }
+      if (idAttr === 'REAL2') { const r = bacaTambahan(); return r ? Object.assign({ _real2: true }, r) : null; }
       return (bacaDummy() || []).find(d => String(d.id) === String(idAttr)) || null;
     }
     function persist(d) {
       if (d._real) { const r = bacaDaftar() || {}; const clone = Object.assign({}, d); delete clone._real; Object.assign(r, clone); simpanDaftar(r); }
+      else if (d._real2) { const r = bacaTambahan() || {}; const clone = Object.assign({}, d); delete clone._real2; Object.assign(r, clone); simpanTambahan(r); tambahJenisAktif(r.jenisNazhir); }
       else { const arr = bacaDummy() || []; const i = arr.findIndex(x => String(x.id) === String(d.id)); if (i >= 0) { arr[i] = d; simpanDummy(arr); } }
+    }
+    // Saat pendaftaran HBW tambahan menjadi 'aktif', daftarkan jenisnya ke pendaftaran utama (jenisAktif) agar menu jenis itu aktif penuh.
+    function tambahJenisAktif(jenis) {
+      if (jenis !== 'tanah' && jenis !== 'uang') return;
+      const t = bacaTambahan();
+      if (!t || t.status !== 'aktif') return;
+      const r = bacaDaftar(); if (!r) return;
+      let arr = Array.isArray(r.jenisAktif) ? r.jenisAktif.slice() : [];
+      if (arr.length === 0 && r.status === 'aktif' && (r.jenisNazhir === 'tanah' || r.jenisNazhir === 'uang')) arr = [r.jenisNazhir];
+      if (arr.indexOf(jenis) === -1) arr.push(jenis);
+      r.jenisAktif = arr;
+      simpanDaftar(r);
     }
     function badge(st) { const s = STATUS[st] || ['-', 'bg-gray-100 text-gray-500']; return '<span class="inline-flex items-center rounded-full ' + s[1] + ' px-2.5 py-1 text-xs font-semibold">' + s[0] + '</span>'; }
 
@@ -258,25 +288,43 @@
       if (q) list = list.filter(d => ((d.namaBadanHukum || '') + ' ' + (d.pic || '') + ' ' + (d.email || '')).toLowerCase().indexOf(q) !== -1);
 
       const body = document.getElementById('tbody');
+      const pag = document.getElementById('pagBar');
       body.innerHTML = '';
-      if (list.length === 0) {
+      const total = list.length;
+      if (total === 0) {
         body.innerHTML = '<tr><td colspan="6" class="px-6 py-14 text-center"><div class="flex flex-col items-center gap-2 text-gray-400"><svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg><span class="text-sm font-medium text-gray-500">Tidak ada pendaftaran pada tampilan ini</span></div></td></tr>';
+        if (pag) pag.style.display = 'none';
         return;
       }
-      list.forEach((d, i) => {
-        const idAttr = d._real ? 'REAL' : amankan(d.id);
+      const maxHal = Math.max(1, Math.ceil(total / PER_HAL));
+      if (halaman > maxHal) halaman = maxHal;
+      if (halaman < 1) halaman = 1;
+      const from = (halaman - 1) * PER_HAL;
+      const irisan = list.slice(from, from + PER_HAL);
+      irisan.forEach((d, i) => {
+        const no = from + i + 1;
+        const idAttr = d._real2 ? 'REAL2' : d._real ? 'REAL' : amankan(d.id);
+        const tandaBaru = d._real ? ' <span class="ml-1 rounded bg-brand-50 px-1.5 py-0.5 text-[10px] font-semibold text-brand-700">Baru</span>' : (d._real2 ? ' <span class="ml-1 rounded bg-violet-50 px-1.5 py-0.5 text-[10px] font-semibold text-violet-700">HBW Tambahan</span>' : '');
         const tr = document.createElement('tr');
         tr.className = 'transition hover:bg-gray-50';
         tr.innerHTML =
-          '<td class="whitespace-nowrap px-5 py-4 text-gray-500 md:px-6">' + (i + 1) + '</td>' +
-          '<td class="px-5 py-4 md:px-6"><p class="font-semibold text-gray-800">' + amankan(d.namaBadanHukum) + (d._real ? ' <span class="ml-1 rounded bg-brand-50 px-1.5 py-0.5 text-[10px] font-semibold text-brand-700">Baru</span>' : '') + '</p><p class="text-xs text-gray-400">' + amankan(d.email || '') + '</p></td>' +
+          '<td class="whitespace-nowrap px-5 py-4 text-gray-500 md:px-6">' + no + '</td>' +
+          '<td class="px-5 py-4 md:px-6"><p class="font-semibold text-gray-800">' + amankan(d.namaBadanHukum) + tandaBaru + '</p><p class="text-xs text-gray-400">' + amankan(d.email || '') + '</p></td>' +
           '<td class="whitespace-nowrap px-5 py-4 text-gray-600 md:px-6">' + amankan(d.pic || '-') + '</td>' +
           '<td class="whitespace-nowrap px-5 py-4 text-gray-600 md:px-6">' + amankan(d.diteruskanOleh || '-') + '</td>' +
           '<td class="px-5 py-4 md:px-6">' + badge(d.status) + '</td>' +
           '<td class="px-5 py-4 text-right md:px-6">' + aksiRow(d, idAttr) + '</td>';
         body.appendChild(tr);
       });
+      if (pag) {
+        pag.style.display = 'flex';
+        document.getElementById('pagInfo').textContent = 'Menampilkan ' + (from + 1) + '–' + (from + irisan.length) + ' dari ' + total;
+        document.getElementById('pagPrev').disabled = halaman <= 1;
+        document.getElementById('pagNext').disabled = halaman >= maxHal;
+      }
     }
+
+    function ubahHal(delta) { halaman += delta; render(); }
 
     /* ---------- TTD (passphrase) ---------- */
     let ttdId = null;
@@ -334,22 +382,18 @@
       const tgl = amankan(d.tglSertifikat || tglHariIni());
       const nomor = 'SK-' + (d.nib || 'NZHR-XXX') + '/BWI/' + (String(tgl).split(' ').pop() || '2026');
       const signed = (!draft && d.ttdOleh);
-      const qrBlok = signed
-        ? '<div style="text-align:center;">' +
-            '<div style="width:104px;height:104px;padding:4px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;">' + qrKode(d.ttdId || d.nib || nomor, 96) + '</div>' +
-            '<p style="margin:6px 0 0;font-size:10px;font-weight:bold;color:#0f766e;font-family:Arial,sans-serif;">&#10003; Terverifikasi — Ketua BWI</p>' +
-            '<p style="margin:1px 0 0;font-size:9px;color:#94a3b8;font-family:Arial,sans-serif;">ID: ' + amankan(d.ttdId || '-') + '</p>' +
-          '</div>'
-        : '<div style="text-align:center;">' +
-            '<div style="width:104px;height:104px;border:1px dashed #cbd5e1;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-family:Arial,sans-serif;font-size:10px;line-height:1.3;">QR terbit<br>setelah TTD</div>' +
-          '</div>';
-      const ttdBlok = '<div style="text-align:center;min-width:230px;">' +
+      const stempel = signed
+        ? '<div style="margin:6px auto 2px;width:100px;height:100px;padding:4px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;">' + qrKode(d.ttdId || d.nib || nomor, 92) + '</div>' +
+          '<p style="margin:2px 0 0;font-size:10px;font-weight:bold;color:#0f766e;font-family:Arial,sans-serif;">&#10003; Terverifikasi — Ketua BWI</p>'
+        : '<div style="margin:6px auto 2px;width:100px;height:100px;border:1px dashed #cbd5e1;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-family:Arial,sans-serif;font-size:10px;line-height:1.3;text-align:center;">QR terbit<br>setelah TTD</div>';
+      const ttdBlok = '<div style="text-align:center;min-width:260px;">' +
             '<p style="margin:0;">Ditetapkan di Jakarta,</p>' +
             '<p style="margin:0 0 4px;">pada tanggal ' + tgl + '</p>' +
             '<p style="margin:0;">Ketua Badan Wakaf Indonesia,</p>' +
-            '<div style="height:56px;"></div>' +
-            '<p style="margin:0;font-weight:bold;text-decoration:underline;">' + amankan(signed ? d.ttdOleh : KETUA_NAMA) + '</p>' +
-            (signed ? '<p style="margin:2px 0 0;font-size:10px;color:#64748b;font-family:Arial,sans-serif;">Ditandatangani secara elektronik · ' + amankan(d.tglTtd || tgl) + '</p>' : '') +
+            stempel +
+            '<p style="margin:2px 0 0;font-weight:bold;text-decoration:underline;">' + amankan(signed ? d.ttdOleh : KETUA_NAMA) + '</p>' +
+            (signed ? '<p style="margin:2px 0 0;font-size:10px;color:#64748b;font-family:Arial,sans-serif;">Ditandatangani secara elektronik · ' + amankan(d.tglTtd || tgl) + '</p>' +
+              '<p style="margin:1px 0 0;font-size:9px;color:#94a3b8;font-family:Arial,sans-serif;">ID: ' + amankan(d.ttdId || '-') + '</p>' : '') +
           '</div>';
       return '' +
         '<div style="text-align:center;border-bottom:3px double #0f766e;padding-bottom:14px;margin-bottom:20px;">' +
@@ -377,8 +421,8 @@
           '<tr><td style="vertical-align:top;padding:2px 0;">KETIGA</td><td style="vertical-align:top;">:</td><td style="padding:2px 0;">Nazhir wajib menyampaikan laporan pengelolaan dan pengembangan harta benda wakaf secara berkala sesuai ketentuan yang berlaku.</td></tr>' +
           '<tr><td style="vertical-align:top;padding:2px 0;">KEEMPAT</td><td style="vertical-align:top;">:</td><td style="padding:2px 0;">Keputusan ini berlaku sejak tanggal ditetapkan dan akan ditinjau kembali apabila terdapat kekeliruan di kemudian hari.</td></tr>' +
         '</table>' +
-        '<div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:34px;">' +
-          qrBlok + ttdBlok +
+        '<div style="display:flex;justify-content:flex-end;align-items:flex-end;margin-top:34px;">' +
+          ttdBlok +
         '</div>';
     }
     function bukaSK(idAttr, draft) {
