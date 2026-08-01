@@ -37,10 +37,8 @@
     <!-- Sidebar -->
     <aside id="sidebar" class="absolute left-0 top-0 z-50 flex h-screen w-[290px] flex-col overflow-y-hidden bg-brand-900 duration-300 ease-linear lg:static lg:translate-x-0 -translate-x-full">
       <div class="flex items-center justify-between gap-2 px-6 py-5.5 h-[72px] lg:py-6.5">
-        <a href="sekretaris-pendaftaran.html" class="flex items-center gap-3">
-          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
-            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" /></svg>
-          </span>
+        <a href="sekretaris-dashboard.html" class="flex items-center gap-3">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white p-1"><img src="Logo_Badan_Wakaf_Indonesia-Bawah.png" alt="Logo Badan Wakaf Indonesia" class="h-full w-full object-contain"></span>
           <span class="leading-tight"><span class="block text-base font-bold text-white">BWI Superapps</span><span class="block text-[11px] font-medium text-brand-300">Sekretaris BWI</span></span>
         </a>
         <button onclick="tutupSidebar()" class="block lg:hidden text-white/70 hover:text-white"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg></button>
@@ -49,6 +47,7 @@
         <nav class="mt-1 px-4 py-4 lg:px-6">
           <h3 class="mb-4 ml-3 text-xs font-semibold uppercase tracking-wider text-brand-400">Menu Sekretariat</h3>
           <ul class="mb-6 flex flex-col gap-1.5">
+            <li><a href="sekretaris-dashboard.html" class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white"><svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span>Dashboard</span></a></li>
             <li><a href="sekretaris-pendaftaran.html" class="flex w-full items-center gap-3 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm duration-300 ease-in-out"><svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" /></svg><span>Pendaftaran Nazhir</span></a></li>
           </ul>
         </nav>
@@ -78,11 +77,11 @@
               <p id="cPerlu" class="mt-1 text-2xl font-bold text-cyan-700">0</p>
             </div>
             <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-card">
-              <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Sudah Diteruskan</p>
+              <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">TTD Ketua</p>
               <p id="cTeruskan" class="mt-1 text-2xl font-bold text-indigo-700">0</p>
             </div>
             <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-card">
-              <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Sudah Disahkan</p>
+              <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Aktif</p>
               <p id="cAktif" class="mt-1 text-2xl font-bold text-brand-700">0</p>
             </div>
             <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-card">
@@ -106,9 +105,8 @@
                 <select id="filterStatus" onchange="halaman=1;render()" class="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pl-11 pr-9 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
                   <option value="">Semua Status</option>
                   <option value="perlu">Perlu Diteruskan</option>
-                  <option value="ttd">Sudah Diteruskan (Menunggu TTD)</option>
-                  <option value="aktif">Sudah Disahkan / Aktif</option>
-                  <option value="lain">Masih Diproses Pusat</option>
+                  <option value="ttd">TTD Ketua</option>
+                  <option value="aktif">Aktif</option>
                 </select>
                 <span class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg></span>
               </div>
@@ -132,37 +130,15 @@
             <!-- Kaki card: kontrol pagination -->
             <div id="pagBar" class="hidden flex-col items-center justify-between gap-3 border-t border-gray-100 bg-gray-50 px-5 py-3.5 sm:flex-row md:px-6" style="display:none;">
               <p id="pagInfo" class="text-xs text-gray-500">&mdash;</p>
-              <div class="flex items-center gap-1">
+              <div class="flex items-center gap-1 flex-wrap">
                 <button id="pagPrev" type="button" onclick="ubahHal(-1)" class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50">Sebelumnya</button>
+                <span id="pagNums" class="flex items-center gap-1 flex-wrap"></span>
                 <button id="pagNext" type="button" onclick="ubahHal(1)" class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50">Berikutnya</button>
               </div>
             </div>
           </div>
         </div>
       </main>
-    </div>
-  </div>
-
-  <!-- Modal detail (read-only) -->
-  <div id="modalDetail" class="fixed inset-0 z-[70] hidden items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/50" onclick="tutupDetail()"></div>
-    <div class="modal-in relative flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
-      <div class="flex items-start justify-between gap-3 border-b border-gray-100 px-6 py-5">
-        <div class="min-w-0">
-          <h3 id="dtNama" class="truncate text-lg font-bold text-gray-800">—</h3>
-          <p id="dtSub" class="mt-0.5 text-xs text-gray-400">—</p>
-        </div>
-        <button onclick="tutupDetail()" class="text-gray-400 transition hover:text-gray-600"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg></button>
-      </div>
-      <div class="flex-1 space-y-5 overflow-y-auto px-6 py-5">
-        <div id="dtInfo" class="grid grid-cols-2 gap-4 sm:grid-cols-3"></div>
-        <div id="dtTimeline"></div>
-        <div>
-          <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Kelengkapan Berkas</p>
-          <div id="dtBerkas" class="grid grid-cols-1 gap-1.5 sm:grid-cols-2"></div>
-        </div>
-      </div>
-      <div id="dtAksi" class="flex items-center justify-end gap-2 border-t border-gray-100 bg-gray-50 px-6 py-4"></div>
     </div>
   </div>
 
@@ -240,8 +216,8 @@
       terjadwal: ['Jadwal Wawancara', 'bg-blue-50 text-blue-700'],
       persetujuan: ['Perlu Diteruskan', 'bg-cyan-50 text-cyan-700'],
       sekretariat: ['Perlu Diteruskan', 'bg-cyan-50 text-cyan-700'],
-      ttd: ['Menunggu TTD Ketua', 'bg-indigo-50 text-indigo-700'],
-      aktif: ['Disahkan / Aktif', 'bg-brand-50 text-brand-700'],
+      ttd: ['TTD Ketua', 'bg-indigo-50 text-indigo-700'],
+      aktif: ['Aktif', 'bg-brand-50 text-brand-700'],
     };
 
     function bacaDaftar() { try { const o = JSON.parse(localStorage.getItem(KUNCI_DAFTAR)); if (o && typeof o === 'object') return o; } catch (e) {} return null; }
@@ -262,8 +238,11 @@
       const tbh = bacaTambahan();
       if (tbh && tbh.status && tbh.status !== 'draft') list.push(Object.assign({ _real2: true }, tbh));
       (bacaDummy() || []).forEach(d => list.push(d));
-      return list;
+      // Sekretaris hanya menangani pendaftaran yang SUDAH lolos Admin Pusat (persetujuan → aktif).
+      // Yang masih diproses Pusat (diajukan/revisi/diverifikasi/terjadwal) & yang ditolak Pusat disembunyikan.
+      return list.filter(relevanSekretaris);
     }
+    function relevanSekretaris(d) { return ['persetujuan', 'sekretariat', 'ttd', 'aktif'].indexOf(d.status) !== -1; }
     function cari(idAttr) {
       if (idAttr === 'REAL') { const r = bacaDaftar(); return r ? Object.assign({ _real: true }, r) : null; }
       if (idAttr === 'REAL2') { const r = bacaTambahan(); return r ? Object.assign({ _real2: true }, r) : null; }
@@ -287,10 +266,11 @@
     }
 
     function aksiRow(d, idAttr) {
-      const lihat = '<button type="button" onclick="bukaDetail(\'' + idAttr + '\')" class="rounded-lg border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-600 transition hover:bg-gray-50">Lihat</button>';
+      const url = 'sekretaris-pendaftaran-detail.html?id=' + encodeURIComponent(idAttr);
+      const lihat = '<a href="' + url + '" class="inline-flex items-center rounded-lg border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-600 transition hover:bg-gray-50">Lihat</a>';
       let utama = '';
       if (perluTeruskan(d)) {
-        utama = '<button type="button" onclick="teruskan(\'' + idAttr + '\')" class="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-brand-700"><svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" /></svg>Teruskan ke Ketua BWI</button>';
+        utama = '<a href="' + url + '" class="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-brand-700"><svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" /></svg>Teruskan ke Ketua BWI</a>';
       } else if (d.status === 'aktif') {
         utama = '<button type="button" onclick="bukaSK(\'' + idAttr + '\')" class="inline-flex items-center gap-1.5 rounded-lg border border-brand-200 bg-brand-50 px-3.5 py-2 text-xs font-semibold text-brand-700 transition hover:bg-brand-100"><svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>Lihat Sertifikat</button>';
       }
@@ -303,7 +283,6 @@
       const f = document.getElementById('filterStatus').value || '';
       let list = semua();
       if (f === 'perlu') list = list.filter(perluTeruskan);
-      else if (f === 'lain') list = list.filter(d => ['diajukan', 'revisi', 'diverifikasi', 'terjadwal'].indexOf(d.status) !== -1);
       else if (f) list = list.filter(d => d.status === f);
       if (q) list = list.filter(d => ((d.namaBadanHukum || '') + ' ' + (d.pic || '') + ' ' + (d.email || '')).toLowerCase().indexOf(q) !== -1);
 
@@ -342,63 +321,19 @@
         document.getElementById('pagInfo').textContent = 'Menampilkan ' + (from + 1) + '–' + (from + irisan.length) + ' dari ' + total;
         document.getElementById('pagPrev').disabled = halaman <= 1;
         document.getElementById('pagNext').disabled = halaman >= maxHal;
+        document.getElementById('pagNums').innerHTML = tombolNomor(total, PER_HAL, halaman, 'gotoHal');
       }
     }
 
     function ubahHal(delta) { halaman += delta; render(); }
-
-    /* ---------- Teruskan ke Ketua ---------- */
-    function teruskan(idAttr) {
-      const d = cari(idAttr);
-      if (!d) return;
-      if (!perluTeruskan(d)) { showToast('Hanya pendaftaran yang lulus wawancara (tahap Persetujuan) yang dapat diteruskan.'); return; }
-      if (!window.confirm('Teruskan pendaftaran "' + (d.namaBadanHukum || '') + '" ke Ketua BWI untuk ditandatangani?')) return;
-      d.status = 'ttd';
-      d.diteruskanOleh = SEKRETARIS_NAMA;
-      d.tglTeruskan = tglHariIni();
-      persist(d);
-      tutupDetail();
-      render();
-      showToast('Diteruskan ke Ketua BWI untuk penandatanganan.');
+    function gotoHal(n) { halaman = n; render(); }
+    function tombolNomor(total, perHal, current, fnGoto) {
+      const maxHal = Math.max(1, Math.ceil(total / perHal));
+      const arr = [];
+      if (maxHal <= 7) { for (let i = 1; i <= maxHal; i++) arr.push(i); }
+      else { arr.push(1); if (current > 3) arr.push('e'); const s = Math.max(2, current - 1), e = Math.min(maxHal - 1, current + 1); for (let i = s; i <= e; i++) arr.push(i); if (current < maxHal - 2) arr.push('e'); arr.push(maxHal); }
+      return arr.map(p => p === 'e' ? '<span class="px-1.5 text-xs text-gray-400">&hellip;</span>' : '<button type="button" onclick="' + fnGoto + '(' + p + ')" class="min-w-[32px] rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition ' + (p === current ? 'border-brand-600 bg-brand-600 text-white' : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-100') + '">' + p + '</button>').join('');
     }
-
-    /* ---------- Detail (read-only) ---------- */
-    let detailId = null;
-    function barisInfo(label, val, mono) { return '<div><p class="text-xs font-semibold uppercase tracking-wide text-gray-400">' + amankan(label) + '</p><p class="mt-0.5 text-sm font-semibold text-gray-800 ' + (mono ? 'font-mono' : '') + '">' + val + '</p></div>'; }
-    function bukaDetail(idAttr) {
-      const d = cari(idAttr);
-      if (!d) return;
-      detailId = idAttr;
-      document.getElementById('dtNama').textContent = d.namaBadanHukum || '-';
-      document.getElementById('dtSub').textContent = (d.jenis || 'Wakaf Uang') + ' · Diajukan ' + (d.tglAjukan || '-');
-      const info = [barisInfo('PIC', amankan(d.pic || '-')), barisInfo('Email', amankan(d.email || '-')), barisInfo('No. HP', amankan(d.hp || '-')), barisInfo('Status', badge(d.status), false)];
-      if (d.jadwalPresentasi) info.push(barisInfo('Jadwal', amankan(d.jadwalPresentasi)));
-      if (d.hasilPresentasi) info.push(barisInfo('Hasil Presentasi', amankan(d.hasilPresentasi)));
-      document.getElementById('dtInfo').innerHTML = info.join('');
-
-      const t = [];
-      if (d.jadwalPresentasi) t.push('<li class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-blue-500"></span>Presentasi/Wawancara · <span class="font-medium">' + amankan(d.jadwalPresentasi) + '</span></li>');
-      if (d.hasilPresentasi) t.push('<li class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-brand-500"></span>Hasil wawancara: <span class="font-medium">' + amankan(d.hasilPresentasi) + '</span>' + (d.catatanHasil ? ' — ' + amankan(d.catatanHasil) : '') + '</li>');
-      if (d.diteruskanOleh) t.push('<li class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-indigo-500"></span>Diteruskan ke Ketua oleh ' + amankan(d.diteruskanOleh) + ' · <span class="font-medium">' + amankan(d.tglTeruskan || '-') + '</span></li>');
-      if (d.ttdOleh) t.push('<li class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-emerald-500"></span>Ditandatangani Ketua (' + amankan(d.ttdOleh) + ') · <span class="font-medium">' + amankan(d.tglTtd || '-') + '</span></li>');
-      document.getElementById('dtTimeline').innerHTML = t.length ? '<div class="rounded-xl border border-gray-100 bg-gray-50 px-4 py-3"><p class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Riwayat</p><ul class="space-y-1.5 text-xs text-gray-600">' + t.join('') + '</ul></div>' : '';
-
-      const berkas = d.berkas || {};
-      document.getElementById('dtBerkas').innerHTML = berkasUntuk(d).map(b => {
-        const ada = !!berkas[b.key];
-        const st = ada ? '<span class="shrink-0 rounded-full bg-brand-50 px-2 py-0.5 text-[11px] font-semibold text-brand-700">Ada</span>' : '<span class="shrink-0 rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-600">Tidak ada</span>';
-        return '<div class="flex items-center justify-between gap-3 rounded-lg border border-gray-100 px-3 py-2"><div class="flex min-w-0 items-center gap-2"><span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gray-100 text-[10px] font-bold text-gray-500">' + b.no + '</span><span class="min-w-0 truncate text-xs font-medium text-gray-700">' + amankan(b.label) + '</span></div>' + st + '</div>';
-      }).join('');
-
-      const aksi = document.getElementById('dtAksi');
-      let btn = '<button type="button" onclick="tutupDetail()" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-600 transition hover:bg-gray-100">Tutup</button>';
-      if (perluTeruskan(d)) btn += '<button type="button" onclick="teruskan(\'' + detailId + '\')" class="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" /></svg>Teruskan ke Ketua BWI</button>';
-      else if (d.status === 'aktif') btn += '<button type="button" onclick="bukaSK(\'' + detailId + '\')" class="inline-flex items-center gap-1.5 rounded-lg border border-brand-200 bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-700 transition hover:bg-brand-100"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>Lihat Sertifikat</button>';
-      aksi.innerHTML = btn;
-
-      const m = document.getElementById('modalDetail'); m.classList.remove('hidden'); m.classList.add('flex');
-    }
-    function tutupDetail() { const m = document.getElementById('modalDetail'); if (m) { m.classList.add('hidden'); m.classList.remove('flex'); } }
 
     /* ---------- Preview Sertifikat (SK) — read-only ---------- */
     function qrKode(seed, px) {
@@ -463,7 +398,7 @@
 
     function toggleSidebar() { const sb = document.getElementById('sidebar'), ov = document.getElementById('overlay'); const t = sb.classList.contains('-translate-x-full'); sb.classList.toggle('-translate-x-full', !t); ov.classList.toggle('hidden', !t); }
     function tutupSidebar() { document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('overlay').classList.add('hidden'); }
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') { tutupSidebar(); tutupDetail(); tutupSK(); } });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { tutupSidebar(); tutupSK(); } });
     function logout() { window.location.href = 'kenazhiran-login.html'; }
     let toastTimer = null;
     function showToast(p) { const t = document.getElementById('toast'); document.getElementById('toastMsg').textContent = p; t.classList.remove('hidden'); t.classList.add('flex'); clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.classList.add('hidden'); t.classList.remove('flex'); }, 3200); }

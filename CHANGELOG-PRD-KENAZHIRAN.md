@@ -4,6 +4,155 @@ Ringkasan perubahan yang diterapkan pada `PRD-FLOW-DESIGN-KENAZHIRAN.md` beserta
 
 ---
 
+## 2026‑07‑31 — Sekretaris & Ketua tidak lagi melihat pendaftaran yang diproses Admin Pusat
+
+**Bagian PRD terdampak:** §5.12, §5.13.
+
+- **Sekretaris** (`sekretaris-pendaftaran.html` & `sekretaris-dashboard.html`): daftar/ringkasan kini **hanya mencakup status `persetujuan`/`sekretariat`/`ttd`/`aktif`**. Pendaftaran yang **masih diproses Admin Pusat** (diajukan/revisi/diverifikasi/terjadwal) dan yang **ditolak Pusat** disembunyikan. **Opsi filter "Diproses Pusat" dihapus** (helper `relevanSekretaris`).
+- **Ketua** (`ketua-pendaftaran.html`): hanya menampilkan pendaftaran yang **benar‑benar diteruskan kepadanya** (ttd / aktif / **ditolak Ketua** — dibatasi `diteruskanOleh` terisi). Pendaftaran yang ditolak/diproses Pusat tidak muncul (termasuk pada kartu "Ditolak").
+
+**File tersentuh:** `sekretaris-pendaftaran.html`, `sekretaris-dashboard.html`, `ketua-pendaftaran.html`, `PRD-FLOW-DESIGN-KENAZHIRAN.md`.
+
+---
+
+## 2026‑07‑31 — Pagination bernomor (tombol halaman) default 5 di semua role
+
+**Bagian PRD terdampak:** §Konvensi tabel global.
+
+- Semua tabel data JS di seluruh role kini memakai **pagination bernomor**: Sebelumnya + **tombol angka halaman** (aktif disorot brand, ellipsis "…" bila > 7 halaman) + Berikutnya, dengan **default 5 baris/halaman**. Info "Menampilkan X–Y dari N" dipertahankan; filter/search reset ke halaman 1; disable di ujung. Helper seragam `tombolNomor()` + `goto*()` per tabel.
+- **File tersentuh (20):** Pusat — `pusat-pendaftaran`, `pusat-master`, `pusat-master-pengguna`, `pusat-periode` (2 tabel), `pusat-broadcast`, `pusat-hierarki`, `pusat-portofolio`, `pusat-cutoff`. Nazhir — `nazhir-aset`, `nazhir-aset-sk`, `nazhir-laporan`, `nazhir-laporan-program`, `nazhir-laporan-isi` (5 tabel), `nazhir-dokumen`, `nazhir-buka-kunci`, `nazhir-program`. Wilayah — `wilayah-dashboard`, `wilayah-master`. Sekretaris — `sekretaris-pendaftaran`. Ketua — `ketua-pendaftaran`. (Halaman tanpa tabel data, detail/preview, dan form React tidak disentuh.)
+
+**File tersentuh:** 20 file HTML tersebut + `PRD-FLOW-DESIGN-KENAZHIRAN.md`.
+
+---
+
+## 2026‑07‑31 — Logo BWI di semua sidebar role + Dashboard Sekretaris + rapikan detail Sekretaris
+
+**Bagian PRD terdampak:** §3.5, §5.12.
+
+1. **Logo resmi BWI di seluruh dashboard role.** Ikon placeholder (SVG) di pojok kiri atas sidebar semua halaman role (Nazhir, Pusat, Sekretaris, Ketua, Wilayah) & halaman verifikasi diganti dengan **`Logo_Badan_Wakaf_Indonesia-Bawah.png`** (di kartu putih agar kontras di atas sidebar teal). Termasuk halaman React (`nazhir-aset-tambah.html`, `modal-tambah-portofolio.html`) memakai `className`.
+2. **Dashboard Sekretaris baru (`sekretaris-dashboard.html`).** Kartu statistik (Perlu Diteruskan / TTD Ketua / Aktif / Total) + antrean "Perlu Diteruskan ke Ketua BWI" dengan tautan detail. Menu sidebar Sekretaris kini **Dashboard + Pendaftaran Nazhir**; login Sekretaris mendarat di Dashboard. **Tidak** menambah daftar HBW se‑Indonesia (di luar tupoksi Sekretaris).
+3. **Detail Sekretaris dirapikan.** Kata "ada" pada hitungan berkas dihapus; layout jadi **rail kiri sempit** (Info + Tindakan + Riwayat) & **kolom kanan lebar** (Kelengkapan Berkas); panel Tindakan saat aktif jadi kartu status ringkas + tombol Lihat Sertifikat.
+
+**File tersentuh:** seluruh `*-*.html` ber-sidebar (logo), `sekretaris-dashboard.html` (baru), `sekretaris-pendaftaran.html`, `sekretaris-pendaftaran-detail.html`, `kenazhiran-login.html`, `PRD-FLOW-DESIGN-KENAZHIRAN.md`.
+
+---
+
+## 2026‑07‑31 — Kartu ringkasan Antrean Pengesahan (Ketua) dirapikan
+
+**Bagian PRD terdampak:** §5.13 (tidak berubah materiil; hanya penyegaran UI).
+
+- Dua kartu besar (Menunggu Tanda Tangan, Sudah Ditandatangani) di `ketua-pendaftaran.html` diganti menjadi **tiga kartu kompak ber‑ikon**: **Menunggu TTD** (indigo), **Aktif / Ditandatangani** (brand), **Ditolak** (merah) — layout ikon + angka + label agar lebih seimbang & enak dilihat. Ditambah penghitung `cTolak`.
+
+**File tersentuh:** `ketua-pendaftaran.html`.
+
+---
+
+## 2026‑07‑31 — Ketua: filter status disederhanakan & menu Riwayat TTD dihapus
+
+**Bagian PRD terdampak:** §3.6, §5.13.
+
+1. **Filter status Antrean Pengesahan** (`ketua-pendaftaran.html`) menghapus opsi **"Perlu Ditandatangani"**. Kini: **Semua Status / Menunggu TTD / Aktif / Ditolak** — "Semua Status" menampilkan status ttd/aktif/ditolak (relevan untuk Ketua).
+2. **Menu "Riwayat TTD" dihapus** (redundan dengan Pengesahan Nazhir). File `ketua-riwayat.html` dihapus dan tautannya dibuang dari sidebar seluruh halaman Ketua (`ketua-dashboard.html`, `ketua-pendaftaran.html`, `ketua-pendaftaran-detail.html`, `ketua-esign.html`, `ketua-pin.html`).
+
+**File tersentuh:** `ketua-pendaftaran.html`, `ketua-dashboard.html`, `ketua-pendaftaran-detail.html`, `ketua-esign.html`, `ketua-pin.html`, `ketua-riwayat.html` (dihapus), `PRD-FLOW-DESIGN-KENAZHIRAN.md`.
+
+---
+
+## 2026‑07‑31 — Revisi Ketua: verifikasi aman, preview SK ala PDF, Riwayat & Atur PIN
+
+**Bagian PRD terdampak:** §4, §5.13.
+
+1. **Halaman Verifikasi Dokumen tidak lagi menampilkan isi SK.** `verifikasi-dokumen.html` (target hasil pindai QR, dapat diakses publik) kini hanya menampilkan **status keaslian** + detail ringkas + QR; **isi lengkap Surat Keputusan dihapus** demi keamanan.
+2. **Preview SK ala PDF viewer.** Modal preview SK di seluruh halaman Ketua (`ketua-pendaftaran.html`, `ketua-pendaftaran-detail.html`, `ketua-riwayat.html`, `ketua-esign.html`) kini punya tombol **Unduh** (simpan SK sebagai berkas HTML standalone) & **Cetak** (buka jendela cetak berisi SK saja → siap cetak / Save‑as‑PDF), menggantikan tombol "Cetak / PDF" tunggal.
+3. **Riwayat TTD — kolom Aksi disederhanakan.** Tombol **"Verifikasi"** dihapus dari baris; aksi kini **Lihat Detail + Lihat SK**, konsisten dengan tabel Pengesahan Nazhir.
+4. **Atur PIN e‑Sign — layout dirapikan.** Dari satu kolom sempit menjadi **dua kolom ala dashboard**: kartu status (badge Aktif + "Terakhir diperbarui" via `esign_pin_tglubah`) & tips di kiri, form Ganti PIN (dengan **toggle lihat PIN** + tombol Batalkan) di kanan.
+
+**File tersentuh:** `verifikasi-dokumen.html`, `ketua-pendaftaran.html`, `ketua-pendaftaran-detail.html`, `ketua-riwayat.html`, `ketua-esign.html`, `ketua-pin.html`, `PRD-FLOW-DESIGN-KENAZHIRAN.md`.
+
+---
+
+## 2026‑07‑31 — Detail Ketua di‑redesign menjadi Studio e‑Sign inline
+
+**Bagian PRD terdampak:** §5.13.
+
+**Apa yang berubah pada `ketua-pendaftaran-detail.html`:**
+- Layout diselaraskan dengan studio: **preview dokumen di kiri**, **Informasi Pemohon + kartu Tanda Tangan Elektronik di kanan**, **Riwayat Proses** (kartu langkah) di bawah.
+- **Penandatanganan kini inline**: kartu kanan berisi input **PIN e‑Sign** + tombol **"Tandatangani & Sahkan"** (validasi `esign_pin_bwi`, default `bwi2026`) → kontrak TTD dijalankan + **modal animasi sukses**. Tombol **"Tolak Pengajuan"** tetap ada (modal alasan). Tidak lagi mengarahkan ke halaman `ketua-esign.html` (yang tetap ada sebagai studio standalone).
+- Bila sudah `aktif`, input PIN + tombol e‑Sign **berubah menjadi teks tautan bergaris bawah "Verifikasi Digital"** (→ `verifikasi-dokumen.html`) + tautan Lihat SK.
+- **Section "Kelengkapan Berkas" dihapus** dari halaman detail Ketua (Ketua tidak perlu meninjau unggahan berkas calon).
+
+**File tersentuh:** `ketua-pendaftaran-detail.html`, `PRD-FLOW-DESIGN-KENAZHIRAN.md`.
+
+---
+
+## 2026‑07‑31 — Revisi 7 poin: pesan persetujuan, berkas terkelompok, & role Sekretaris/Ketua
+
+**Bagian PRD terdampak:** §3.6, §4, §5.1, §5.10, §5.12, §5.13.
+
+1. **Pesan disetujui tampil ke calon.** Catatan yang ditulis Admin Pusat kini disimpan untuk **semua** aksi (termasuk Verifikasi, bukan hanya tolak/revisi) ke `catatanPusat`, dan **ditampilkan ke calon** pada banner "Dokumen terverifikasi" (`nazhir-pendaftaran.html`, `nazhir-dashboard.html`); `catatanHasil` tampil pada status `persetujuan`. Label textarea diperjelas.
+2. **Kelengkapan Berkas dikelompokkan + navigasi** di `pusat-pendaftaran-detail.html` (seksi A/B/C/D + indikator "x/total", panel per seksi) — meniru pengalaman sisi calon; tetap menampilkan nama file & Nomor Dokumen.
+3. **Label status Sekretaris disederhanakan**: Perlu Diteruskan / TTD Ketua / Aktif / Diproses Pusat (kartu ringkasan & filter selaras).
+4. **Detail Sekretaris → halaman** (`sekretaris-pendaftaran-detail.html`, bukan modal) dengan berkas terkelompok + navigasi; modal detail lama dihapus.
+5. **Modal "Teruskan ke Ketua" custom** (mengganti `window.confirm`) — informatif: ringkasan pemohon, konsekuensi, konfirmasi.
+6. **Role Ketua diperluas**: aksi baris hanya **"Lihat Detail"** → `ketua-pendaftaran-detail.html` (preview draf inline + berkas terkelompok + Tolak/Tandatangani). **Studio e‑Sign** (`ketua-esign.html`) dengan **PIN** (`esign_pin_bwi`, default `bwi2026`) + modal animasi sukses + link **Verifikasi Dokumen** (`verifikasi-dokumen.html`). Menu **Atur PIN e‑Sign** (`ketua-pin.html`).
+7. **Status Ketua**: Menunggu TTD / Aktif / Ditolak. Ditambah **Dashboard Ketua** (`ketua-dashboard.html`) & **Riwayat TTD** (`ketua-riwayat.html`).
+
+**File tersentuh:** `pusat-pendaftaran.html`, `pusat-pendaftaran-detail.html`, `nazhir-pendaftaran.html`, `nazhir-dashboard.html`, `sekretaris-pendaftaran.html`, `sekretaris-pendaftaran-detail.html` (baru), `ketua-pendaftaran.html`, `ketua-pendaftaran-detail.html` (baru), `ketua-esign.html` (baru), `ketua-pin.html` (baru), `ketua-dashboard.html` (baru), `ketua-riwayat.html` (baru), `verifikasi-dokumen.html` (baru), `PRD-FLOW-DESIGN-KENAZHIRAN.md`.
+
+---
+
+## 2026‑07‑31 — Logo resmi BWI & ornamen islami pada halaman login
+
+**Bagian PRD terdampak:** §5.1 (Login & Pendaftaran).
+
+**Apa yang berubah:**
+- Logo placeholder (ikon gedung SVG) pada `kenazhiran-login.html` diganti dengan **logo resmi Badan Wakaf Indonesia** (`Logo_Badan_Wakaf_Indonesia-Bawah.png`) — di lockup panel brand (desktop) & header mobile, dibungkus kartu putih agar kontras.
+- Background panel brand kini memakai **ornamen geometris islami** (motif bintang delapan) bernuansa teal via kelas CSS `.pola-islamic` (menggantikan `.pola-titik`); sisi form memakai `.pola-islamic-terang` (teal sangat halus) untuk kohesi. Ornamen di-embed sebagai SVG data‑URI (offline, tanpa aset eksternal).
+
+**File tersentuh:** `kenazhiran-login.html`, `PRD-FLOW-DESIGN-KENAZHIRAN.md`.
+
+---
+
+## 2026‑07‑31 — Perbaikan tipe toast validasi tolak/revisi (Admin Pusat)
+
+**Bagian PRD terdampak:** §5.10 (Pusat — Pendaftaran Nazhir).
+
+**Apa yang berubah:**
+- Saat Admin Pusat menekan **Tolak/Minta Revisi** tanpa mengisi kolom catatan alasan, toast peringatan *"Isi catatan alasan terlebih dahulu."* sebelumnya tampil sebagai **toast sukses** (ikon centang hijau). Kini tampil sebagai **toast warning** (ikon segitiga peringatan, warna amber).
+- `showToast(pesan, type)` kini menerima parameter `type`; `type: 'warning'` menukar ikon (`#toastIcon`) & warna. Default tetap sukses.
+
+**File tersentuh:** `pusat-pendaftaran.html`, `pusat-pendaftaran-detail.html`, `PRD-FLOW-DESIGN-KENAZHIRAN.md`.
+
+---
+
+## 2026‑07‑29 — Input "Nomor Dokumen" pada kelengkapan berkas (Uang & Tanah)
+
+**Bagian PRD terdampak:** §5.1 (Fase 2 — kelengkapan berkas), §4 (Model Data).
+
+**Apa yang berubah:**
+- Di **`nazhir-pendaftaran.html`**, dokumen yang bernomor kini punya **input "Nomor Dokumen"** (dengan label) di samping unggah file — memudahkan Pusat memverifikasi. Berlaku untuk **kedua jenis**:
+  - *Wakaf Uang:* Akta Pendirian, SK Pengesahan Kemenkumham, NPWP, Surat Keterangan Domisili, Rekomendasi BWI Perwakilan, Rekomendasi LKS‑PWU, STBPN Sebelumnya, Sertifikat Kompetensi, Surat Permohonan.
+  - *Wakaf Tanah:* Surat Pengesahan Nazhir, Sertifikat Wakaf, AIW/APAIW, NIK (KTP) Nazhir, Surat Permohonan KUA, Surat Pengantar KUA.
+  - Dikelola via peta `NOMOR_DOK` (key→label+placeholder); disimpan di **`pendaftaran_nazhir_bwi.nomorBerkas`** (`{ key: nomor }`), juga untuk pendaftaran tambahan. Saat sudah diajukan, nomor tampil read‑only. "Isi semua (demo)" ikut mengisi nomor contoh.
+- **Verifikasi Pusat & Sekretaris**: nomor dokumen kini **ditampilkan** di checklist berkas (baris "No: …") pada `pusat-pendaftaran.html`, `pusat-pendaftaran-detail.html`, `sekretaris-pendaftaran.html`.
+
+**File tersentuh:** `nazhir-pendaftaran.html`, `pusat-pendaftaran.html`, `pusat-pendaftaran-detail.html`, `sekretaris-pendaftaran.html`, `PRD-FLOW-DESIGN-KENAZHIRAN.md`.
+
+---
+
+## 2026‑07‑29 — Modal sukses pengajuan berkas: animasi halus + tombol secondary
+
+**Bagian PRD terdampak:** §5.1 (Fase 2 — pengajuan/revisi berkas) — detail tampilan.
+
+**Apa yang berubah (di `nazhir-pendaftaran.html`, berlaku untuk submit awal & submit ulang setelah revisi):**
+- Modal "Berkas berhasil diajukan!" dibuat **lebih halus**: overlay *fade‑in* + `backdrop-blur`, panel *pop‑in* (`cubic-bezier` easing), dan ikon centang dengan **animasi pop + ring pulse**. Menghormati `prefers-reduced-motion`.
+- Tombol **"Ke Dashboard" → "Kembali ke Dashboard"** dan diubah menjadi **tipe secondary** (outline abu, bukan tombol brand penuh) + ikon panah kembali.
+
+**File tersentuh:** `nazhir-pendaftaran.html`.
+
+---
+
 ## 2026‑07‑29 — HBW tanpa validasi Pusat: hapus kolom Status hierarki + rapikan alur Sub-ID
 
 **Bagian PRD terdampak:** §5.6 (Hierarki), §5.3 (Master HBW).

@@ -33,6 +33,19 @@
     body, html { font-family: 'Outfit', sans-serif !important; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+
+    /* Animasi modal (halus) */
+    @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes popIn { 0% { opacity: 0; transform: translateY(14px) scale(.96); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes ringPulse { 0% { transform: scale(.75); opacity: .55; } 75% { transform: scale(1.25); opacity: 0; } 100% { opacity: 0; } }
+    @keyframes checkPop { 0% { transform: scale(0); } 55% { transform: scale(1.12); } 100% { transform: scale(1); } }
+    .anim-overlay { animation: overlayIn .22s ease-out both; }
+    .anim-pop { animation: popIn .34s cubic-bezier(.16, 1, .3, 1) both; }
+    .anim-check { animation: checkPop .42s .08s cubic-bezier(.16, 1, .3, 1) both; }
+    .anim-ring { animation: ringPulse 1.4s ease-out .25s infinite; }
+    @media (prefers-reduced-motion: reduce) {
+      .anim-overlay, .anim-pop, .anim-check, .anim-ring { animation: none !important; }
+    }
   </style>
 </head>
 
@@ -141,14 +154,20 @@
 
   <!-- Modal sukses pengajuan -->
   <div id="modalSukses" class="fixed inset-0 z-[80] hidden items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/50"></div>
-    <div class="relative w-full max-w-sm rounded-2xl bg-white p-7 text-center shadow-2xl">
-      <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-brand-50 text-brand-600">
-        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+    <div class="anim-overlay absolute inset-0 bg-slate-900/50 backdrop-blur-sm"></div>
+    <div class="anim-pop relative w-full max-w-sm rounded-2xl bg-white p-8 text-center shadow-2xl">
+      <div class="relative mx-auto mb-5 flex h-16 w-16 items-center justify-center">
+        <span class="anim-ring absolute inset-0 rounded-full bg-brand-200"></span>
+        <span class="anim-check relative flex h-16 w-16 items-center justify-center rounded-full bg-brand-600 text-white shadow-lg shadow-brand-600/30">
+          <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+        </span>
       </div>
       <h3 class="text-lg font-bold text-gray-800">Berkas berhasil diajukan!</h3>
-      <p class="mt-1.5 text-sm text-gray-500">Pengajuan Anda telah dikirim ke <span class="font-semibold text-gray-700">BWI Pusat</span> dan sedang menunggu verifikasi. Anda dapat memantau statusnya di dashboard.</p>
-      <button type="button" onclick="keDashboard()" class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700">Ke Dashboard</button>
+      <p class="mt-1.5 text-sm leading-relaxed text-gray-500">Pengajuan Anda telah dikirim ke <span class="font-semibold text-gray-700">BWI Pusat</span> dan sedang menunggu verifikasi. Anda dapat memantau statusnya di dashboard.</p>
+      <button type="button" onclick="keDashboard()" class="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50">
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>
+        Kembali ke Dashboard
+      </button>
     </div>
   </div>
 
@@ -245,6 +264,28 @@
       { no: 9, key: 'permohonanKUA', seksi: 'C', wajib: true, template: false, label: 'Surat Permohonan kepada KUA Setempat untuk Meneruskan Pendaftaran Nazhir kepada BWI', ket: '' },
       { no: 10, key: 'pengantarKUA', seksi: 'C', wajib: true, template: false, label: 'Surat Pengantar Permohonan Pendaftaran Nazhir dari KUA Tempat Harta Benda Wakaf Berada yang Ditujukan kepada BWI', ket: '' },
     ];
+
+    // Dokumen yang punya nomor -> tampilkan input "Nomor Dokumen" (memudahkan verifikasi Pusat).
+    // key -> label + placeholder input. Berlaku untuk Wakaf Uang & Wakaf Tanah.
+    const NOMOR_DOK = {
+      // Wakaf Uang
+      aktaPendirian: { label: 'Nomor Akta Pendirian', ph: 'mis. 12/AKTA/2024' },
+      pengesahanKemenkumham: { label: 'Nomor SK Pengesahan Kemenkumham', ph: 'mis. AHU-0001234.AH.01.04.Tahun 2024' },
+      npwp: { label: 'Nomor NPWP', ph: 'mis. 01.234.567.8-901.000' },
+      domisili: { label: 'Nomor Surat Keterangan Domisili', ph: 'mis. 470/12/Kel/2025' },
+      rekomBWI: { label: 'Nomor Surat Rekomendasi BWI Perwakilan', ph: 'mis. 33/BWI-JABAR/REK/2025' },
+      rekomLKSPWU: { label: 'Nomor Rekomendasi LKS-PWU', ph: 'mis. 55/LKSPWU/2025' },
+      stbpnSebelumnya: { label: 'Nomor STBPN Sebelumnya', ph: 'mis. STBPN-JB-2020-00123' },
+      sertifikatKompetensi: { label: 'Nomor Sertifikat Kompetensi', ph: 'mis. BNSP/NZ/2024/00123' },
+      suratPermohonan: { label: 'Nomor Surat Permohonan', ph: 'mis. 001/YWN/PERM/2025' },
+      // Wakaf Tanah
+      pengesahanNazhir: { label: 'Nomor Surat Pengesahan Nazhir', ph: 'mis. W.2/PN/2024' },
+      sertifikatWakaf: { label: 'Nomor Sertifikat Wakaf', ph: 'mis. 12.34.56.78.9.00123' },
+      aiwApaiw: { label: 'Nomor AIW / APAIW', ph: 'mis. W.2/12/AIW/2024' },
+      ktpNazhir: { label: 'NIK (Nomor KTP) Nazhir', ph: 'mis. 3273xxxxxxxxxxxx' },
+      permohonanKUA: { label: 'Nomor Surat Permohonan (ke KUA)', ph: 'mis. 010/KUA/2025' },
+      pengantarKUA: { label: 'Nomor Surat Pengantar (dari KUA)', ph: 'mis. 021/KUA/PGT/2025' },
+    };
 
     // Set aktif sesuai jenis
     const SEKSI = jenisNazhir === 'tanah' ? SEKSI_TANAH : SEKSI_UANG;
@@ -362,6 +403,31 @@
     let seksiAktif = Object.keys(SEKSI)[0];   // seksi yang sedang dibuka di panel kanan
     function pilihSeksi(kode) { seksiAktif = kode; renderChecklist(); }
 
+    // Escape aman untuk atribut value (tambahkan kutip).
+    function amankanAttr(t) { return amankan(t).replace(/"/g, '&quot;'); }
+    // Input Nomor Dokumen (hanya untuk dokumen bernomor di NOMOR_DOK).
+    function inputNomor(b, d, beku) {
+      const cfg = NOMOR_DOK[b.key];
+      if (!cfg) return '';
+      const val = (d.nomorBerkas && d.nomorBerkas[b.key]) ? d.nomorBerkas[b.key] : '';
+      if (beku) {
+        return '<div class="mt-2"><p class="text-[11px] font-medium text-gray-500">' + amankan(cfg.label) + '</p>' +
+          '<p class="text-xs font-semibold text-gray-700">' + (val ? amankan(val) : '<span class="font-normal text-gray-400">— belum diisi —</span>') + '</p></div>';
+      }
+      return '<div class="mt-2 max-w-xs">' +
+        '<label class="mb-1 block text-[11px] font-medium text-gray-500">' + amankan(cfg.label) + (b.wajib ? ' <span class="text-red-400">*</span>' : '') + '</label>' +
+        '<input type="text" value="' + amankanAttr(val) + '" oninput="simpanNomor(\'' + b.key + '\', this.value)" placeholder="' + amankanAttr(cfg.ph || '') + '" class="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">' +
+        '</div>';
+    }
+    // Simpan nomor dokumen tanpa re-render (agar fokus input tidak hilang saat mengetik).
+    function simpanNomor(key, val) {
+      if (diajukan()) return;
+      const d = bacaDaftar();
+      d.nomorBerkas = d.nomorBerkas || {};
+      d.nomorBerkas[key] = val;
+      simpanDaftar(d);
+    }
+
     // HTML satu baris berkas (dipakai di panel kanan)
     function barisBerkas(b, d, beku) {
       const berkas = d.berkas && d.berkas[b.key];
@@ -391,6 +457,7 @@
         '<div class="min-w-0"><div class="flex flex-wrap items-center gap-2"><p class="text-sm font-semibold text-gray-800">' + amankan(b.label) + '</p>' + wajibBadge + '</div>' +
         (b.ket ? '<p class="mt-0.5 text-xs text-gray-400">' + amankan(b.ket) + '</p>' : '') +
         (ada ? '<button type="button" onclick="pratinjauBerkas(\'' + b.key + '\')" title="Klik untuk pratinjau" class="mt-1 block max-w-full truncate text-left text-xs font-medium text-brand-700 underline decoration-brand-300 underline-offset-2 transition hover:text-brand-800 hover:decoration-brand-500">' + amankan(berkas.nama) + (berkas.ukuran ? ' &middot; ' + amankan(berkas.ukuran) : '') + '</button>' : '') +
+        inputNomor(b, d, beku) +
         '</div></div>' +
         '<div class="flex shrink-0 items-center gap-2 md:justify-end">' + badgeStatusBerkas(ada) + aksi + '</div>' +
         '</div>';
@@ -457,7 +524,7 @@
       } else if (s === 'ditolak') {
         wrap.innerHTML = kartuStatus('red', 'Pendaftaran ditolak', 'Maaf, pengajuan Anda tidak dapat disetujui.' + cat);
       } else if (s === 'diverifikasi') {
-        wrap.innerHTML = kartuStatus('emerald', 'Dokumen terverifikasi', 'Berkas Anda lengkap & terverifikasi. Menunggu penjadwalan presentasi/wawancara dari BWI Pusat.');
+        wrap.innerHTML = kartuStatus('emerald', 'Dokumen terverifikasi', 'Berkas Anda lengkap & terverifikasi.' + cat + ' Menunggu penjadwalan presentasi/wawancara dari BWI Pusat.');
       } else if (s === 'terjadwal') {
         const jam = ((d.jadwalTanggal || '') + (d.jadwalWaktu ? ', ' + d.jadwalWaktu : '')) || (d.jadwalPresentasi || '-');
         let teks = 'Jadwal Anda: <b>' + amankan(jam) + '</b>';
@@ -529,7 +596,11 @@
       if (diajukan()) return;
       const d = bacaDaftar();
       d.berkas = d.berkas || {};
-      BERKAS.forEach(b => { if (!d.berkas[b.key]) d.berkas[b.key] = { nama: 'contoh-' + b.key + '.pdf', ukuran: '320 KB' }; });
+      d.nomorBerkas = d.nomorBerkas || {};
+      BERKAS.forEach(b => {
+        if (!d.berkas[b.key]) d.berkas[b.key] = { nama: 'contoh-' + b.key + '.pdf', ukuran: '320 KB' };
+        if (NOMOR_DOK[b.key] && !d.nomorBerkas[b.key]) d.nomorBerkas[b.key] = 'DEMO-' + String(b.key).toUpperCase().slice(0, 6) + '-001';
+      });
       simpanDaftar(d);
       renderChecklist(); renderProgress();
       showToast('Semua berkas diisi contoh (mode demo).');

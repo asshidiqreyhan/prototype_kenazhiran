@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detail Pengesahan Nazhir | Ketua BWI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Outfit', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+          colors: { brand: { 50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 300: '#5eead4', 400: '#2dd4bf', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a' } },
+          maxWidth: { 'screen-2xl': '1536px' },
+          boxShadow: { 'card': '0px 1px 3px rgba(0,0,0,0.06), 0px 1px 2px rgba(0,0,0,0.04)' }
+        }
+      }
+    }
+  </script>
+  <style>
+    body,
+    html {
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 999px;
+    }
+
+    #sidebar ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, .18);
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .modal-in {
+      animation: modalIn .22s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    @keyframes esDrawCircle {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes esDrawCheck {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes esPop {
+      0% {
+        transform: scale(.6);
+        opacity: 0;
+      }
+
+      60% {
+        transform: scale(1.06);
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes esRing {
+      0% {
+        transform: scale(.7);
+        opacity: .55;
+      }
+
+      100% {
+        transform: scale(1.7);
+        opacity: 0;
+      }
+    }
+
+    .es-pop {
+      animation: esPop .5s cubic-bezier(.34, 1.56, .64, 1) both;
+    }
+
+    .es-ring {
+      transform-origin: center;
+      animation: esRing 1.1s ease-out .35s 1 both;
+    }
+
+    .es-circle {
+      stroke-dasharray: 283;
+      stroke-dashoffset: 283;
+      animation: esDrawCircle .6s ease-out .1s forwards;
+    }
+
+    .es-check {
+      stroke-dasharray: 60;
+      stroke-dashoffset: 60;
+      animation: esDrawCheck .4s ease-out .6s forwards;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .es-pop,
+      .es-ring {
+        animation: none;
+        opacity: 1;
+        transform: none;
+      }
+
+      .es-circle,
+      .es-check {
+        animation: none;
+        stroke-dashoffset: 0;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 antialiased">
+  <div class="flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside id="sidebar"
+      class="absolute left-0 top-0 z-50 flex h-screen w-[290px] flex-col overflow-y-hidden bg-brand-900 duration-300 ease-linear lg:static lg:translate-x-0 -translate-x-full">
+      <div class="flex items-center justify-between gap-2 px-6 py-5.5 h-[72px] lg:py-6.5">
+        <a href="ketua-dashboard.html" class="flex items-center gap-3">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white p-1"><img src="Logo_Badan_Wakaf_Indonesia-Bawah.png" alt="Logo Badan Wakaf Indonesia" class="h-full w-full object-contain"></span>
+          <span class="leading-tight"><span class="block text-base font-bold text-white">BWI Superapps</span><span
+              class="block text-[11px] font-medium text-brand-300">Ketua BWI</span></span>
+        </a>
+        <button onclick="tutupSidebar()" class="block lg:hidden text-white/70 hover:text-white"><svg class="h-6 w-6"
+            fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg></button>
+      </div>
+      <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
+        <nav class="mt-1 px-4 py-4 lg:px-6">
+          <!-- <h3 class="mb-4 ml-3 text-xs font-semibold uppercase tracking-wider text-brand-400">Menu Ketua</h3> -->
+          <ul class="mb-6 flex flex-col gap-1.5">
+            <li><a href="ketua-dashboard.html"
+                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white"><svg
+                  class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                </svg><span>Dashboard</span></a></li>
+            <li><a href="ketua-pendaftaran.html"
+                class="flex w-full items-center gap-3 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm duration-300 ease-in-out"><svg
+                  class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                </svg><span>Pengesahan Nazhir</span></a></li>
+            <li><a href="ketua-pin.html"
+                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white"><svg
+                  class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" />
+                </svg><span>Atur PIN e-Sign</span></a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="mt-auto border-t border-white/10 p-4 lg:p-6">
+        <button onclick="logout()"
+          class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 transition hover:bg-white/10 hover:text-white"><svg
+            class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+          </svg>Keluar</button>
+      </div>
+    </aside>
+    <div id="overlay" onclick="tutupSidebar()" class="fixed inset-0 z-40 hidden bg-black/40 lg:hidden"></div>
+
+    <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+      <header class="sticky top-0 z-30 flex h-[72px] items-center gap-3 border-b border-gray-200 bg-white px-4 md:px-6">
+        <button onclick="toggleSidebar()" class="text-gray-500 hover:text-gray-700 lg:hidden"><svg class="h-6 w-6"
+            fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg></button>
+        <div class="min-w-0">
+          <h1 class="truncate text-lg font-bold leading-tight text-gray-800">Detail Pengesahan Nazhir</h1>
+          <p class="truncate text-xs text-gray-400">Tinjau berkas &amp; draf surat sebelum menandatangani secara
+            elektronik</p>
+        </div>
+        <div class="ml-auto flex items-center gap-3">
+          <span class="hidden text-right sm:block"><span class="block text-sm font-semibold text-gray-700">Prof. Dr.
+              K.H. Noor Achmad, M.A.</span><span class="block text-xs text-gray-400">Ketua BWI</span></span>
+          <span
+            class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">NA</span>
+        </div>
+      </header>
+
+      <main>
+        <div class="mx-auto max-w-screen-2xl space-y-6 p-4 md:p-6">
+          <!-- Kembali + judul -->
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex items-center gap-3">
+              <a href="ketua-pendaftaran.html" title="Kembali ke antrean pengesahan"
+                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50"><svg
+                  class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg></a>
+              <div class="min-w-0">
+                <h2 id="dtNama" class="truncate text-xl font-bold text-gray-800 md:text-2xl">&mdash;</h2>
+                <p id="dtSub" class="mt-0.5 text-sm text-gray-500">&mdash;</p>
+              </div>
+            </div>
+            <div id="dtBadge" class="shrink-0"></div>
+          </div>
+
+          <!-- Data tidak ditemukan -->
+          <div id="dtNotFound"
+            class="hidden rounded-2xl border border-gray-200 bg-white px-6 py-14 text-center shadow-card">
+            <p class="text-sm font-medium text-gray-500">Data pengajuan tidak ditemukan.</p>
+            <a href="ketua-pendaftaran.html"
+              class="mt-4 inline-flex rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700">Kembali
+              ke Antrean</a>
+          </div>
+
+          <div id="dtKonten" class="space-y-6">
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+              <!-- Kolom kiri: preview dokumen -->
+              <div class="lg:col-span-2">
+                <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+                  <div class="flex items-center justify-between gap-3 border-b border-gray-100 px-5 py-4 md:px-6">
+                    <div class="flex items-center gap-2">
+                      <svg class="h-5 w-5 text-brand-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                      </svg>
+                      <h3 id="dtPrevJudul" class="text-base font-bold text-gray-800">Preview Draf Surat Keputusan</h3>
+                    </div>
+                    <button type="button" onclick="bukaSK()"
+                      class="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-semibold text-gray-600 transition hover:bg-gray-50"><svg
+                        class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+                      </svg>Perbesar</button>
+                  </div>
+                  <div class="max-h-[78vh] overflow-y-auto bg-gray-100 px-4 py-6 sm:px-8">
+                    <div id="dtPreview"
+                      class="mx-auto max-w-[720px] bg-white p-8 text-sm leading-relaxed text-gray-800 shadow-lg sm:p-10"
+                      style="font-family: 'Times New Roman', Georgia, serif;"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Kolom kanan: info pemohon + e-Sign -->
+              <div class="space-y-6 lg:col-span-1">
+                <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-card md:p-6">
+                  <h3 class="mb-4 text-base font-bold text-gray-800">Informasi Pemohon</h3>
+                  <div id="dtInfo" class="grid grid-cols-1 gap-3.5 text-sm"></div>
+                </div>
+                <div id="dtCatatan"></div>
+                <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+                  <div class="flex items-center gap-2 border-b border-gray-100 px-5 py-4 md:px-6">
+                    <svg class="h-5 w-5 text-brand-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+                      stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                    </svg>
+                    <h3 class="text-base font-bold text-gray-800">Tanda Tangan Elektronik</h3>
+                  </div>
+                  <div id="dtPanel" class="px-5 py-5 md:px-6"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Riwayat proses -->
+            <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-card md:p-6">
+              <h3 class="mb-4 text-base font-bold text-gray-800">Riwayat Proses</h3>
+              <div id="dtRiwayat" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal Tolak -->
+  <div id="modalTolak" class="fixed inset-0 z-[76] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60" onclick="tutupTolak()"></div>
+    <div class="modal-in relative w-full max-w-lg rounded-2xl bg-white shadow-2xl">
+      <div class="flex items-start justify-between gap-3 border-b border-gray-100 px-6 py-5">
+        <div class="flex items-center gap-2.5">
+          <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-red-50 text-red-600"><svg class="h-5 w-5"
+              fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9.75 9.75l4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg></span>
+          <div>
+            <h3 class="text-lg font-bold text-gray-800">Tolak Pengesahan</h3>
+            <p class="mt-0.5 text-xs text-gray-400">Pengajuan dikembalikan dengan status Ditolak.</p>
+          </div>
+        </div>
+        <button onclick="tutupTolak()" class="text-gray-400 transition hover:text-gray-600"><svg class="h-6 w-6"
+            fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg></button>
+      </div>
+      <div class="space-y-4 px-6 py-5">
+        <div>
+          <label class="mb-1.5 block text-sm font-semibold text-gray-700">Alasan Penolakan <span
+              class="text-red-500">*</span></label>
+          <textarea id="tolakNote" rows="4" placeholder="Tuliskan alasan penolakan..."
+            class="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"></textarea>
+          <p id="tolakErr" class="mt-1.5 hidden text-xs font-medium text-red-600">Alasan penolakan wajib diisi.</p>
+        </div>
+      </div>
+      <div class="flex items-center justify-end gap-2 border-t border-gray-100 bg-gray-50 px-6 py-4">
+        <button onclick="tutupTolak()"
+          class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-600 transition hover:bg-gray-100">Batal</button>
+        <button onclick="konfirmasiTolak()"
+          class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700">Tolak
+          Pengajuan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Preview SK -->
+  <div id="modalSK" class="fixed inset-0 z-[75] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60" onclick="tutupSK()"></div>
+    <div
+      class="modal-in relative flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+      <div class="flex items-center justify-between gap-3 border-b border-gray-100 px-6 py-4">
+        <div class="flex items-center gap-2">
+          <svg class="h-5 w-5 text-brand-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+          </svg>
+          <h3 class="text-base font-bold text-gray-800">Preview Surat Keputusan (SK) Nazhir</h3>
+        </div>
+        <button onclick="tutupSK()" class="text-gray-400 transition hover:text-gray-600"><svg class="h-6 w-6"
+            fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg></button>
+      </div>
+      <div class="flex-1 overflow-y-auto bg-gray-100 px-4 py-6 sm:px-8">
+        <div id="skBody"
+          class="mx-auto max-w-[720px] bg-white p-8 text-sm leading-relaxed text-gray-800 shadow-lg sm:p-12"
+          style="font-family: 'Times New Roman', Georgia, serif;"></div>
+      </div>
+      <div class="flex items-center justify-end gap-2 border-t border-gray-100 bg-gray-50 px-6 py-3">
+        <button onclick="tutupSK()"
+          class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-600 transition hover:bg-gray-100">Tutup</button>
+        <button onclick="unduhSK()"
+          class="inline-flex items-center gap-2 rounded-lg border border-brand-200 bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-700 transition hover:bg-brand-100"><svg
+            class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+          </svg>Unduh</button>
+        <button onclick="cetakSK()"
+          class="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"><svg
+            class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
+          </svg>Cetak</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Sukses e-Sign -->
+  <div id="modalSukses" class="fixed inset-0 z-[85] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60"></div>
+    <div class="modal-in relative w-full max-w-md overflow-hidden rounded-2xl bg-white text-center shadow-2xl">
+      <div class="px-6 pt-8 pb-2">
+        <div class="relative mx-auto h-24 w-24">
+          <span class="es-ring absolute inset-0 rounded-full bg-brand-400"></span>
+          <span class="es-pop relative flex h-24 w-24 items-center justify-center rounded-full bg-brand-50">
+            <svg class="h-16 w-16" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle class="es-circle" cx="50" cy="50" r="45" stroke="#0d9488" stroke-width="6" fill="none"
+                stroke-linecap="round" transform="rotate(-90 50 50)" />
+              <path class="es-check" d="M32 51 L45 64 L70 37" stroke="#0d9488" stroke-width="7" fill="none"
+                stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+        </div>
+        <h3 class="mt-5 text-xl font-bold text-gray-800">Berhasil Ditandatangani</h3>
+        <p class="mt-1.5 text-sm text-gray-500">Dokumen telah ditandatangani secara digital oleh Ketua BWI dan Surat
+          Keputusan telah terbit.</p>
+        <div class="mt-5 space-y-2 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 text-left">
+          <div class="flex items-center justify-between gap-3"><span
+              class="text-xs font-semibold uppercase tracking-wide text-gray-400">NIB</span><span id="skNib"
+              class="font-mono text-sm font-bold text-gray-800">—</span></div>
+          <div class="flex items-center justify-between gap-3"><span
+              class="text-xs font-semibold uppercase tracking-wide text-gray-400">ID e-Sign</span><span id="skTtdId"
+              class="font-mono text-sm font-bold text-gray-800">—</span></div>
+        </div>
+      </div>
+      <div class="flex flex-col gap-2 px-6 pb-6 pt-4">
+        <a id="skVerif" href="#" target="_blank" rel="noopener"
+          class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"><svg
+            class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M7.864 4.243A7.5 7.5 0 0 1 19.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 0 0 4.5 10.5a7.464 7.464 0 0 1-1.15 3.993m1.989 3.559A11.209 11.209 0 0 0 8.25 10.5a3.75 3.75 0 1 1 7.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 0 1-3.6 9.75m6.633-4.596a18.666 18.666 0 0 1-2.485 5.33" />
+          </svg>Verifikasi Dokumen</a>
+        <div class="flex gap-2">
+          <button type="button" onclick="bukaSK()"
+            class="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-brand-200 bg-brand-50 px-4 py-2.5 text-sm font-semibold text-brand-700 transition hover:bg-brand-100"><svg
+              class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+            </svg>Lihat SK</button>
+          <button type="button" onclick="tutupSukses()"
+            class="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-600 transition hover:bg-gray-100">Tutup</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"
+    class="fixed bottom-6 right-6 z-[80] hidden max-w-md items-center gap-3 rounded-xl bg-gray-900 px-5 py-3 text-sm font-medium text-white shadow-2xl">
+    <svg class="h-5 w-5 shrink-0 text-brand-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+    </svg>
+    <span id="toastMsg"></span>
+  </div>
+
+  <script>
+    const KETUA_NAMA = 'Prof. Dr. K.H. Noor Achmad, M.A.';
+    const KUNCI_DAFTAR = 'pendaftaran_nazhir_bwi';
+    const KUNCI_DUMMY = 'pendaftaran_dummy_bwi_v2';
+    const KUNCI_TAMBAHAN = 'pendaftaran_tambahan_bwi';
+    const KUNCI_PIN = 'esign_pin_bwi';
+    const PIN_DEFAULT = 'bwi2026';
+    function bacaPin() { try { const v = localStorage.getItem(KUNCI_PIN); if (v !== null && v !== '') return v; } catch (e) { } try { localStorage.setItem(KUNCI_PIN, PIN_DEFAULT); } catch (e) { } return PIN_DEFAULT; }
+    const STATUS = {
+      diajukan: ['Menunggu Verifikasi', 'bg-amber-50 text-amber-700'],
+      revisi: ['Revisi', 'bg-orange-50 text-orange-700'],
+      ditolak: ['Ditolak', 'bg-red-50 text-red-600'],
+      diverifikasi: ['Sudah Diverifikasi', 'bg-emerald-50 text-emerald-700'],
+      terjadwal: ['Jadwal Wawancara', 'bg-blue-50 text-blue-700'],
+      persetujuan: ['Menunggu Persetujuan', 'bg-violet-50 text-violet-700'],
+      sekretariat: ['Menunggu Sekretaris', 'bg-cyan-50 text-cyan-700'],
+      ttd: ['Menunggu TTD', 'bg-indigo-50 text-indigo-700'],
+      aktif: ['Aktif', 'bg-brand-50 text-brand-700'],
+    };
+
+    function bacaDaftar() { try { const o = JSON.parse(localStorage.getItem(KUNCI_DAFTAR)); if (o && typeof o === 'object') return o; } catch (e) { } return null; }
+    function simpanDaftar(o) { try { localStorage.setItem(KUNCI_DAFTAR, JSON.stringify(o)); } catch (e) { } }
+    function bacaTambahan() { try { const o = JSON.parse(localStorage.getItem(KUNCI_TAMBAHAN)); if (o && typeof o === 'object') return o; } catch (e) { } return null; }
+    function simpanTambahan(o) { try { localStorage.setItem(KUNCI_TAMBAHAN, JSON.stringify(o)); } catch (e) { } }
+    function bacaDummy() { try { const a = JSON.parse(localStorage.getItem(KUNCI_DUMMY)); if (Array.isArray(a)) return a; } catch (e) { } return null; }
+    function simpanDummy(a) { try { localStorage.setItem(KUNCI_DUMMY, JSON.stringify(a)); } catch (e) { } }
+    function amankan(t) { const d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; }
+    function tglHariIni() { const b = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']; const d = new Date(); return d.getDate() + ' ' + b[d.getMonth()] + ' ' + d.getFullYear(); }
+
+    function cari(idAttr) {
+      if (idAttr === 'REAL') { const r = bacaDaftar(); return r ? Object.assign({ _real: true }, r) : null; }
+      if (idAttr === 'REAL2') { const r = bacaTambahan(); return r ? Object.assign({ _real2: true }, r) : null; }
+      return (bacaDummy() || []).find(d => String(d.id) === String(idAttr)) || null;
+    }
+    function persist(d) {
+      if (d._real) { const r = bacaDaftar() || {}; const clone = Object.assign({}, d); delete clone._real; Object.assign(r, clone); simpanDaftar(r); }
+      else if (d._real2) { const r = bacaTambahan() || {}; const clone = Object.assign({}, d); delete clone._real2; Object.assign(r, clone); simpanTambahan(r); tambahJenisAktif(r.jenisNazhir); }
+      else { const arr = bacaDummy() || []; const i = arr.findIndex(x => String(x.id) === String(d.id)); if (i >= 0) { arr[i] = d; simpanDummy(arr); } }
+    }
+    function tambahJenisAktif(jenis) {
+      if (jenis !== 'tanah' && jenis !== 'uang') return;
+      const t = bacaTambahan();
+      if (!t || t.status !== 'aktif') return;
+      const r = bacaDaftar(); if (!r) return;
+      let arr = Array.isArray(r.jenisAktif) ? r.jenisAktif.slice() : [];
+      if (arr.length === 0 && r.status === 'aktif' && (r.jenisNazhir === 'tanah' || r.jenisNazhir === 'uang')) arr = [r.jenisNazhir];
+      if (arr.indexOf(jenis) === -1) arr.push(jenis);
+      r.jenisAktif = arr;
+      simpanDaftar(r);
+    }
+    function badge(st) { const s = STATUS[st] || ['-', 'bg-gray-100 text-gray-500']; return '<span class="inline-flex items-center rounded-full ' + s[1] + ' px-2.5 py-1 text-xs font-semibold">' + s[0] + '</span>'; }
+    function barisInfo(label, val, mono) { return '<div><p class="text-xs font-semibold uppercase tracking-wide text-gray-400">' + amankan(label) + '</p><p class="mt-0.5 text-sm font-semibold text-gray-800 ' + (mono ? 'font-mono' : '') + '">' + val + '</p></div>'; }
+
+    /* ---------- QR verified ---------- */
+    function qrKode(seed, px) {
+      const N = 25, s = px || 96, cell = s / N, sd = String(seed || 'BWI');
+      let h = 2166136261;
+      for (let i = 0; i < sd.length; i++) { h ^= sd.charCodeAt(i); h = Math.imul(h, 16777619); }
+      function rnd(i) { let x = Math.imul((h ^ (i * 2654435761)) >>> 0, 2246822519); x ^= x >>> 13; return ((x >>> 0) % 1000) / 1000; }
+      const on = {}; const set = (x, y) => { on[x + '_' + y] = true; };
+      function finder(gx, gy) { for (let y = 0; y < 7; y++) for (let x = 0; x < 7; x++) { const edge = (x === 0 || x === 6 || y === 0 || y === 6), core = (x >= 2 && x <= 4 && y >= 2 && y <= 4); if (edge || core) set(gx + x, gy + y); } }
+      finder(0, 0); finder(N - 7, 0); finder(0, N - 7);
+      const inF = (x, y) => (x < 8 && y < 8) || (x >= N - 8 && y < 8) || (x < 8 && y >= N - 8);
+      let idx = 0;
+      for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) { if (inF(x, y)) continue; if (rnd(idx++) > 0.5) set(x, y); }
+      let r = '';
+      for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) if (on[x + '_' + y]) r += '<rect x="' + (x * cell).toFixed(2) + '" y="' + (y * cell).toFixed(2) + '" width="' + cell.toFixed(2) + '" height="' + cell.toFixed(2) + '"/>';
+      return '<svg width="' + s + '" height="' + s + '" viewBox="0 0 ' + s + ' ' + s + '" xmlns="http://www.w3.org/2000/svg" style="display:block"><rect width="' + s + '" height="' + s + '" fill="#fff"/><g fill="#0f172a">' + r + '</g></svg>';
+    }
+
+    /* ---------- Preview SK ---------- */
+    function skHTML(d, draft) {
+      const nama = amankan(d.namaBadanHukum || '-');
+      const pic = amankan(d.pic || '-');
+      const nib = amankan(d.nib || '(otomatis saat ditandatangani)');
+      const tgl = amankan(d.tglSertifikat || tglHariIni());
+      const nomor = 'SK-' + (d.nib || 'NZHR-XXX') + '/BWI/' + (String(tgl).split(' ').pop() || '2026');
+      const signed = (!draft && d.ttdOleh);
+      const stempel = signed
+        ? '<div style="margin:6px auto 2px;width:100px;height:100px;padding:4px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;">' + qrKode(d.ttdId || d.nib || nomor, 92) + '</div>' +
+        '<p style="margin:2px 0 0;font-size:10px;font-weight:bold;color:#0f766e;font-family:Arial,sans-serif;">&#10003; Terverifikasi — Ketua BWI</p>'
+        : '<div style="margin:6px auto 2px;width:100px;height:100px;border:1px dashed #cbd5e1;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-family:Arial,sans-serif;font-size:10px;line-height:1.3;text-align:center;">QR terbit<br>setelah TTD</div>';
+      const ttdBlok = '<div style="text-align:center;min-width:260px;">' +
+        '<p style="margin:0;">Ditetapkan di Jakarta,</p>' +
+        '<p style="margin:0 0 4px;">pada tanggal ' + tgl + '</p>' +
+        '<p style="margin:0;">Ketua Badan Wakaf Indonesia,</p>' +
+        stempel +
+        '<p style="margin:2px 0 0;font-weight:bold;text-decoration:underline;">' + amankan(signed ? d.ttdOleh : KETUA_NAMA) + '</p>' +
+        (signed ? '<p style="margin:2px 0 0;font-size:10px;color:#64748b;font-family:Arial,sans-serif;">Ditandatangani secara elektronik · ' + amankan(d.tglTtd || tgl) + '</p>' +
+          '<p style="margin:1px 0 0;font-size:9px;color:#94a3b8;font-family:Arial,sans-serif;">ID: ' + amankan(d.ttdId || '-') + '</p>' : '') +
+        '</div>';
+      return '' +
+        '<div style="text-align:center;border-bottom:3px double #0f766e;padding-bottom:14px;margin-bottom:20px;">' +
+        '<p style="margin:0;font-size:15px;font-weight:bold;letter-spacing:.5px;">BADAN WAKAF INDONESIA</p>' +
+        '<p style="margin:2px 0 0;font-size:11px;">Jl. Kebon Sirih Nomor 57, Jakarta Pusat 10340 · www.bwi.go.id</p>' +
+        '</div>' +
+        (draft ? '<p style="text-align:center;margin:0 0 12px;color:#b45309;font-weight:bold;font-family:Arial,sans-serif;font-size:11px;letter-spacing:1px;">— DRAF, BELUM DITANDATANGANI —</p>' : '') +
+        '<div style="text-align:center;margin-bottom:18px;">' +
+        '<p style="margin:0;font-weight:bold;text-decoration:underline;">SURAT KEPUTUSAN KETUA BADAN WAKAF INDONESIA</p>' +
+        '<p style="margin:4px 0;">Nomor: ' + amankan(nomor) + '</p>' +
+        '<p style="margin:8px 0 0;">TENTANG</p>' +
+        '<p style="margin:2px 0;font-weight:bold;">PENETAPAN DAN PENDAFTARAN NAZHIR WAKAF UANG</p>' +
+        '</div>' +
+        '<p style="margin:0 0 8px;">Ketua Badan Wakaf Indonesia, setelah melakukan verifikasi dokumen dan penilaian presentasi/wawancara:</p>' +
+        '<table style="width:100%;border-collapse:collapse;margin-bottom:12px;">' +
+        '<tr><td style="width:120px;vertical-align:top;padding:2px 0;">Menimbang</td><td style="width:14px;vertical-align:top;">:</td><td style="padding:2px 0;">bahwa ' + nama + ' telah memenuhi persyaratan administratif dan kompetensi sebagai Nazhir Wakaf Uang sesuai ketentuan peraturan perundang-undangan yang berlaku;</td></tr>' +
+        '<tr><td style="vertical-align:top;padding:2px 0;">Mengingat</td><td style="vertical-align:top;">:</td><td style="padding:2px 0;">Undang-Undang No. 41 Tahun 2004 tentang Wakaf serta Peraturan BWI tentang Pendaftaran Nazhir Wakaf Uang;</td></tr>' +
+        '<tr><td style="vertical-align:top;padding:2px 0;">Memperhatikan</td><td style="vertical-align:top;">:</td><td style="padding:2px 0;">hasil verifikasi berkas dan hasil presentasi/wawancara yang dinyatakan <b>LULUS</b>' + (d.catatanHasil ? ' dengan catatan: "' + amankan(d.catatanHasil) + '"' : '') + ';</td></tr>' +
+        '</table>' +
+        '<p style="text-align:center;font-weight:bold;margin:14px 0;">MEMUTUSKAN</p>' +
+        '<table style="width:100%;border-collapse:collapse;">' +
+        '<tr><td style="width:120px;vertical-align:top;padding:2px 0;">Menetapkan</td><td style="width:14px;vertical-align:top;">:</td><td style="padding:2px 0;"></td></tr>' +
+        '<tr><td style="vertical-align:top;padding:2px 0;">KESATU</td><td style="vertical-align:top;">:</td><td style="padding:2px 0;">Menetapkan <b>' + nama + '</b> sebagai <b>Nazhir Wakaf Uang</b> yang terdaftar pada Badan Wakaf Indonesia.</td></tr>' +
+        '<tr><td style="vertical-align:top;padding:2px 0;">KEDUA</td><td style="vertical-align:top;">:</td><td style="padding:2px 0;">Nomor Induk Nazhir (NIB): <b>' + nib + '</b>, dengan penanggung jawab (PIC): ' + pic + '.</td></tr>' +
+        '<tr><td style="vertical-align:top;padding:2px 0;">KETIGA</td><td style="vertical-align:top;">:</td><td style="padding:2px 0;">Nazhir wajib menyampaikan laporan pengelolaan dan pengembangan harta benda wakaf secara berkala sesuai ketentuan yang berlaku.</td></tr>' +
+        '<tr><td style="vertical-align:top;padding:2px 0;">KEEMPAT</td><td style="vertical-align:top;">:</td><td style="padding:2px 0;">Keputusan ini berlaku sejak tanggal ditetapkan dan akan ditinjau kembali apabila terdapat kekeliruan di kemudian hari.</td></tr>' +
+        '</table>' +
+        '<div style="display:flex;justify-content:flex-end;align-items:flex-end;margin-top:34px;">' +
+        ttdBlok +
+        '</div>';
+    }
+
+    /* ---------- Render ---------- */
+    const detailId = new URLSearchParams(location.search).get('id') || '';
+    let currentD = null;
+
+    function renderDetail() {
+      const d = cari(detailId);
+      currentD = d;
+      const nf = document.getElementById('dtNotFound'), kon = document.getElementById('dtKonten');
+      if (!d) {
+        nf.classList.remove('hidden'); kon.classList.add('hidden');
+        document.getElementById('dtNama').textContent = 'Tidak ditemukan';
+        document.getElementById('dtSub').textContent = 'Pengajuan tidak tersedia';
+        document.getElementById('dtBadge').innerHTML = '';
+        return;
+      }
+      nf.classList.add('hidden'); kon.classList.remove('hidden');
+      document.getElementById('dtNama').textContent = d.namaBadanHukum || '-';
+      document.getElementById('dtSub').textContent = (d.jenis || 'Wakaf Uang') + (d._real2 ? ' · HBW Tambahan' : '') + ' · Diajukan ' + (d.tglAjukan || '-');
+      document.getElementById('dtBadge').innerHTML = badge(d.status) + (d._real2 ? ' <span class="ml-1 inline-flex items-center rounded-full bg-violet-50 px-2.5 py-1 text-xs font-semibold text-violet-700">HBW Tambahan</span>' : '');
+
+      const info = [barisInfo('PIC', amankan(d.pic || '-')), barisInfo('Email', amankan(d.email || '-')), barisInfo('No. HP', amankan(d.hp || '-')), barisInfo('Jenis Nazhir', amankan(d.jenis || 'Wakaf Uang'))];
+      if (d.jadwalPresentasi) info.push(barisInfo('Jadwal Presentasi', amankan(d.jadwalPresentasi)));
+      if (d.hasilPresentasi) info.push(barisInfo('Hasil Presentasi', amankan(d.hasilPresentasi)));
+      if (d.catatanHasil) info.push(barisInfo('Catatan Hasil', amankan(d.catatanHasil)));
+      if (d.nib) info.push(barisInfo('NIB Terbit', amankan(d.nib), true));
+      if (d.tglSertifikat) info.push(barisInfo('Tanggal SK', amankan(d.tglSertifikat)));
+      document.getElementById('dtInfo').innerHTML = info.join('');
+
+      // Riwayat proses
+      const langkah = [];
+      langkah.push(['Diajukan pemohon', d.tglAjukan || '-', true]);
+      if (d.hasilPresentasi) langkah.push(['Hasil presentasi: ' + amankan(d.hasilPresentasi), d.catatanHasil ? amankan(d.catatanHasil) : '-', true]);
+      langkah.push(['Diteruskan oleh Sekretaris' + (d.diteruskanOleh ? ' (' + amankan(d.diteruskanOleh) + ')' : ''), d.tglTeruskan || '-', !!d.diteruskanOleh]);
+      langkah.push(['Ditandatangani Ketua (e-Sign)' + (d.ttdOleh ? ' — ' + amankan(d.ttdOleh) : ''), d.tglTtd ? (amankan(d.tglTtd) + (d.ttdId ? ' · ' + amankan(d.ttdId) : '')) : 'Belum ditandatangani', d.status === 'aktif']);
+      document.getElementById('dtRiwayat').innerHTML = langkah.map(l => {
+        const done = l[2];
+        const dot = done ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-400';
+        const kartu = done ? 'border-brand-100 bg-brand-50/40' : 'border-gray-100 bg-white';
+        const ic = done ? '<svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>' : '<svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>';
+        return '<div class="flex gap-3 rounded-xl border ' + kartu + ' px-4 py-3.5"><span class="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full ' + dot + '">' + ic + '</span><div class="min-w-0"><p class="text-sm font-semibold text-gray-700">' + l[0] + '</p><p class="mt-0.5 text-xs text-gray-400">' + l[1] + '</p></div></div>';
+      }).join('');
+
+      // Catatan (bila ditolak)
+      document.getElementById('dtCatatan').innerHTML = (d.catatanPusat && d.status === 'ditolak')
+        ? '<div class="rounded-2xl border border-red-200 bg-red-50 px-5 py-4"><p class="text-sm font-bold text-red-700">Alasan Penolakan</p><p class="mt-1 text-xs text-red-700">' + amankan(d.catatanPusat) + '</p></div>'
+        : '';
+
+      // Preview draf / final
+      const isAktif = d.status === 'aktif';
+      document.getElementById('dtPrevJudul').textContent = isAktif ? 'Surat Keputusan (SK) Final' : 'Preview Draf Surat Keputusan';
+      document.getElementById('dtPreview').innerHTML = skHTML(d, !isAktif);
+
+      // Panel tindakan (e-Sign)
+      document.getElementById('dtPanel').innerHTML = panelTindakan(d);
+      const pin = document.getElementById('dtPin'); if (pin) setTimeout(() => pin.focus(), 60);
+    }
+
+    function panelTindakan(d) {
+      if (d.status === 'ttd') {
+        return '<p class="mb-4 text-sm text-gray-500">Tinjau draf surat di samping. Bila sesuai, masukkan <span class="font-semibold text-gray-600">PIN e-Sign</span> untuk menetapkan &amp; menandatangani secara elektronik.</p>' +
+          '<label class="mb-1.5 block text-sm font-semibold text-gray-700">PIN / Passphrase e-Sign <span class="text-red-500">*</span></label>' +
+          '<div class="relative"><span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg></span>' +
+          '<input id="dtPin" type="password" placeholder="Masukkan PIN e-Sign" onkeydown="if(event.key===\'Enter\')prosesTtd()" oninput="document.getElementById(\'dtErr\').classList.add(\'hidden\')" class="w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-11 pr-4 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"></div>' +
+          '<p id="dtErr" class="mt-1.5 hidden text-xs font-medium text-red-600">PIN e-Sign salah. Coba lagi.</p>' +
+          '<p class="mt-2 text-[11px] text-gray-400">PIN diatur di menu <a href="ketua-pin.html" class="font-semibold text-brand-600 hover:underline">Atur PIN e-Sign</a>. Default demo: <span class="font-mono font-semibold text-gray-500">bwi2026</span>.</p>' +
+          '<button type="button" onclick="prosesTtd()" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>Tandatangani &amp; Sahkan</button>' +
+          '<button type="button" onclick="bukaTolak()" class="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-red-200 px-4 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>Tolak Pengajuan</button>';
+      }
+      if (d.status === 'aktif') {
+        return '<div class="flex flex-col gap-4">' +
+          '<div class="flex items-start gap-2.5 rounded-lg border border-brand-100 bg-brand-50 px-4 py-3"><svg class="mt-0.5 h-5 w-5 shrink-0 text-brand-600" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg><div><p class="text-sm font-semibold text-brand-800">Sudah ditandatangani secara digital.</p><p class="mt-0.5 text-xs text-brand-700">NIB ' + amankan(d.nib || '-') + ' · ' + amankan(d.tglTtd || d.tglSertifikat || '-') + '</p><p class="text-[11px] text-brand-600">ID: ' + amankan(d.ttdId || '-') + '</p></div></div>' +
+          '<div class="flex flex-col items-start gap-2">' +
+          '<a href="verifikasi-dokumen.html?id=' + amankan(detailId) + '" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700 underline decoration-brand-400 decoration-2 underline-offset-4 transition hover:text-brand-800"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.864 4.243A7.5 7.5 0 0 1 19.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 0 0 4.5 10.5a7.464 7.464 0 0 1-1.15 3.993m1.989 3.559A11.209 11.209 0 0 0 8.25 10.5a3.75 3.75 0 1 1 7.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 0 1-3.6 9.75m6.633-4.596a18.666 18.666 0 0 1-2.485 5.33" /></svg>Verifikasi Digital</a>' +
+          '<button type="button" onclick="bukaSK()" class="text-xs font-medium text-gray-500 underline decoration-gray-300 underline-offset-2 transition hover:text-gray-700">Lihat Surat Keputusan (SK)</button>' +
+          '</div>' +
+          '</div>';
+      }
+      if (d.status === 'ditolak') {
+        return '<p class="text-sm text-gray-500">Pengajuan ini telah <span class="font-semibold text-red-600">ditolak</span>. Tidak ada tindakan penandatanganan.</p>';
+      }
+      return '<p class="text-sm text-gray-500">Status saat ini: <span class="font-semibold">' + (STATUS[d.status] ? STATUS[d.status][0] : amankan(d.status)) + '</span>. Belum masuk tahap penandatanganan Ketua.</p>';
+    }
+
+    /* ---------- Proses e-Sign inline ---------- */
+    function prosesTtd() {
+      const d = cari(detailId);
+      if (!d || d.status !== 'ttd') { renderDetail(); return; }
+      const el = document.getElementById('dtPin'); if (!el) return;
+      if (el.value !== bacaPin()) { document.getElementById('dtErr').classList.remove('hidden'); return; }
+      d.status = 'aktif';
+      d.nib = d.nib || ('NZHR-JKT-' + (300 + (Date.now() % 90)));
+      d.tglSertifikat = tglHariIni();
+      d.ttdOleh = KETUA_NAMA;
+      d.tglTtd = tglHariIni();
+      d.ttdId = 'BWI-ESIGN-' + Date.now().toString(36).toUpperCase();
+      persist(d);
+      document.getElementById('skNib').textContent = d.nib;
+      document.getElementById('skTtdId').textContent = d.ttdId;
+      document.getElementById('skVerif').setAttribute('href', 'verifikasi-dokumen.html?id=' + encodeURIComponent(detailId));
+      const m = document.getElementById('modalSukses'); m.classList.remove('hidden'); m.classList.add('flex');
+      renderDetail();
+    }
+    function tutupSukses() { const m = document.getElementById('modalSukses'); if (m) { m.classList.add('hidden'); m.classList.remove('flex'); } }
+
+    /* ---------- Tolak ---------- */
+    function bukaTolak() {
+      document.getElementById('tolakNote').value = '';
+      document.getElementById('tolakErr').classList.add('hidden');
+      const m = document.getElementById('modalTolak'); m.classList.remove('hidden'); m.classList.add('flex');
+      setTimeout(() => document.getElementById('tolakNote').focus(), 50);
+    }
+    function tutupTolak() { const m = document.getElementById('modalTolak'); if (m) { m.classList.add('hidden'); m.classList.remove('flex'); } }
+    function konfirmasiTolak() {
+      const d = cari(detailId); if (!d) return;
+      const note = document.getElementById('tolakNote').value.trim();
+      if (!note) { document.getElementById('tolakErr').classList.remove('hidden'); return; }
+      d.status = 'ditolak';
+      d.catatanPusat = note;
+      persist(d);
+      try { localStorage.setItem('toast_pending_bwi', 'Pengajuan ditolak.'); } catch (e) { }
+      window.location.href = 'ketua-pendaftaran.html';
+    }
+
+    /* ---------- Preview SK modal ---------- */
+    function bukaSK() {
+      const d = cari(detailId); if (!d) return;
+      document.getElementById('skBody').innerHTML = skHTML(d, d.status !== 'aktif');
+      const m = document.getElementById('modalSK'); m.classList.remove('hidden'); m.classList.add('flex');
+    }
+    function tutupSK() { const m = document.getElementById('modalSK'); if (m) { m.classList.add('hidden'); m.classList.remove('flex'); } }
+    function skDokumenHTML() {
+      const isi = document.getElementById('skBody') ? document.getElementById('skBody').innerHTML : '';
+      return '<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><title>Surat Keputusan Nazhir — BWI</title><style>*{box-sizing:border-box;}body{margin:0;background:#e5e7eb;font-family:"Times New Roman",Georgia,serif;color:#1f2937;}.paper{max-width:720px;margin:24px auto;background:#fff;padding:48px;box-shadow:0 10px 30px rgba(0,0,0,.12);}@media print{body{background:#fff;}.paper{margin:0;max-width:none;box-shadow:none;padding:24px;}}</style></head><body><div class="paper">' + isi + '</div></body></html>';
+    }
+    function cetakSK() { const w = window.open('', '_blank'); if (!w) { window.print(); return; } w.document.open(); w.document.write(skDokumenHTML()); w.document.close(); w.focus(); setTimeout(function () { try { w.print(); } catch (e) { } }, 350); }
+    function unduhSK() { try { const blob = new Blob([skDokumenHTML()], { type: 'text/html' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'SK-Nazhir-BWI.html'; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(function () { URL.revokeObjectURL(url); }, 1000); } catch (e) { window.print(); } }
+
+    function toggleSidebar() { const sb = document.getElementById('sidebar'), ov = document.getElementById('overlay'); const t = sb.classList.contains('-translate-x-full'); sb.classList.toggle('-translate-x-full', !t); ov.classList.toggle('hidden', !t); }
+    function tutupSidebar() { document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('overlay').classList.add('hidden'); }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { tutupSidebar(); tutupTolak(); tutupSK(); tutupSukses(); } });
+    function logout() { window.location.href = 'kenazhiran-login.html'; }
+    let toastTimer = null;
+    function showToast(p) { const t = document.getElementById('toast'); document.getElementById('toastMsg').textContent = p; t.classList.remove('hidden'); t.classList.add('flex'); clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.classList.add('hidden'); t.classList.remove('flex'); }, 3200); }
+
+    document.addEventListener('DOMContentLoaded', renderDetail);
+  </script>
+</body>
+
+</html>

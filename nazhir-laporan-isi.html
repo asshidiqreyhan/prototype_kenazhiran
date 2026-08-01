@@ -66,12 +66,7 @@
       <!-- SIDEBAR HEADER -->
       <div class="flex items-center justify-between gap-2 px-6 py-5.5 h-[72px] lg:py-6.5">
         <a href="nazhir-dashboard.html" class="flex items-center gap-3">
-          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
-            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 0 0 2.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 0 1 2.916.52 6.003 6.003 0 0 1-5.395 4.972m0 0a6.726 6.726 0 0 1-2.749 1.35m0 0a6.772 6.772 0 0 1-3.044 0" />
-            </svg>
-          </span>
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white p-1"><img src="Logo_Badan_Wakaf_Indonesia-Bawah.png" alt="Logo Badan Wakaf Indonesia" class="h-full w-full object-contain"></span>
           <span class="leading-tight">
             <span class="block text-base font-bold text-white">BWI Superapps</span>
             <span class="block text-[11px] font-medium text-brand-300">Modul Kenazhiran</span>
@@ -479,9 +474,10 @@
 
                 <div class="flex items-center justify-between border-t border-gray-100 bg-gray-50 px-5 py-3.5">
                   <p id="penInfo" class="text-xs text-gray-500">Menampilkan 0 data.</p>
-                  <div class="flex items-center gap-1">
-                    <button class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-500 hover:bg-gray-100" disabled>Prev</button>
-                    <button class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100">Next</button>
+                  <div class="flex items-center gap-1 flex-wrap">
+                    <button id="penPrev" type="button" onclick="gantiHalPen(-1)" class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50" disabled>Sebelumnya</button>
+                    <span id="penNums" class="flex items-center gap-1 flex-wrap"></span>
+                    <button id="penNext" type="button" onclick="gantiHalPen(1)" class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50">Berikutnya</button>
                   </div>
                 </div>
               </div>
@@ -600,9 +596,10 @@
 
                 <div class="flex items-center justify-between border-t border-gray-100 bg-gray-50 px-5 py-3.5">
                   <p id="mutInfo" class="text-xs text-gray-500">Menampilkan 0 data.</p>
-                  <div class="flex items-center gap-1">
-                    <button class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-500 hover:bg-gray-100" disabled>Prev</button>
-                    <button class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100">Next</button>
+                  <div class="flex items-center gap-1 flex-wrap">
+                    <button id="mutPrev" type="button" onclick="gantiHalMut(-1)" class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50" disabled>Sebelumnya</button>
+                    <span id="mutNums" class="flex items-center gap-1 flex-wrap"></span>
+                    <button id="mutNext" type="button" onclick="gantiHalMut(1)" class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50">Berikutnya</button>
                   </div>
                 </div>
               </div>
@@ -720,9 +717,10 @@
 
                 <div class="flex items-center justify-between border-t border-gray-100 bg-gray-50 px-5 py-3.5">
                   <p id="dpkInfo" class="text-xs text-gray-500">Menampilkan 0 data.</p>
-                  <div class="flex items-center gap-1">
-                    <button class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-500 hover:bg-gray-100" disabled>Prev</button>
-                    <button class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100">Next</button>
+                  <div class="flex items-center gap-1 flex-wrap">
+                    <button id="dpkPrev" type="button" onclick="gantiHalDpk(-1)" class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50" disabled>Sebelumnya</button>
+                    <span id="dpkNums" class="flex items-center gap-1 flex-wrap"></span>
+                    <button id="dpkNext" type="button" onclick="gantiHalDpk(1)" class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50">Berikutnya</button>
                   </div>
                 </div>
               </div>
@@ -841,9 +839,10 @@
 
                 <div class="flex items-center justify-between border-t border-gray-100 bg-gray-50 px-5 py-3.5">
                   <p id="hslInfo" class="text-xs text-gray-500">Menampilkan 0 data.</p>
-                  <div class="flex items-center gap-1">
-                    <button class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-500 hover:bg-gray-100" disabled>Prev</button>
-                    <button class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100">Next</button>
+                  <div class="flex items-center gap-1 flex-wrap">
+                    <button id="hslPrev" type="button" onclick="gantiHalHsl(-1)" class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50" disabled>Sebelumnya</button>
+                    <span id="hslNums" class="flex items-center gap-1 flex-wrap"></span>
+                    <button id="hslNext" type="button" onclick="gantiHalHsl(1)" class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50">Berikutnya</button>
                   </div>
                 </div>
               </div>
@@ -961,9 +960,10 @@
 
                 <div class="flex items-center justify-between border-t border-gray-100 bg-gray-50 px-5 py-3.5">
                   <p id="pnyInfo" class="text-xs text-gray-500">Menampilkan 0 data.</p>
-                  <div class="flex items-center gap-1">
-                    <button class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-500 hover:bg-gray-100" disabled>Prev</button>
-                    <button class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100">Next</button>
+                  <div class="flex items-center gap-1 flex-wrap">
+                    <button id="pnyPrev" type="button" onclick="gantiHalPny(-1)" class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50" disabled>Sebelumnya</button>
+                    <span id="pnyNums" class="flex items-center gap-1 flex-wrap"></span>
+                    <button id="pnyNext" type="button" onclick="gantiHalPny(1)" class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50">Berikutnya</button>
                   </div>
                 </div>
               </div>
@@ -2058,6 +2058,43 @@
     }
 
     /* ===================== RENDER TABEL PENERIMAAN ===================== */
+    /* ===================== PAGINATION BERNOMOR (5 baris/halaman) ===================== */
+    const PER_HAL = 5;
+    let halPen = 1, halMut = 1, halDpk = 1, halHsl = 1, halPny = 1;
+    let sigPen = null, sigMut = null, sigDpk = null, sigHsl = null, sigPny = null;
+
+    // Rangkaian tombol nomor halaman (dengan ellipsis bila > 7 halaman)
+    function tombolNomor(total, perHal, current, fnGoto) {
+      const maxHal = Math.max(1, Math.ceil(total / perHal));
+      const arr = [];
+      if (maxHal <= 7) { for (let i = 1; i <= maxHal; i++) arr.push(i); }
+      else { arr.push(1); if (current > 3) arr.push('e'); const s = Math.max(2, current - 1), e = Math.min(maxHal - 1, current + 1); for (let i = s; i <= e; i++) arr.push(i); if (current < maxHal - 2) arr.push('e'); arr.push(maxHal); }
+      return arr.map(p => p === 'e' ? '<span class="px-1.5 text-xs text-gray-400">…</span>' : '<button type="button" onclick="' + fnGoto + '(' + p + ')" class="min-w-[32px] rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition ' + (p === current ? 'border-brand-600 bg-brand-600 text-white' : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-100') + '">' + p + '</button>').join('');
+    }
+
+    // Perbarui footer (info + prev/next + nomor) satu tabel.
+    function setFooterHal(prefix, hal, total, maxHal, fnGoto) {
+      const from = total === 0 ? 0 : (hal - 1) * PER_HAL + 1;
+      const to = Math.min(hal * PER_HAL, total);
+      const info = document.getElementById(prefix + 'Info');
+      if (info) info.textContent = 'Menampilkan ' + from + '–' + to + ' dari ' + total + ' data.';
+      const prev = document.getElementById(prefix + 'Prev'); if (prev) prev.disabled = hal <= 1;
+      const next = document.getElementById(prefix + 'Next'); if (next) next.disabled = hal >= maxHal;
+      const nums = document.getElementById(prefix + 'Nums'); if (nums) nums.innerHTML = tombolNomor(total, PER_HAL, hal, fnGoto);
+    }
+
+    // Navigasi per tabel
+    function gantiHalPen(d) { halPen += d; renderPenerimaan(); }
+    function gotoPen(p) { halPen = p; renderPenerimaan(); }
+    function gantiHalMut(d) { halMut += d; renderMutasi(); }
+    function gotoMut(p) { halMut = p; renderMutasi(); }
+    function gantiHalDpk(d) { halDpk += d; renderDampak(); }
+    function gotoDpk(p) { halDpk = p; renderDampak(); }
+    function gantiHalHsl(d) { halHsl += d; renderHasil(); }
+    function gotoHsl(p) { halHsl = p; renderHasil(); }
+    function gantiHalPny(d) { halPny += d; renderPenyaluran(); }
+    function gotoPny(p) { halPny = p; renderPenyaluran(); }
+
     function renderPenerimaan() {
       const body = document.getElementById('penerimaanBody');
       if (!body) return;
@@ -2072,15 +2109,24 @@
         ));
       }
 
+      // Reset ke halaman 1 bila pencarian berubah
+      if (q !== sigPen) { halPen = 1; sigPen = q; }
+      const total = rows.length;
+      const maxHal = Math.max(1, Math.ceil(total / PER_HAL));
+      if (halPen > maxHal) halPen = maxHal;
+      if (halPen < 1) halPen = 1;
+      const mulai = (halPen - 1) * PER_HAL;
+      const irisan = rows.slice(mulai, mulai + PER_HAL);
+
       body.innerHTML = '';
       if (rows.length === 0) {
         body.innerHTML = '<tr><td colspan="8" class="px-4 py-12 text-center text-sm text-gray-400">No data available in table</td></tr>';
       } else {
-        rows.forEach((r, i) => {
+        irisan.forEach((r, i) => {
           const tr = document.createElement('tr');
           tr.className = 'transition hover:bg-gray-50';
           tr.innerHTML =
-            '<td class="px-4 py-3.5 text-gray-500">' + (i + 1) + '</td>' +
+            '<td class="px-4 py-3.5 text-gray-500">' + (mulai + i + 1) + '</td>' +
             '<td class="px-4 py-3.5 font-medium text-gray-800">' + amankan(r.nama) + '</td>' +
             '<td class="px-4 py-3.5 text-gray-600">' + amankan(r.jenisHarta) + '</td>' +
             '<td class="px-4 py-3.5 text-gray-600">' + amankan(r.akunWakaf) + '</td>' +
@@ -2093,8 +2139,7 @@
       }
 
       // Info & total
-      const info = document.getElementById('penInfo');
-      if (info) info.textContent = 'Menampilkan ' + rows.length + ' dari ' + det.penerimaan.length + ' data.';
+      setFooterHal('pen', halPen, total, maxHal, 'gotoPen');
 
       const totalNilai = det.penerimaan.reduce((s, r) => s + (Number(r.nilaiWajar) || 0), 0);
       const totalKas = det.penerimaan.reduce((s, r) => s + ((r.akunWakaf === 'Kas/Bank Wakaf') ? (Number(r.nilaiWajar) || 0) : 0), 0);
@@ -2192,15 +2237,24 @@
         ));
       }
 
+      // Reset ke halaman 1 bila pencarian berubah
+      if (q !== sigMut) { halMut = 1; sigMut = q; }
+      const total = rows.length;
+      const maxHal = Math.max(1, Math.ceil(total / PER_HAL));
+      if (halMut > maxHal) halMut = maxHal;
+      if (halMut < 1) halMut = 1;
+      const mulai = (halMut - 1) * PER_HAL;
+      const irisan = rows.slice(mulai, mulai + PER_HAL);
+
       body.innerHTML = '';
       if (rows.length === 0) {
         body.innerHTML = '<tr><td colspan="8" class="px-4 py-12 text-center text-sm text-gray-400">No data available in table</td></tr>';
       } else {
-        rows.forEach((r, i) => {
+        irisan.forEach((r, i) => {
           const tr = document.createElement('tr');
           tr.className = 'transition hover:bg-gray-50';
           tr.innerHTML =
-            '<td class="px-4 py-3.5 text-gray-500">' + (i + 1) + '</td>' +
+            '<td class="px-4 py-3.5 text-gray-500">' + (mulai + i + 1) + '</td>' +
             '<td class="px-4 py-3.5 font-medium text-gray-800">' + amankan(r.jenisTransaksi) + '</td>' +
             '<td class="px-4 py-3.5 text-gray-600">' + amankan(r.akunAsal) + '</td>' +
             '<td class="px-4 py-3.5 text-gray-600">' + (r.namaTujuan ? amankan(r.namaTujuan) : '-') + '</td>' +
@@ -2212,8 +2266,7 @@
         });
       }
 
-      const info = document.getElementById('mutInfo');
-      if (info) info.textContent = 'Menampilkan ' + rows.length + ' dari ' + det.mutasi.length + ' data.';
+      setFooterHal('mut', halMut, total, maxHal, 'gotoMut');
 
       // Kartu total pada tab Mutasi
       const tKas = hitungTotalKas();
@@ -2368,18 +2421,27 @@
         ));
       }
 
+      // Reset ke halaman 1 bila pencarian berubah
+      if (q !== sigDpk) { halDpk = 1; sigDpk = q; }
+      const total = rows.length;
+      const maxHal = Math.max(1, Math.ceil(total / PER_HAL));
+      if (halDpk > maxHal) halDpk = maxHal;
+      if (halDpk < 1) halDpk = 1;
+      const mulai = (halDpk - 1) * PER_HAL;
+      const irisan = rows.slice(mulai, mulai + PER_HAL);
+
       body.innerHTML = '';
       if (rows.length === 0) {
         body.innerHTML = '<tr><td colspan="9" class="px-4 py-12 text-center text-sm text-gray-400">No data available in table</td></tr>';
       } else {
-        rows.forEach((r, i) => {
+        irisan.forEach((r, i) => {
           const n = Number(r.nilai) || 0;
           const warnaNilai = n < 0 ? 'text-red-600' : 'text-emerald-600';
           const tandaNilai = (n > 0 ? '+' : '') + formatRupiah(n).replace('Rp ', 'Rp ');
           const tr = document.createElement('tr');
           tr.className = 'transition hover:bg-gray-50';
           tr.innerHTML =
-            '<td class="px-4 py-3.5 text-gray-500">' + (i + 1) + '</td>' +
+            '<td class="px-4 py-3.5 text-gray-500">' + (mulai + i + 1) + '</td>' +
             '<td class="px-4 py-3.5 font-medium text-gray-800">' + amankan(r.nama) + '</td>' +
             '<td class="px-4 py-3.5">' + badgeAda(r.asetPenerimaan) + '</td>' +
             '<td class="px-4 py-3.5">' + badgeAda(r.asetPengelolaan) + '</td>' +
@@ -2392,8 +2454,7 @@
         });
       }
 
-      const info = document.getElementById('dpkInfo');
-      if (info) info.textContent = 'Menampilkan ' + rows.length + ' dari ' + det.dampak.length + ' data.';
+      setFooterHal('dpk', halDpk, total, maxHal, 'gotoDpk');
 
       // Kartu total: kenaikan (positif), penurunan (negatif), dan net
       const naik = det.dampak.reduce((s, r) => s + Math.max(Number(r.nilai) || 0, 0), 0);
@@ -2532,18 +2593,27 @@
         ));
       }
 
+      // Reset ke halaman 1 bila pencarian berubah
+      if (q !== sigHsl) { halHsl = 1; sigHsl = q; }
+      const totHsl = rows.length;
+      const maxHsl = Math.max(1, Math.ceil(totHsl / PER_HAL));
+      if (halHsl > maxHsl) halHsl = maxHsl;
+      if (halHsl < 1) halHsl = 1;
+      const mulai = (halHsl - 1) * PER_HAL;
+      const irisan = rows.slice(mulai, mulai + PER_HAL);
+
       body.innerHTML = '';
       if (rows.length === 0) {
         body.innerHTML = '<tr><td colspan="10" class="px-4 py-12 text-center text-sm text-gray-400">No data available in table</td></tr>';
       } else {
-        rows.forEach((r, i) => {
+        irisan.forEach((r, i) => {
           const n = Number(r.nilai) || 0;
           const warnaNilai = n < 0 ? 'text-red-600' : 'text-emerald-600';
           const tandaNilai = (n > 0 ? '+' : '') + formatRupiah(n);
           const tr = document.createElement('tr');
           tr.className = 'transition hover:bg-gray-50';
           tr.innerHTML =
-            '<td class="px-4 py-3.5 text-gray-500">' + (i + 1) + '</td>' +
+            '<td class="px-4 py-3.5 text-gray-500">' + (mulai + i + 1) + '</td>' +
             '<td class="px-4 py-3.5"><span class="inline-flex rounded-md bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-700">' + amankan(r.jenisHasil) + '</span></td>' +
             '<td class="px-4 py-3.5 font-medium text-gray-800">' + amankan(r.nama) + '</td>' +
             '<td class="px-4 py-3.5">' + badgeAda(r.asetPenerimaan) + '</td>' +
@@ -2557,8 +2627,7 @@
         });
       }
 
-      const info = document.getElementById('hslInfo');
-      if (info) info.textContent = 'Menampilkan ' + rows.length + ' dari ' + det.hasil.length + ' data.';
+      setFooterHal('hsl', halHsl, totHsl, maxHsl, 'gotoHsl');
 
       // Kartu total: pendapatan (positif), kerugian (negatif), dan total bersih
       const pendapatan = det.hasil.reduce((s, r) => s + Math.max(Number(r.nilai) || 0, 0), 0);
@@ -2696,11 +2765,20 @@
         ));
       }
 
+      // Reset ke halaman 1 bila pencarian berubah
+      if (q !== sigPny) { halPny = 1; sigPny = q; }
+      const total = rows.length;
+      const maxHal = Math.max(1, Math.ceil(total / PER_HAL));
+      if (halPny > maxHal) halPny = maxHal;
+      if (halPny < 1) halPny = 1;
+      const mulai = (halPny - 1) * PER_HAL;
+      const irisan = rows.slice(mulai, mulai + PER_HAL);
+
       body.innerHTML = '';
       if (rows.length === 0) {
         body.innerHTML = '<tr><td colspan="9" class="px-4 py-12 text-center text-sm text-gray-400">No data available in table</td></tr>';
       } else {
-        rows.forEach((r, i) => {
+        irisan.forEach((r, i) => {
           const n = Number(r.nominal) || 0;
           const langsung = String(r.diserahkanLangsung || '').toLowerCase() === 'ya';
           const warnaBadge = langsung ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-600';
@@ -2708,7 +2786,7 @@
           const tr = document.createElement('tr');
           tr.className = 'transition hover:bg-gray-50';
           tr.innerHTML =
-            '<td class="px-4 py-3.5 text-gray-500">' + (i + 1) + '</td>' +
+            '<td class="px-4 py-3.5 text-gray-500">' + (mulai + i + 1) + '</td>' +
             '<td class="px-4 py-3.5 font-medium text-gray-800">' + amankan(r.mauqufAlaih) + '</td>' +
             '<td class="px-4 py-3.5"><span class="inline-flex rounded-md bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-700">' + amankan(r.kategori) + '</span></td>' +
             '<td class="px-4 py-3.5 text-gray-600">' + amankan(r.subKategori) + '</td>' +
@@ -2722,8 +2800,7 @@
         });
       }
 
-      const info = document.getElementById('pnyInfo');
-      if (info) info.textContent = 'Menampilkan ' + rows.length + ' dari ' + det.penyaluran.length + ' data.';
+      setFooterHal('pny', halPny, total, maxHal, 'gotoPny');
 
       // Kas tersedia dirantai dari tab sebelumnya: Penerimaan - Mutasi + Hasil Pengelolaan
       const kasTersedia = hitungTotalKas() - hitungTotalMutasi() + hitungNetHasil();

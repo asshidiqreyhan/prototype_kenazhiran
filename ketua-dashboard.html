@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Ketua BWI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Outfit', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+          colors: { brand: { 50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 300: '#5eead4', 400: '#2dd4bf', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a' } },
+          maxWidth: { 'screen-2xl': '1536px' },
+          boxShadow: { 'card': '0px 1px 3px rgba(0,0,0,0.06), 0px 1px 2px rgba(0,0,0,0.04)' }
+        }
+      }
+    }
+  </script>
+  <style>
+    body,
+    html {
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 999px;
+    }
+
+    #sidebar ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, .18);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 antialiased">
+  <div class="flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside id="sidebar"
+      class="absolute left-0 top-0 z-50 flex h-screen w-[290px] flex-col overflow-y-hidden bg-brand-900 duration-300 ease-linear lg:static lg:translate-x-0 -translate-x-full">
+      <div class="flex items-center justify-between gap-2 px-6 py-5.5 h-[72px] lg:py-6.5">
+        <a href="ketua-dashboard.html" class="flex items-center gap-3">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white p-1"><img src="Logo_Badan_Wakaf_Indonesia-Bawah.png" alt="Logo Badan Wakaf Indonesia" class="h-full w-full object-contain"></span>
+          <span class="leading-tight"><span class="block text-base font-bold text-white">BWI Superapps</span><span
+              class="block text-[11px] font-medium text-brand-300">Ketua BWI</span></span>
+        </a>
+        <button onclick="tutupSidebar()" class="block lg:hidden text-white/70 hover:text-white"><svg class="h-6 w-6"
+            fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg></button>
+      </div>
+      <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
+        <nav class="mt-1 px-4 py-4 lg:px-6">
+          <!-- <h3 class="mb-4 ml-3 text-xs font-semibold uppercase tracking-wider text-brand-400">Menu Ketua</h3> -->
+          <ul class="mb-6 flex flex-col gap-1.5">
+            <li><a href="ketua-dashboard.html"
+                class="flex w-full items-center gap-3 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm duration-300 ease-in-out"><svg
+                  class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                </svg><span>Dashboard</span></a></li>
+            <li><a href="ketua-pendaftaran.html"
+                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white"><svg
+                  class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                </svg><span>Pengesahan Nazhir</span></a></li>
+            <li><a href="ketua-pin.html"
+                class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white"><svg
+                  class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" />
+                </svg><span>Atur PIN e-Sign</span></a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="mt-auto border-t border-white/10 p-4 lg:p-6">
+        <button onclick="logout()"
+          class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 transition hover:bg-white/10 hover:text-white"><svg
+            class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+          </svg>Keluar</button>
+      </div>
+    </aside>
+    <div id="overlay" onclick="tutupSidebar()" class="fixed inset-0 z-40 hidden bg-black/40 lg:hidden"></div>
+
+    <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+      <header class="sticky top-0 z-30 flex h-[72px] items-center gap-3 border-b border-gray-200 bg-white px-4 md:px-6">
+        <button onclick="toggleSidebar()" class="text-gray-500 hover:text-gray-700 lg:hidden"><svg class="h-6 w-6"
+            fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg></button>
+        <div class="min-w-0">
+          <h1 class="truncate text-lg font-bold leading-tight text-gray-800">Dashboard Ketua BWI</h1>
+          <p class="truncate text-xs text-gray-400">Ringkasan pengesahan &amp; tanda tangan Nazhir</p>
+        </div>
+        <div class="ml-auto flex items-center gap-3">
+          <span class="hidden text-right sm:block"><span class="block text-sm font-semibold text-gray-700">Prof. Dr.
+              K.H. Noor Achmad, M.A.</span><span class="block text-xs text-gray-400">Ketua BWI</span></span>
+          <span
+            class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">NA</span>
+        </div>
+      </header>
+
+      <main>
+        <div class="mx-auto max-w-screen-2xl space-y-6 p-4 md:p-6">
+          <!-- Sapaan -->
+          <div
+            class="rounded-2xl border border-brand-100 bg-gradient-to-br from-brand-600 to-brand-800 p-6 text-white shadow-card md:p-8">
+            <p class="text-sm font-medium text-brand-100">Assalamualaikum,</p>
+            <h2 class="mt-1 text-2xl font-bold md:text-3xl">Prof. Dr. K.H. Noor Achmad, M.A.</h2>
+            <p class="mt-2 max-w-2xl text-sm text-brand-100">Berikut ringkasan pengesahan Nazhir yang menunggu tanda
+              tangan Anda serta rekap dokumen yang telah disahkan.</p>
+          </div>
+
+          <!-- Kartu statistik -->
+          <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+            <div class="rounded-2xl border border-indigo-100 bg-white p-5 shadow-card">
+              <div class="flex items-center justify-between">
+                <p class="text-xs font-semibold uppercase tracking-wide text-indigo-500">Menunggu TTD</p><span
+                  class="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600"><svg
+                    class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                  </svg></span>
+              </div>
+              <p id="cTtd" class="mt-2 text-3xl font-bold text-indigo-700">0</p>
+            </div>
+            <div class="rounded-2xl border border-brand-100 bg-white p-5 shadow-card">
+              <div class="flex items-center justify-between">
+                <p class="text-xs font-semibold uppercase tracking-wide text-brand-600">Aktif</p><span
+                  class="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-50 text-brand-600"><svg
+                    class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg></span>
+              </div>
+              <p id="cAktif" class="mt-2 text-3xl font-bold text-brand-700">0</p>
+            </div>
+            <div class="rounded-2xl border border-red-100 bg-white p-5 shadow-card">
+              <div class="flex items-center justify-between">
+                <p class="text-xs font-semibold uppercase tracking-wide text-red-500">Ditolak</p><span
+                  class="flex h-9 w-9 items-center justify-center rounded-lg bg-red-50 text-red-600"><svg
+                    class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M9.75 9.75l4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg></span>
+              </div>
+              <p id="cDitolak" class="mt-2 text-3xl font-bold text-red-600">0</p>
+            </div>
+            <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-card">
+              <div class="flex items-center justify-between">
+                <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Total</p><span
+                  class="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100 text-gray-600"><svg
+                    class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                  </svg></span>
+              </div>
+              <p id="cTotal" class="mt-2 text-3xl font-bold text-gray-800">0</p>
+            </div>
+          </div>
+
+          <!-- Antrean terbaru -->
+          <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+            <div class="flex items-center justify-between gap-3 border-b border-gray-100 px-5 py-4 md:px-6">
+              <div>
+                <h3 class="text-base font-bold text-gray-800">Antrean Menunggu Tanda Tangan</h3>
+                <p class="mt-0.5 text-xs text-gray-400">Pendaftaran terbaru yang perlu Anda tandatangani.</p>
+              </div>
+              <a href="ketua-pendaftaran.html"
+                class="hidden shrink-0 items-center gap-1.5 rounded-lg border border-gray-200 px-3.5 py-2 text-xs font-semibold text-gray-600 transition hover:bg-gray-50 sm:inline-flex">Lihat
+                Semua<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                </svg></a>
+            </div>
+            <div id="dashList" class="divide-y divide-gray-100"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const KUNCI_DAFTAR = 'pendaftaran_nazhir_bwi';
+    const KUNCI_DUMMY = 'pendaftaran_dummy_bwi_v2';
+    const KUNCI_TAMBAHAN = 'pendaftaran_tambahan_bwi';
+
+    function bacaDaftar() { try { const o = JSON.parse(localStorage.getItem(KUNCI_DAFTAR)); if (o && typeof o === 'object') return o; } catch (e) { } return null; }
+    function bacaTambahan() { try { const o = JSON.parse(localStorage.getItem(KUNCI_TAMBAHAN)); if (o && typeof o === 'object') return o; } catch (e) { } return null; }
+    function bacaDummy() { try { const a = JSON.parse(localStorage.getItem(KUNCI_DUMMY)); if (Array.isArray(a)) return a; } catch (e) { } return null; }
+    function amankan(t) { const d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; }
+
+    function semua() {
+      const list = [];
+      const real = bacaDaftar();
+      if (real && real.status && real.status !== 'draft') list.push(Object.assign({ _real: true }, real));
+      const tbh = bacaTambahan();
+      if (tbh && tbh.status && tbh.status !== 'draft') list.push(Object.assign({ _real2: true }, tbh));
+      (bacaDummy() || []).forEach(d => list.push(d));
+      return list;
+    }
+
+    function render() {
+      const list = semua();
+      const ttd = list.filter(d => d.status === 'ttd');
+      document.getElementById('cTtd').textContent = ttd.length;
+      document.getElementById('cAktif').textContent = list.filter(d => d.status === 'aktif').length;
+      document.getElementById('cDitolak').textContent = list.filter(d => d.status === 'ditolak').length;
+      document.getElementById('cTotal').textContent = list.length;
+
+      const box = document.getElementById('dashList');
+      if (ttd.length === 0) {
+        box.innerHTML = '<div class="px-6 py-14 text-center"><div class="flex flex-col items-center gap-2 text-gray-400"><svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg><span class="text-sm font-medium text-gray-500">Tidak ada antrean menunggu tanda tangan</span></div></div>';
+        return;
+      }
+      box.innerHTML = ttd.slice(0, 6).map(d => {
+        const idAttr = d._real2 ? 'REAL2' : d._real ? 'REAL' : amankan(d.id);
+        const tanda = d._real ? ' <span class="ml-1 rounded bg-brand-50 px-1.5 py-0.5 text-[10px] font-semibold text-brand-700">Baru</span>' : (d._real2 ? ' <span class="ml-1 rounded bg-violet-50 px-1.5 py-0.5 text-[10px] font-semibold text-violet-700">HBW Tambahan</span>' : '');
+        return '<div class="flex items-center justify-between gap-3 px-5 py-4 transition hover:bg-gray-50 md:px-6">' +
+          '<div class="flex min-w-0 items-center gap-3">' +
+          '<span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-indigo-600"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg></span>' +
+          '<div class="min-w-0"><p class="truncate font-semibold text-gray-800">' + amankan(d.namaBadanHukum || '-') + tanda + '</p><p class="truncate text-xs text-gray-400">PIC: ' + amankan(d.pic || '-') + ' · Diteruskan oleh ' + amankan(d.diteruskanOleh || '-') + '</p></div>' +
+          '</div>' +
+          '<a href="ketua-pendaftaran-detail.html?id=' + idAttr + '" class="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-brand-600 px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-brand-700">Tinjau<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg></a>' +
+          '</div>';
+      }).join('');
+    }
+
+    function toggleSidebar() { const sb = document.getElementById('sidebar'), ov = document.getElementById('overlay'); const t = sb.classList.contains('-translate-x-full'); sb.classList.toggle('-translate-x-full', !t); ov.classList.toggle('hidden', !t); }
+    function tutupSidebar() { document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('overlay').classList.add('hidden'); }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { tutupSidebar(); } });
+    function logout() { window.location.href = 'kenazhiran-login.html'; }
+
+    document.addEventListener('DOMContentLoaded', render);
+  </script>
+</body>
+
+</html>

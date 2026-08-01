@@ -38,9 +38,7 @@
     <aside id="sidebar" class="absolute left-0 top-0 z-50 flex h-screen w-[290px] flex-col overflow-y-hidden bg-brand-900 duration-300 ease-linear lg:static lg:translate-x-0 -translate-x-full">
       <div class="flex items-center justify-between gap-2 px-6 py-5.5 h-[72px] lg:py-6.5">
         <a href="pusat-dashboard.html" class="flex items-center gap-3">
-          <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
-            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 0 0 2.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 0 1 2.916.52 6.003 6.003 0 0 1-5.395 4.972m0 0a6.726 6.726 0 0 1-2.749 1.35m0 0a6.772 6.772 0 0 1-3.044 0" /></svg>
-          </span>
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white p-1"><img src="Logo_Badan_Wakaf_Indonesia-Bawah.png" alt="Logo Badan Wakaf Indonesia" class="h-full w-full object-contain"></span>
           <span class="leading-tight"><span class="block text-base font-bold text-white">BWI Superapps</span><span class="block text-[11px] font-medium text-brand-300">Administrator Pusat</span></span>
         </a>
         <button onclick="tutupSidebar()" class="block lg:hidden text-white/70 hover:text-white"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg></button>
@@ -130,9 +128,9 @@
             <!-- Kaki: pagination -->
             <div id="pgWrap" class="flex flex-col items-center justify-between gap-2 border-t border-gray-100 bg-gray-50 px-5 py-3.5 sm:flex-row md:px-6">
               <p id="pgInfo" class="text-xs text-gray-500"></p>
-              <div class="flex items-center gap-1">
+              <div class="flex items-center gap-1 flex-wrap">
                 <button id="pgPrev" type="button" onclick="ubahHal(-1)" class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40">Sebelumnya</button>
-                <span id="pgNum" class="px-2 text-xs font-medium text-gray-500"></span>
+                <div id="pagNums" class="flex items-center gap-1 flex-wrap"></div>
                 <button id="pgNext" type="button" onclick="ubahHal(1)" class="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40">Berikutnya</button>
               </div>
             </div>
@@ -164,7 +162,7 @@
   </div>
 
   <div id="toast" class="fixed bottom-6 right-6 z-[80] hidden max-w-md items-center gap-3 rounded-xl bg-gray-900 px-5 py-3 text-sm font-medium text-white shadow-2xl">
-    <svg class="h-5 w-5 shrink-0 text-brand-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+    <svg id="toastIcon" class="h-5 w-5 shrink-0 text-brand-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
     <span id="toastMsg"></span>
   </div>
 
@@ -238,7 +236,15 @@
     const PER_HAL = 5;
     let halPend = 1;
     function ubahHal(delta) { halPend += delta; render(); }
+    function gotoHal(n) { halPend = n; render(); }
     function resetHal() { halPend = 1; render(); }
+    function tombolNomor(total, perHal, current, fnGoto) {
+      const maxHal = Math.max(1, Math.ceil(total / perHal));
+      const arr = [];
+      if (maxHal <= 7) { for (let i = 1; i <= maxHal; i++) arr.push(i); }
+      else { arr.push(1); if (current > 3) arr.push('e'); const s = Math.max(2, current - 1), e = Math.min(maxHal - 1, current + 1); for (let i = s; i <= e; i++) arr.push(i); if (current < maxHal - 2) arr.push('e'); arr.push(maxHal); }
+      return arr.map(p => p === 'e' ? '<span class="px-1.5 text-xs text-gray-400">…</span>' : '<button type="button" onclick="' + fnGoto + '(' + p + ')" class="min-w-[32px] rounded-lg border px-2.5 py-1.5 text-xs font-semibold transition ' + (p === current ? 'border-brand-600 bg-brand-600 text-white' : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-100') + '">' + p + '</button>').join('');
+    }
 
     function bacaDaftar() { try { const o = JSON.parse(localStorage.getItem(KUNCI_DAFTAR)); if (o && typeof o === 'object') return o; } catch (e) {} return null; }
     function simpanDaftar(o) { try { localStorage.setItem(KUNCI_DAFTAR, JSON.stringify(o)); } catch (e) {} }
@@ -385,7 +391,7 @@
       wrap.classList.remove('hidden');
       const from = mulai + 1, to = Math.min(mulai + PER_HAL, total);
       document.getElementById('pgInfo').textContent = 'Menampilkan ' + from + '–' + to + ' dari ' + total;
-      document.getElementById('pgNum').textContent = 'Hal ' + halPend + '/' + maxHal;
+      document.getElementById('pagNums').innerHTML = tombolNomor(total, PER_HAL, halPend, 'gotoHal');
       document.getElementById('pgPrev').disabled = halPend <= 1;
       document.getElementById('pgNext').disabled = halPend >= maxHal;
     }
@@ -439,7 +445,7 @@
       document.getElementById('rvBerkas').innerHTML = berkasUntuk(d).map(b => {
         const ada = !!berkas[b.key];
         const st = ada ? '<span class="rounded-full bg-brand-50 px-2 py-0.5 text-[11px] font-semibold text-brand-700">Ada</span>' : '<span class="rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-600">Tidak ada</span>';
-        return '<div class="flex items-center justify-between gap-3 rounded-lg border border-gray-100 px-3 py-2"><div class="flex min-w-0 items-center gap-2"><span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gray-100 text-[10px] font-bold text-gray-500">' + b.no + '</span><span class="min-w-0"><span class="block truncate text-xs font-medium text-gray-700">' + amankan(b.label) + '</span>' + (ada ? '<span class="block truncate text-[11px] text-gray-400">' + amankan(berkas[b.key].nama) + '</span>' : '') + '</span></div>' + st + '</div>';
+        return '<div class="flex items-center justify-between gap-3 rounded-lg border border-gray-100 px-3 py-2"><div class="flex min-w-0 items-center gap-2"><span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gray-100 text-[10px] font-bold text-gray-500">' + b.no + '</span><span class="min-w-0"><span class="block truncate text-xs font-medium text-gray-700">' + amankan(b.label) + '</span>' + (ada ? '<span class="block truncate text-[11px] text-gray-400">' + amankan(berkas[b.key].nama) + '</span>' : '') + ((d.nomorBerkas && d.nomorBerkas[b.key]) ? '<span class="block truncate text-[11px] font-medium text-gray-600">No: ' + amankan(d.nomorBerkas[b.key]) + '</span>' : '') + '</span></div>' + st + '</div>';
       }).join('');
       document.getElementById('rvKeputusan').innerHTML = panel(d);
       const m = document.getElementById('modalReview'); m.classList.remove('hidden'); m.classList.add('flex');
@@ -519,7 +525,7 @@
     function tombol(aksi, teks, warna) { return '<button type="button" onclick="putusan(\'' + aksi + '\')" class="rounded-lg ' + warna + ' px-4 py-2 text-sm font-semibold transition">' + teks + '</button>'; }
     function panel(d) {
       if (d.status === 'diajukan') {
-        return '<label class="mb-1.5 block text-xs font-semibold text-gray-600">Catatan (wajib untuk revisi/tolak)</label><textarea id="rvNote" rows="2" class="mb-3 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"></textarea>' +
+        return '<label class="mb-1.5 block text-xs font-semibold text-gray-600">Catatan / pesan untuk pemohon <span class="font-normal text-gray-400">(wajib untuk revisi/tolak; opsional saat verifikasi — tampil ke calon)</span></label><textarea id="rvNote" rows="2" placeholder="mis. Dokumen lengkap & terverifikasi. Mohon tunggu jadwal presentasi." class="mb-3 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"></textarea>' +
           '<div class="flex flex-wrap justify-end gap-2">' + tombol('tolak', 'Tolak', 'border border-red-200 text-red-600 hover:bg-red-50') + tombol('revisi', 'Minta Revisi', 'border border-orange-300 text-orange-600 hover:bg-orange-50') + tombol('verifikasi', 'Verifikasi Dokumen', 'bg-brand-600 text-white hover:bg-brand-700') + '</div>';
       }
       if (d.status === 'diverifikasi') {
@@ -556,11 +562,11 @@
       const d = cari(reviewId);
       if (!d) return;
       const note = document.getElementById('rvNote') ? document.getElementById('rvNote').value.trim() : '';
-      if ((aksi === 'revisi' || aksi === 'tolak') && !note) { showToast('Isi catatan alasan terlebih dahulu.'); return; }
+      if ((aksi === 'revisi' || aksi === 'tolak') && !note) { showToast('Isi catatan alasan terlebih dahulu.', 'warning'); return; }
 
       if (aksi === 'revisi') { d.status = 'revisi'; d.catatanPusat = note; }
       else if (aksi === 'tolak') { d.status = 'ditolak'; d.catatanPusat = note; }
-      else if (aksi === 'verifikasi') { d.status = 'diverifikasi'; d.catatanPusat = ''; }
+      else if (aksi === 'verifikasi') { d.status = 'diverifikasi'; d.catatanPusat = note; }
       else if (aksi === 'jadwalkan') {
         const tgl = document.getElementById('rvTgl') ? document.getElementById('rvTgl').value : '';
         const waktu = document.getElementById('rvWaktu') ? document.getElementById('rvWaktu').value : '';
@@ -587,7 +593,21 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') { tutupSidebar(); tutupSK(); } });
     function logout() { window.location.href = 'kenazhiran-login.html'; }
     let toastTimer = null;
-    function showToast(p) { const t = document.getElementById('toast'); document.getElementById('toastMsg').textContent = p; t.classList.remove('hidden'); t.classList.add('flex'); clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.classList.add('hidden'); t.classList.remove('flex'); }, 3200); }
+    function showToast(p, type) {
+      const t = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = p;
+      const ic = document.getElementById('toastIcon');
+      if (ic) {
+        if (type === 'warning') {
+          ic.setAttribute('class', 'h-5 w-5 shrink-0 text-amber-400');
+          ic.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />';
+        } else {
+          ic.setAttribute('class', 'h-5 w-5 shrink-0 text-brand-400');
+          ic.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />';
+        }
+      }
+      t.classList.remove('hidden'); t.classList.add('flex'); clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.classList.add('hidden'); t.classList.remove('flex'); }, 3200);
+    }
 
     function init() {
       // Pulihkan tab terakhir (mis. setelah kembali dari halaman detail)

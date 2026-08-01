@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detail Pendaftaran Nazhir | Sekretaris BWI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Outfit', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+          colors: { brand: { 50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 300: '#5eead4', 400: '#2dd4bf', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a' } },
+          maxWidth: { 'screen-2xl': '1536px' },
+          boxShadow: { 'card': '0px 1px 3px rgba(0,0,0,0.06), 0px 1px 2px rgba(0,0,0,0.04)' }
+        }
+      }
+    }
+  </script>
+  <style>
+    body, html { font-family: 'Outfit', sans-serif !important; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+    #sidebar ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.18); }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    @keyframes modalIn { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .modal-in { animation: modalIn .22s cubic-bezier(.4,0,.2,1); }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 antialiased">
+  <div class="flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="absolute left-0 top-0 z-50 flex h-screen w-[290px] flex-col overflow-y-hidden bg-brand-900 duration-300 ease-linear lg:static lg:translate-x-0 -translate-x-full">
+      <div class="flex items-center justify-between gap-2 px-6 py-5.5 h-[72px] lg:py-6.5">
+        <a href="sekretaris-dashboard.html" class="flex items-center gap-3">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white p-1"><img src="Logo_Badan_Wakaf_Indonesia-Bawah.png" alt="Logo Badan Wakaf Indonesia" class="h-full w-full object-contain"></span>
+          <span class="leading-tight"><span class="block text-base font-bold text-white">BWI Superapps</span><span class="block text-[11px] font-medium text-brand-300">Sekretaris BWI</span></span>
+        </a>
+        <button onclick="tutupSidebar()" class="block lg:hidden text-white/70 hover:text-white"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg></button>
+      </div>
+      <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
+        <nav class="mt-1 px-4 py-4 lg:px-6">
+          <h3 class="mb-4 ml-3 text-xs font-semibold uppercase tracking-wider text-brand-400">Menu Sekretariat</h3>
+          <ul class="mb-6 flex flex-col gap-1.5">
+            <li><a href="sekretaris-dashboard.html" class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 duration-300 ease-in-out hover:bg-white/10 hover:text-white"><svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg><span>Dashboard</span></a></li>
+            <li><a href="sekretaris-pendaftaran.html" class="flex w-full items-center gap-3 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm duration-300 ease-in-out"><svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" /></svg><span>Pendaftaran Nazhir</span></a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="mt-auto border-t border-white/10 p-4 lg:p-6">
+        <button onclick="logout()" class="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-300 transition hover:bg-white/10 hover:text-white"><svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" /></svg>Keluar</button>
+      </div>
+    </aside>
+    <div id="overlay" onclick="tutupSidebar()" class="fixed inset-0 z-40 hidden bg-black/40 lg:hidden"></div>
+
+    <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+      <header class="sticky top-0 z-30 flex h-[72px] items-center gap-3 border-b border-gray-200 bg-white px-4 md:px-6">
+        <button onclick="toggleSidebar()" class="text-gray-500 hover:text-gray-700 lg:hidden"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg></button>
+        <div class="min-w-0"><h1 class="truncate text-lg font-bold leading-tight text-gray-800">Detail Pendaftaran Nazhir</h1><p class="truncate text-xs text-gray-400">Tinjau berkas &amp; riwayat, lalu teruskan ke Ketua BWI untuk penandatanganan</p></div>
+        <div class="ml-auto flex items-center gap-3">
+          <span class="hidden text-right sm:block"><span class="block text-sm font-semibold text-gray-700">Dr. H. Imam Nur Azis</span><span class="block text-xs text-gray-400">Sekretaris BWI</span></span>
+          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">IN</span>
+        </div>
+      </header>
+
+      <main>
+        <div class="mx-auto max-w-screen-2xl space-y-6 p-4 md:p-6">
+          <!-- Kembali + judul -->
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex items-center gap-3">
+              <a href="sekretaris-pendaftaran.html" title="Kembali ke daftar pendaftaran" class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:bg-gray-50"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg></a>
+              <div class="min-w-0"><h2 id="dtNama" class="truncate text-xl font-bold text-gray-800 md:text-2xl">&mdash;</h2><p id="dtSub" class="mt-0.5 text-sm text-gray-500">&mdash;</p></div>
+            </div>
+            <div id="dtBadge" class="shrink-0"></div>
+          </div>
+
+          <!-- Data tidak ditemukan -->
+          <div id="dtNotFound" class="hidden rounded-2xl border border-gray-200 bg-white px-6 py-14 text-center shadow-card">
+            <p class="text-sm font-medium text-gray-500">Data pendaftaran tidak ditemukan.</p>
+            <a href="sekretaris-pendaftaran.html" class="mt-4 inline-flex rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700">Kembali ke Daftar Pendaftaran</a>
+          </div>
+
+          <div id="dtKonten" class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            <!-- Rail kiri (sempit): Info + Tindakan + Riwayat -->
+            <div class="space-y-6 lg:col-span-1">
+              <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-card">
+                <h3 class="mb-4 text-base font-bold text-gray-800">Informasi Pemohon</h3>
+                <div id="dtInfo" class="grid grid-cols-1 gap-3.5 text-sm"></div>
+              </div>
+              <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+                <div class="border-b border-gray-100 px-5 py-3.5"><h3 class="text-sm font-bold text-gray-800">Tindakan Sekretariat</h3></div>
+                <div id="dtPanel" class="px-5 py-4"></div>
+              </div>
+              <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+                <div class="border-b border-gray-100 px-5 py-3.5"><h3 class="text-sm font-bold text-gray-800">Riwayat Proses</h3></div>
+                <div id="dtTimeline" class="px-5 py-4"></div>
+              </div>
+            </div>
+
+            <!-- Kanan (lebar): Kelengkapan Berkas dikelompokkan + navigasi -->
+            <div class="lg:col-span-2">
+              <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+                <div class="border-b border-gray-100 px-5 py-4 md:px-6"><h3 class="text-base font-bold text-gray-800">Kelengkapan Berkas <span id="dtBerkasHitung" class="font-medium text-gray-400"></span></h3></div>
+                <div class="flex flex-col lg:flex-row">
+                  <div id="dtSeksiNav" class="no-scrollbar flex shrink-0 gap-2 overflow-x-auto border-b border-gray-100 p-4 lg:w-64 lg:flex-col lg:border-b-0 lg:border-r"></div>
+                  <div id="dtSeksiPanel" class="grid flex-1 grid-cols-1 gap-1.5 p-4 sm:grid-cols-2"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal Konfirmasi Teruskan ke Ketua BWI -->
+  <div id="modalTeruskan" class="fixed inset-0 z-[70] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/50" onclick="tutupTeruskan()"></div>
+    <div class="modal-in relative flex w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+      <div class="flex items-start gap-4 border-b border-gray-100 px-6 py-5">
+        <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" /></svg></span>
+        <div class="min-w-0">
+          <h3 class="text-lg font-bold text-gray-800">Teruskan ke Ketua BWI</h3>
+          <p class="mt-0.5 text-xs text-gray-400">Konfirmasi sebelum diteruskan untuk penandatanganan elektronik.</p>
+        </div>
+      </div>
+      <div class="space-y-4 px-6 py-5">
+        <div class="rounded-xl border border-gray-100 bg-gray-50 px-4 py-3.5">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Akan ditetapkan sebagai Nazhir</p>
+          <dl class="space-y-1.5 text-sm">
+            <div class="flex gap-2"><dt class="w-24 shrink-0 text-gray-500">Badan Hukum</dt><dd id="tsNama" class="min-w-0 flex-1 font-semibold text-gray-800">&mdash;</dd></div>
+            <div class="flex gap-2"><dt class="w-24 shrink-0 text-gray-500">PIC</dt><dd id="tsPic" class="min-w-0 flex-1 font-medium text-gray-700">&mdash;</dd></div>
+            <div class="flex gap-2"><dt class="w-24 shrink-0 text-gray-500">Jenis</dt><dd id="tsJenis" class="min-w-0 flex-1 font-medium text-gray-700">&mdash;</dd></div>
+          </dl>
+        </div>
+        <div class="flex gap-3 rounded-xl border border-brand-100 bg-brand-50/60 px-4 py-3">
+          <svg class="h-5 w-5 shrink-0 text-brand-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>
+          <p class="text-xs leading-relaxed text-brand-800">Status berubah menjadi <span class="font-semibold">TTD Ketua</span>; pendaftaran diteruskan ke Ketua BWI untuk ditandatangani secara elektronik. NIB &amp; SK terbit setelah Ketua menandatangani.</p>
+        </div>
+        <p class="text-xs text-gray-500">Diteruskan oleh <span class="font-semibold text-gray-700">Dr. H. Imam Nur Azis</span> &mdash; Sekretaris BWI.</p>
+      </div>
+      <div class="flex items-center justify-end gap-2 border-t border-gray-100 bg-gray-50 px-6 py-4">
+        <button onclick="tutupTeruskan()" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-600 transition hover:bg-gray-100">Batal</button>
+        <button onclick="konfirmasiTeruskan()" class="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" /></svg>Ya, Teruskan ke Ketua</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Preview Sertifikat (SK) -->
+  <div id="modalSK" class="fixed inset-0 z-[75] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60" onclick="tutupSK()"></div>
+    <div class="modal-in relative flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+      <div class="flex items-center justify-between gap-3 border-b border-gray-100 px-6 py-4">
+        <div class="flex items-center gap-2">
+          <svg class="h-5 w-5 text-brand-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>
+          <h3 class="text-base font-bold text-gray-800">Sertifikat / SK Nazhir</h3>
+        </div>
+        <button onclick="tutupSK()" class="text-gray-400 transition hover:text-gray-600"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg></button>
+      </div>
+      <div class="flex-1 overflow-y-auto bg-gray-100 px-4 py-6 sm:px-8">
+        <div id="skBody" class="mx-auto max-w-[720px] bg-white p-8 text-sm leading-relaxed text-gray-800 shadow-lg sm:p-12" style="font-family: 'Times New Roman', Georgia, serif;"></div>
+      </div>
+      <div class="flex items-center justify-end gap-2 border-t border-gray-100 bg-gray-50 px-6 py-3">
+        <button onclick="tutupSK()" class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-600 transition hover:bg-gray-100">Tutup</button>
+        <button onclick="window.print()" class="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" /></svg>Cetak / PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-6 right-6 z-[80] hidden max-w-md items-center gap-3 rounded-xl bg-gray-900 px-5 py-3 text-sm font-medium text-white shadow-2xl">
+    <svg class="h-5 w-5 shrink-0 text-brand-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+    <span id="toastMsg"></span>
+  </div>
+
+  <script>
+    const SEKRETARIS_NAMA = 'Dr. H. Imam Nur Azis';
+    const KUNCI_DAFTAR = 'pendaftaran_nazhir_bwi';
+    const KUNCI_DUMMY = 'pendaftaran_dummy_bwi_v2';
+    const KUNCI_TAMBAHAN = 'pendaftaran_tambahan_bwi';
+
+    // Pemetaan seksi (label)
+    const SEKSI_UANG = { A: 'Administrasi & Legalitas', B: 'Pengurus & Kompetensi', C: 'Rencana & Keuangan', D: 'Surat Pernyataan' };
+    const SEKSI_TANAH = { A: 'Legalitas & Wakaf', B: 'Data Nazhir', C: 'Permohonan KUA' };
+
+    // Checklist berkas Wakaf Uang (17 dokumen) + seksi
+    const BERKAS_UANG = [
+      { no: 1, key: 'aktaPendirian', label: 'Akta Pendirian', seksi: 'A' },
+      { no: 2, key: 'pengesahanKemenkumham', label: 'Dokumen Pengesahan Kemenkumham', seksi: 'A' },
+      { no: 3, key: 'npwp', label: 'Dokumen NPWP', seksi: 'A' },
+      { no: 4, key: 'domisili', label: 'Dokumen Surat Keterangan Domisili dari Kelurahan', seksi: 'A' },
+      { no: 5, key: 'rekomBWI', label: 'Rekomendasi BWI Perwakilan Provinsi/Kota/Kabupaten', seksi: 'A' },
+      { no: 6, key: 'rekomLKSPWU', label: 'Dokumen Rekomendasi LKSPWU', seksi: 'A' },
+      { no: 7, key: 'stbpnSebelumnya', label: 'Surat Tanda Bukti Pendaftaran Nazhir Sebelumnya (jika ada)', seksi: 'A' },
+      { no: 8, key: 'dataPengurus', label: 'Permohonan Data Pengurus Yayasan dan Lembaga Wakaf serta Surat Pernyataan', seksi: 'B' },
+      { no: 9, key: 'sertifikatKompetensi', label: 'Sertifikat Kompetensi Bidang Pengelola Wakaf Minimal 2 Orang', seksi: 'B' },
+      { no: 10, key: 'companyProfile', label: 'Company Profile Yayasan / Organisasi', seksi: 'B' },
+      { no: 11, key: 'rencanaKerja', label: 'Rencana Kerja', seksi: 'C' },
+      { no: 12, key: 'biayaOperasional', label: 'Memiliki Biaya Operasional Minimal 30 Juta (Buku Rekening)', seksi: 'C' },
+      { no: 13, key: 'suratPermohonan', label: 'Surat Permohonan', seksi: 'D' },
+      { no: 14, key: 'setiaNKRI', label: 'Surat Kesediaan Setia kepada NKRI', seksi: 'D' },
+      { no: 15, key: 'laporanBulanan', label: 'Surat Pernyataan Laporan Data Wakaf Bulanan', seksi: 'D' },
+      { no: 16, key: 'bersediaDiaudit', label: 'Surat Pernyataan Bersedia Diaudit', seksi: 'D' },
+      { no: 17, key: 'laporan6Bulan', label: 'Surat Pernyataan Laporan Pelaksanaan Wakaf per 6 Bulan', seksi: 'D' },
+    ];
+    // Checklist berkas Wakaf Tanah (10 dokumen) + seksi
+    const BERKAS_TANAH = [
+      { no: 1, key: 'pengesahanNazhir', label: 'Foto Copy Surat Pengesahan Nazhir', seksi: 'A' },
+      { no: 2, key: 'sertifikatWakaf', label: 'Foto Copy Sertifikat Wakaf', seksi: 'A' },
+      { no: 3, key: 'aiwApaiw', label: 'Foto Copy Akta Ikrar Wakaf (AIW) atau Akta Pengganti Akta Ikrar Wakaf (APAIW)', seksi: 'A' },
+      { no: 4, key: 'jenisHBW', label: 'Jenis Harta Benda Wakaf', seksi: 'A' },
+      { no: 5, key: 'ktpNazhir', label: 'Foto Copy KTP Nazhir', seksi: 'B' },
+      { no: 6, key: 'riwayatHidupNazhir', label: 'Daftar Riwayat Hidup Nazhir', seksi: 'B' },
+      { no: 7, key: 'kegiatanNazhir', label: 'Kegiatan Nazhir', seksi: 'B' },
+      { no: 8, key: 'alamatSekretariat', label: 'Keterangan Alamat Sekretariat, Telepon / Fax', seksi: 'B' },
+      { no: 9, key: 'permohonanKUA', label: 'Surat Permohonan kepada KUA Setempat untuk Meneruskan Pendaftaran Nazhir kepada BWI', seksi: 'C' },
+      { no: 10, key: 'pengantarKUA', label: 'Surat Pengantar Permohonan Pendaftaran Nazhir dari KUA Tempat Harta Benda Wakaf Berada yang Ditujukan kepada BWI', seksi: 'C' },
+    ];
+    // Pilih set berkas & seksi sesuai jenis nazhir record (default 'uang')
+    function berkasUntuk(d) { return (d && d.jenisNazhir === 'tanah') ? BERKAS_TANAH : BERKAS_UANG; }
+    function seksiUntuk(d) { return (d && d.jenisNazhir === 'tanah') ? SEKSI_TANAH : SEKSI_UANG; }
+
+    const STATUS = {
+      diajukan: ['Menunggu Verifikasi', 'bg-amber-50 text-amber-700'],
+      revisi: ['Revisi', 'bg-orange-50 text-orange-700'],
+      ditolak: ['Ditolak', 'bg-red-50 text-red-600'],
+      diverifikasi: ['Sudah Diverifikasi', 'bg-emerald-50 text-emerald-700'],
+      terjadwal: ['Jadwal Wawancara', 'bg-blue-50 text-blue-700'],
+      persetujuan: ['Perlu Diteruskan', 'bg-cyan-50 text-cyan-700'],
+      sekretariat: ['Perlu Diteruskan', 'bg-cyan-50 text-cyan-700'],
+      ttd: ['TTD Ketua', 'bg-indigo-50 text-indigo-700'],
+      aktif: ['Aktif', 'bg-brand-50 text-brand-700'],
+    };
+
+    function bacaDaftar() { try { const o = JSON.parse(localStorage.getItem(KUNCI_DAFTAR)); if (o && typeof o === 'object') return o; } catch (e) {} return null; }
+    function simpanDaftar(o) { try { localStorage.setItem(KUNCI_DAFTAR, JSON.stringify(o)); } catch (e) {} }
+    function bacaTambahan() { try { const o = JSON.parse(localStorage.getItem(KUNCI_TAMBAHAN)); if (o && typeof o === 'object') return o; } catch (e) {} return null; }
+    function simpanTambahan(o) { try { localStorage.setItem(KUNCI_TAMBAHAN, JSON.stringify(o)); } catch (e) {} }
+    function bacaDummy() { try { const a = JSON.parse(localStorage.getItem(KUNCI_DUMMY)); if (Array.isArray(a)) return a; } catch (e) {} return null; }
+    function simpanDummy(a) { try { localStorage.setItem(KUNCI_DUMMY, JSON.stringify(a)); } catch (e) {} }
+    function amankan(t) { const d = document.createElement('div'); d.textContent = t == null ? '' : String(t); return d.innerHTML; }
+    function tglHariIni() { const b = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']; const d = new Date(); return d.getDate() + ' ' + b[d.getMonth()] + ' ' + d.getFullYear(); }
+
+    function cari(idAttr) {
+      if (idAttr === 'REAL') { const r = bacaDaftar(); return r ? Object.assign({ _real: true }, r) : null; }
+      if (idAttr === 'REAL2') { const r = bacaTambahan(); return r ? Object.assign({ _real2: true }, r) : null; }
+      return (bacaDummy() || []).find(d => String(d.id) === String(idAttr)) || null;
+    }
+    function persist(d) {
+      if (d._real) { const r = bacaDaftar() || {}; const clone = Object.assign({}, d); delete clone._real; Object.assign(r, clone); simpanDaftar(r); }
+      else if (d._real2) { const r = bacaTambahan() || {}; const clone = Object.assign({}, d); delete clone._real2; Object.assign(r, clone); simpanTambahan(r); }
+      else { const arr = bacaDummy() || []; const i = arr.findIndex(x => String(x.id) === String(d.id)); if (i >= 0) { arr[i] = d; simpanDummy(arr); } }
+    }
+    function badge(st) { const s = STATUS[st] || ['-', 'bg-gray-100 text-gray-500']; return '<span class="inline-flex items-center rounded-full ' + s[1] + ' px-2.5 py-1 text-xs font-semibold">' + s[0] + '</span>'; }
+    function barisInfo(label, val, mono) { return '<div><p class="text-xs font-semibold uppercase tracking-wide text-gray-400">' + amankan(label) + '</p><p class="mt-0.5 text-sm font-semibold text-gray-800 ' + (mono ? 'font-mono' : '') + '">' + val + '</p></div>'; }
+    // Dapat diteruskan ke Ketua = telah lulus wawancara & masuk tahap persetujuan (dulu 'sekretariat', kompatibel).
+    function perluTeruskan(d) { return d.status === 'persetujuan' || d.status === 'sekretariat'; }
+
+    /* ---------- Param & state ---------- */
+    const detailId = new URLSearchParams(location.search).get('id') || '';
+    let seksiAktif = 'A';
+
+    /* ---------- Render halaman ---------- */
+    function renderDetail() {
+      const d = cari(detailId);
+      const nf = document.getElementById('dtNotFound'), kon = document.getElementById('dtKonten');
+      if (!d) {
+        nf.classList.remove('hidden'); kon.classList.add('hidden');
+        document.getElementById('dtNama').textContent = 'Tidak ditemukan';
+        document.getElementById('dtSub').textContent = 'Pendaftaran tidak tersedia';
+        document.getElementById('dtBadge').innerHTML = '';
+        return;
+      }
+      nf.classList.add('hidden'); kon.classList.remove('hidden');
+      document.getElementById('dtNama').textContent = d.namaBadanHukum || '-';
+      document.getElementById('dtSub').textContent = (d.jenis || 'Wakaf Uang') + (d._real2 ? ' · HBW Tambahan' : '') + ' · Diajukan ' + (d.tglAjukan || '-');
+      document.getElementById('dtBadge').innerHTML = badge(d.status) + (d._real2 ? ' <span class="ml-1 inline-flex items-center rounded-full bg-violet-50 px-2.5 py-1 text-xs font-semibold text-violet-700">HBW Tambahan</span>' : '');
+
+      const info = [barisInfo('PIC', amankan(d.pic || '-')), barisInfo('Email', amankan(d.email || '-')), barisInfo('No. HP', amankan(d.hp || '-')), barisInfo('Jenis Nazhir', amankan(d.jenis || 'Wakaf Uang')), barisInfo('Status', badge(d.status))];
+      if (d.nib) info.push(barisInfo('NIB Terbit', amankan(d.nib), true));
+      if (d.tglSertifikat) info.push(barisInfo('Tanggal SK', amankan(d.tglSertifikat)));
+      document.getElementById('dtInfo').innerHTML = info.join('');
+
+      renderTimeline(d);
+      renderPanel(d);
+      renderBerkas(d);
+    }
+
+    function renderTimeline(d) {
+      const t = [];
+      t.push(baris('bg-gray-400', 'Pendaftaran diajukan', d.tglAjukan || '-'));
+      if (d.jadwalPresentasi) t.push(baris('bg-blue-500', 'Presentasi / Wawancara', amankan(d.jadwalPresentasi)));
+      if (d.hasilPresentasi) t.push(baris('bg-brand-500', 'Hasil wawancara: ' + amankan(d.hasilPresentasi), d.catatanHasil ? amankan(d.catatanHasil) : ''));
+      if (d.diteruskanOleh) t.push(baris('bg-indigo-500', 'Diteruskan ke Ketua oleh ' + amankan(d.diteruskanOleh), d.tglTeruskan || '-'));
+      if (d.ttdOleh) t.push(baris('bg-emerald-500', 'Ditandatangani Ketua (' + amankan(d.ttdOleh) + ')', d.tglTtd || '-'));
+      document.getElementById('dtTimeline').innerHTML = '<ol class="space-y-4">' + t.join('') + '</ol>';
+    }
+    function baris(warna, judul, ket) {
+      return '<li class="flex gap-3">' +
+        '<span class="mt-1 flex h-2.5 w-2.5 shrink-0 rounded-full ' + warna + '"></span>' +
+        '<div class="min-w-0"><p class="text-sm font-medium text-gray-700">' + judul + '</p>' + (ket ? '<p class="mt-0.5 text-xs text-gray-400">' + amankan(ket) + '</p>' : '') + '</div></li>';
+    }
+
+    function renderPanel(d) {
+      const el = document.getElementById('dtPanel');
+      if (perluTeruskan(d)) {
+        el.innerHTML =
+          '<div class="flex flex-col gap-3">' +
+          '<div class="flex gap-3 rounded-xl border border-cyan-100 bg-cyan-50/70 px-4 py-3">' +
+          '<svg class="h-5 w-5 shrink-0 text-cyan-700" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>' +
+          '<p class="text-sm text-cyan-800">Hasil wawancara <span class="font-semibold">LULUS</span> &amp; telah disetujui Pusat. Teruskan pendaftaran ini ke <span class="font-semibold">Ketua BWI</span> untuk ditandatangani secara elektronik.</p></div>' +
+          '<button type="button" onclick="bukaTeruskan()" class="inline-flex items-center justify-center gap-1.5 self-start rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" /></svg>Teruskan ke Ketua BWI</button>' +
+          '</div>';
+        return;
+      }
+      if (d.status === 'ttd') {
+        el.innerHTML = '<div class="flex gap-3 rounded-xl border border-indigo-100 bg-indigo-50/70 px-4 py-3 text-sm text-indigo-800"><svg class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg><p>Sudah diteruskan' + (d.diteruskanOleh ? ' oleh <span class="font-semibold">' + amankan(d.diteruskanOleh) + '</span>' : '') + (d.tglTeruskan ? ' pada ' + amankan(d.tglTeruskan) : '') + '. Menunggu <span class="font-semibold">Ketua BWI</span> menandatangani (e-Sign).</p></div>';
+        return;
+      }
+      if (d.status === 'aktif') {
+        el.innerHTML =
+          '<div class="flex flex-col gap-3">' +
+          '<div class="rounded-xl border border-brand-100 bg-brand-50/70 p-4">' +
+          '<div class="flex items-center gap-2"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-600 text-white"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg></span><p class="text-sm font-bold text-brand-800">Sudah disahkan &amp; aktif</p></div>' +
+          '<dl class="mt-3 space-y-1.5 text-xs">' +
+          '<div class="flex justify-between gap-2"><dt class="text-brand-700/70">NIB</dt><dd class="font-mono font-semibold text-brand-800">' + amankan(d.nib || '-') + '</dd></div>' +
+          '<div class="flex justify-between gap-2"><dt class="text-brand-700/70">Tanggal SK</dt><dd class="font-semibold text-brand-800">' + amankan(d.tglSertifikat || '-') + '</dd></div>' +
+          (d.ttdOleh ? '<div class="flex justify-between gap-2"><dt class="text-brand-700/70">Ditandatangani</dt><dd class="text-right font-semibold text-brand-800">' + amankan(d.ttdOleh) + '</dd></div>' : '') +
+          '</dl></div>' +
+          '<button type="button" onclick="bukaSK(\'' + amankan(detailId) + '\')" class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-brand-200 bg-white px-4 py-2 text-sm font-semibold text-brand-700 transition hover:bg-brand-50"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>Lihat Sertifikat (SK)</button>' +
+          '</div>';
+        return;
+      }
+      el.innerHTML = '<p class="text-sm text-gray-500">Status saat ini: <span class="font-semibold text-gray-700">' + (STATUS[d.status] ? STATUS[d.status][0] : amankan(d.status)) + '</span>. Pendaftaran masih diproses Pusat &mdash; belum dapat diteruskan ke Ketua BWI.</p>';
+    }
+
+    /* ---------- Kelengkapan berkas (dikelompokkan + navigasi) ---------- */
+    function hitungSeksi(d, sk) {
+      const list = berkasUntuk(d).filter(b => b.seksi === sk);
+      const berkas = d.berkas || {};
+      const ada = list.filter(b => !!berkas[b.key]).length;
+      return { ada: ada, total: list.length };
+    }
+    function renderBerkas(d) {
+      const seksi = seksiUntuk(d);
+      const keys = Object.keys(seksi);
+      if (keys.indexOf(seksiAktif) === -1) seksiAktif = keys[0];
+      const berkas = d.berkas || {};
+      const totalAda = berkasUntuk(d).filter(b => !!berkas[b.key]).length;
+      document.getElementById('dtBerkasHitung').textContent = '(' + totalAda + '/' + berkasUntuk(d).length + ' dokumen)';
+
+      // Navigasi seksi
+      document.getElementById('dtSeksiNav').innerHTML = keys.map(k => {
+        const c = hitungSeksi(d, k);
+        const aktif = k === seksiAktif;
+        const cls = aktif
+          ? 'border-brand-500 bg-brand-50 text-brand-800'
+          : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50';
+        return '<button type="button" onclick="gantiSeksi(\'' + k + '\')" class="flex shrink-0 items-center gap-3 rounded-xl border ' + cls + ' px-3.5 py-2.5 text-left transition lg:w-full">' +
+          '<span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sm font-bold ' + (aktif ? 'bg-brand-600 text-white' : 'bg-gray-100 text-gray-500') + '">' + k + '</span>' +
+          '<span class="min-w-0"><span class="block truncate text-sm font-semibold">' + amankan(seksi[k]) + '</span>' +
+          '<span class="block text-[11px] font-medium ' + (c.ada === c.total ? 'text-brand-600' : 'text-gray-400') + '">' + c.ada + '/' + c.total + '</span></span>' +
+          '</button>';
+      }).join('');
+
+      renderSeksiPanel(d);
+    }
+    function renderSeksiPanel(d) {
+      const berkas = d.berkas || {};
+      const list = berkasUntuk(d).filter(b => b.seksi === seksiAktif);
+      document.getElementById('dtSeksiPanel').innerHTML = list.map(b => {
+        const ada = !!berkas[b.key];
+        const st = ada
+          ? '<span class="shrink-0 rounded-full bg-brand-50 px-2 py-0.5 text-[11px] font-semibold text-brand-700">Ada</span>'
+          : '<span class="shrink-0 rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-600">Tidak ada</span>';
+        return '<div class="flex items-start justify-between gap-3 rounded-lg border border-gray-100 px-3 py-2.5">' +
+          '<div class="flex min-w-0 items-start gap-2">' +
+          '<span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gray-100 text-[10px] font-bold text-gray-500">' + b.no + '</span>' +
+          '<span class="min-w-0"><span class="block text-xs font-medium text-gray-700">' + amankan(b.label) + '</span>' +
+          (ada ? '<span class="block truncate text-[11px] text-gray-400">' + amankan(berkas[b.key].nama) + '</span>' : '<span class="block text-[11px] text-red-400">Belum diunggah</span>') +
+          ((d.nomorBerkas && d.nomorBerkas[b.key]) ? '<span class="block truncate text-[11px] font-medium text-gray-600">No: ' + amankan(d.nomorBerkas[b.key]) + '</span>' : '') +
+          '</span></div>' + st + '</div>';
+      }).join('');
+    }
+    function gantiSeksi(k) { seksiAktif = k; const d = cari(detailId); if (d) renderBerkas(d); }
+
+    /* ---------- Teruskan ke Ketua (modal konfirmasi) ---------- */
+    function bukaTeruskan() {
+      const d = cari(detailId);
+      if (!d) return;
+      if (!perluTeruskan(d)) { showToast('Hanya pendaftaran yang lulus wawancara (tahap Persetujuan) yang dapat diteruskan.'); return; }
+      document.getElementById('tsNama').textContent = d.namaBadanHukum || '-';
+      document.getElementById('tsPic').textContent = d.pic || '-';
+      document.getElementById('tsJenis').textContent = d.jenis || 'Wakaf Uang';
+      const m = document.getElementById('modalTeruskan'); m.classList.remove('hidden'); m.classList.add('flex');
+    }
+    function tutupTeruskan() { const m = document.getElementById('modalTeruskan'); if (m) { m.classList.add('hidden'); m.classList.remove('flex'); } }
+    function konfirmasiTeruskan() {
+      const d = cari(detailId);
+      if (!d) return;
+      if (!perluTeruskan(d)) { tutupTeruskan(); showToast('Status pendaftaran sudah berubah.'); renderDetail(); return; }
+      d.status = 'ttd';
+      d.diteruskanOleh = SEKRETARIS_NAMA;
+      d.tglTeruskan = tglHariIni();
+      persist(d);
+      tutupTeruskan();
+      renderDetail();
+      showToast('Diteruskan ke Ketua BWI untuk penandatanganan.');
+    }
+
+    /* ---------- Preview Sertifikat (SK) ---------- */
+    function qrKode(seed, px) {
+      const N = 25, s = px || 96, cell = s / N, sd = String(seed || 'BWI');
+      let h = 2166136261;
+      for (let i = 0; i < sd.length; i++) { h ^= sd.charCodeAt(i); h = Math.imul(h, 16777619); }
+      function rnd(i) { let x = Math.imul((h ^ (i * 2654435761)) >>> 0, 2246822519); x ^= x >>> 13; return ((x >>> 0) % 1000) / 1000; }
+      const on = {}; const set = (x, y) => { on[x + '_' + y] = true; };
+      function finder(gx, gy) { for (let y = 0; y < 7; y++) for (let x = 0; x < 7; x++) { const edge = (x === 0 || x === 6 || y === 0 || y === 6), core = (x >= 2 && x <= 4 && y >= 2 && y <= 4); if (edge || core) set(gx + x, gy + y); } }
+      finder(0, 0); finder(N - 7, 0); finder(0, N - 7);
+      const inF = (x, y) => (x < 8 && y < 8) || (x >= N - 8 && y < 8) || (x < 8 && y >= N - 8);
+      let idx = 0;
+      for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) { if (inF(x, y)) continue; if (rnd(idx++) > 0.5) set(x, y); }
+      let r = '';
+      for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) if (on[x + '_' + y]) r += '<rect x="' + (x * cell).toFixed(2) + '" y="' + (y * cell).toFixed(2) + '" width="' + cell.toFixed(2) + '" height="' + cell.toFixed(2) + '"/>';
+      return '<svg width="' + s + '" height="' + s + '" viewBox="0 0 ' + s + ' ' + s + '" xmlns="http://www.w3.org/2000/svg" style="display:block"><rect width="' + s + '" height="' + s + '" fill="#fff"/><g fill="#0f172a">' + r + '</g></svg>';
+    }
+    function skHTML(d) {
+      const nama = amankan(d.namaBadanHukum || '-');
+      const pic = amankan(d.pic || '-');
+      const nib = amankan(d.nib || '-');
+      const tgl = amankan(d.tglSertifikat || tglHariIni());
+      const nomor = 'SK-' + (d.nib || 'NZHR-000') + '/BWI/' + (String(tgl).split(' ').pop() || '2026');
+      const namaKetua = amankan(d.ttdOleh || 'Prof. Dr. K.H. Noor Achmad, M.A.');
+      return '' +
+        '<div style="text-align:center;border-bottom:3px double #0f766e;padding-bottom:14px;margin-bottom:20px;">' +
+          '<p style="margin:0;font-size:15px;font-weight:bold;letter-spacing:.5px;">BADAN WAKAF INDONESIA</p>' +
+          '<p style="margin:2px 0 0;font-size:11px;">Jl. Kebon Sirih Nomor 57, Jakarta Pusat 10340 · www.bwi.go.id</p>' +
+        '</div>' +
+        '<div style="text-align:center;margin-bottom:18px;">' +
+          '<p style="margin:0;font-weight:bold;text-decoration:underline;">SURAT KEPUTUSAN KETUA BADAN WAKAF INDONESIA</p>' +
+          '<p style="margin:4px 0;">Nomor: ' + amankan(nomor) + '</p>' +
+          '<p style="margin:8px 0 0;">TENTANG</p>' +
+          '<p style="margin:2px 0;font-weight:bold;">PENETAPAN DAN PENDAFTARAN NAZHIR WAKAF UANG</p>' +
+        '</div>' +
+        '<p style="margin:0 0 8px;">Ketua Badan Wakaf Indonesia, setelah melakukan verifikasi dokumen dan penilaian presentasi/wawancara, menetapkan:</p>' +
+        '<table style="width:100%;border-collapse:collapse;">' +
+          '<tr><td style="width:120px;vertical-align:top;padding:2px 0;">KESATU</td><td style="width:14px;vertical-align:top;">:</td><td style="padding:2px 0;">Menetapkan <b>' + nama + '</b> sebagai <b>Nazhir Wakaf Uang</b> yang terdaftar pada Badan Wakaf Indonesia.</td></tr>' +
+          '<tr><td style="vertical-align:top;padding:2px 0;">KEDUA</td><td style="vertical-align:top;">:</td><td style="padding:2px 0;">Nomor Induk Nazhir (NIB): <b>' + nib + '</b>, dengan penanggung jawab (PIC): ' + pic + '.</td></tr>' +
+          '<tr><td style="vertical-align:top;padding:2px 0;">KETIGA</td><td style="vertical-align:top;">:</td><td style="padding:2px 0;">Nazhir wajib menyampaikan laporan pengelolaan &amp; pengembangan harta benda wakaf secara berkala sesuai ketentuan.</td></tr>' +
+        '</table>' +
+        '<div style="display:flex;justify-content:flex-end;align-items:flex-end;margin-top:34px;">' +
+          '<div style="text-align:center;min-width:260px;">' +
+            '<p style="margin:0;">Ditetapkan di Jakarta,</p>' +
+            '<p style="margin:0 0 4px;">pada tanggal ' + tgl + '</p>' +
+            '<p style="margin:0;">Ketua Badan Wakaf Indonesia,</p>' +
+            '<div style="margin:6px auto 2px;width:100px;height:100px;padding:4px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;">' + qrKode(d.ttdId || d.nib || nomor, 92) + '</div>' +
+            '<p style="margin:2px 0 0;font-size:10px;font-weight:bold;color:#0f766e;font-family:Arial,sans-serif;">&#10003; Terverifikasi — Ketua BWI</p>' +
+            '<p style="margin:2px 0 0;font-weight:bold;text-decoration:underline;">' + namaKetua + '</p>' +
+            '<p style="margin:2px 0 0;font-size:10px;color:#64748b;font-family:Arial,sans-serif;">Ditandatangani secara elektronik</p>' +
+            '<p style="margin:1px 0 0;font-size:9px;color:#94a3b8;font-family:Arial,sans-serif;">ID: ' + amankan(d.ttdId || '-') + '</p>' +
+          '</div>' +
+        '</div>';
+    }
+    function bukaSK(idAttr) {
+      const d = cari(idAttr);
+      if (!d || d.status !== 'aktif') { showToast('Sertifikat tersedia setelah ditandatangani Ketua BWI.'); return; }
+      document.getElementById('skBody').innerHTML = skHTML(d);
+      const m = document.getElementById('modalSK'); m.classList.remove('hidden'); m.classList.add('flex');
+    }
+    function tutupSK() { const m = document.getElementById('modalSK'); if (m) { m.classList.add('hidden'); m.classList.remove('flex'); } }
+
+    /* ---------- Util UI ---------- */
+    function toggleSidebar() { const sb = document.getElementById('sidebar'), ov = document.getElementById('overlay'); const t = sb.classList.contains('-translate-x-full'); sb.classList.toggle('-translate-x-full', !t); ov.classList.toggle('hidden', !t); }
+    function tutupSidebar() { document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('overlay').classList.add('hidden'); }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { tutupSidebar(); tutupTeruskan(); tutupSK(); } });
+    function logout() { window.location.href = 'kenazhiran-login.html'; }
+    let toastTimer = null;
+    function showToast(p) { const t = document.getElementById('toast'); document.getElementById('toastMsg').textContent = p; t.classList.remove('hidden'); t.classList.add('flex'); clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.classList.add('hidden'); t.classList.remove('flex'); }, 3200); }
+
+    document.addEventListener('DOMContentLoaded', renderDetail);
+  </script>
+</body>
+
+</html>

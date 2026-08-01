@@ -5,7 +5,7 @@
 - **Produk:** Modul Kenazhiran — pengelolaan Nazhir, Harta Benda Wakaf (HBW), pelaporan, dan tata kelola nasional.
 - **Identitas visual:** Deep Teal (`brand` 50→900), font Outfit, ikon inline SVG (tanpa emoji), shell TailAdmin (sidebar + topbar).
 - **Bahasa UI:** Indonesia.
-- **Konvensi tabel (global, semua role):** setiap tabel data memakai **pagination default 5 baris/halaman** — footer "Menampilkan {from}–{to} dari {total}" + Sebelumnya/Berikutnya (disabled di ujung); halaman **reset ke 1** saat search/filter/tab berubah; nomor urut kontinu antar‑halaman.
+- **Konvensi tabel (global, semua role):** setiap tabel data memakai **pagination bernomor, default 5 baris/halaman** — footer "Menampilkan {from}–{to} dari {total}" di kiri; kontrol kanan = **Sebelumnya + tombol nomor halaman + Berikutnya** (nomor aktif disorot brand; ellipsis "…" bila > 7 halaman; Sebelumnya/Berikutnya disabled di ujung); halaman **reset ke 1** saat search/filter/tab berubah; nomor urut kontinu antar‑halaman. Helper `tombolNomor(total, perHal, current, fnGoto)` + `goto*(n)` per tabel.
 
 ---
 
@@ -82,12 +82,17 @@ Pendukung: `pusat-hierarki.html`. Halaman berikut **masih ada namun tidak lagi d
 ### 3.5 Role: Sekretaris BWI
 | Menu | Halaman |
 |---|---|
-| **Pendaftaran Nazhir** (pantau semua + teruskan ke Ketua) | `sekretaris-pendaftaran.html` |
+| **Dashboard** (ringkasan status + antrean perlu diteruskan) | `sekretaris-dashboard.html` |
+| **Pendaftaran Nazhir** (pantau semua + teruskan ke Ketua) | `sekretaris-pendaftaran.html` → `sekretaris-pendaftaran-detail.html` |
 
 ### 3.6 Role: Ketua BWI
 | Menu | Halaman |
 |---|---|
-| **Pengesahan Nazhir** (TTD digital + passphrase) | `ketua-pendaftaran.html` |
+| **Dashboard** (statistik + antrean TTD) | `ketua-dashboard.html` |
+| **Pengesahan Nazhir** (antrean → detail) | `ketua-pendaftaran.html` → `ketua-pendaftaran-detail.html` |
+| **Studio e‑Sign** (TTD digital + PIN) | `ketua-esign.html` |
+| **Atur PIN e‑Sign** | `ketua-pin.html` |
+| **Verifikasi Dokumen** (publik) | `verifikasi-dokumen.html` |
 
 ---
 
@@ -107,6 +112,8 @@ Pendukung: `pusat-hierarki.html`. Halaman berikut **masih ada namun tidak lagi d
 | `data_mutasi_bwi` | Laporan mutasi aset (tanah). |
 | `data_laporan_program_bwi` | Laporan progres HBW (tanah & uang). |
 | `detail_laporan_bwi` | Detail entri laporan. |
+| `esign_pin_bwi` | PIN/passphrase e‑Sign Ketua (default demo `bwi2026`). Diatur di `ketua-pin.html`, divalidasi di `ketua-esign.html` & halaman detail Ketua. |
+| `esign_pin_tglubah` | Tanggal PIN e‑Sign terakhir diubah (tampil di kartu status `ketua-pin.html`). |
 | `cutoff_bwi` | Periode & penguncian `{ periodeAktif, items: { <periode>: { deadline, terkunci, semester, tahun } } }`. |
 | `buka_kunci_bwi` | Permohonan buka kunci dari Nazhir. |
 | `notifikasi_bwi` | Notifikasi / peringatan deadline & broadcast alert ke Nazhir (dibaca lonceng Nazhir; entri `{ id, lembaga, judul, pesan, periode, tanggal, tipe }`, `lembaga: '*'` = semua). |
@@ -119,6 +126,7 @@ Pendukung: `pusat-hierarki.html`. Halaman berikut **masih ada namun tidak lagi d
 
 ### 5.1 Login & Pendaftaran
 - **Login:** kolom **Email atau NIB** + sandi (localStorage) — **tanpa pemilih/selektor peran** & tanpa panel "Akun demo". Peran dikenali otomatis; nazhir aktif bisa via email atau NIB. Diarahkan sesuai peran.
+- **Branding & visual login:** memakai **logo resmi Badan Wakaf Indonesia** (`Logo_Badan_Wakaf_Indonesia-Bawah.png`) pada lockup panel brand (desktop) & header mobile — ditempatkan di kartu putih agar kontras di atas panel teal. Background panel brand memakai **ornamen geometris islami** (motif bintang delapan) bernuansa teal (`.pola-islamic`), dan sisi form memakai ornamen teal sangat halus (`.pola-islamic-terang`) untuk kohesi.
 - **Buat akun dulu, pilih jenis setelah login.** Halaman login punya **satu tombol "Daftar sebagai Nazhir"** → `kenazhiran-daftar.html` (pembuatan akun **tanpa** memilih jenis). Setelah login, **dashboard** menampilkan pemilih jenis (lihat §5.2). `jenisNazhir` awalnya kosong dan diisi saat memilih di dashboard; nilainya menentukan set berkas **serta** hak akses menu HBW (§5.3/§5.4 gating).
 - **Pendaftaran Calon Nazhir (2 fase):**
   - **Fase 1** (`kenazhiran-daftar.html`): buat akun — nama badan hukum, email, PIC, HP, sandi + persetujuan → status `draft`, `jenisNazhir` **kosong**, `tglDaftar` distempel → masuk sebagai Calon ke dashboard.
@@ -126,6 +134,7 @@ Pendukung: `pusat-hierarki.html`. Halaman berikut **masih ada namun tidak lagi d
     - **Wakaf Uang (17 berkas — 16 wajib + 1 opsional)**, 4 kelompok (Administrasi & Legalitas, Pengurus & Kompetensi, Rencana & Keuangan, Surat Pernyataan): Akta Pendirian, Pengesahan Kemenkumham, NPWP, Surat Keterangan Domisili, Rekomendasi BWI Perwakilan, Rekomendasi LKSPWU, STBPN sebelumnya *(opsional)*, Data Pengurus + Surat Pernyataan, Sertifikat Kompetensi Pengelola Wakaf, Company Profile, Rencana Kerja, Biaya Operasional min. 30 juta, Surat Permohonan, Setia NKRI, Laporan Data Wakaf Bulanan, Bersedia Diaudit, Laporan Pelaksanaan per 6 bulan.
     - **Wakaf Tanah (10 berkas, semua wajib)**, 3 kelompok (Legalitas & Wakaf, Data Nazhir, Permohonan KUA): Foto Copy Surat Pengesahan Nazhir, Foto Copy Sertifikat Wakaf, Foto Copy AIW/APAIW, Jenis Harta Benda Wakaf, Foto Copy KTP Nazhir, Daftar Riwayat Hidup Nazhir, Kegiatan Nazhir, Keterangan Alamat Sekretariat/Telepon/Fax, Surat Permohonan kepada KUA setempat, Surat Pengantar Permohonan dari KUA.
   - Daftar & `key` dokumen **sinkron** di sisi Nazhir, Admin Pusat, & Sekretaris (checklist verifikasi memilih set via `berkasUntuk(record.jenisNazhir)`). Aksi: unggah/hapus, Simpan & Lanjutkan Nanti, **Ajukan Verifikasi**.
+  - **Input Nomor Dokumen:** dokumen yang memiliki nomor menampilkan **input teks berlabel** ("Nomor Dokumen") di bawah tombol unggah, agar Pusat lebih mudah memverifikasi. Peta `NOMOR_DOK` (key→label+placeholder) mencakup — *Uang:* Akta Pendirian, Pengesahan Kemenkumham, NPWP, Surat Keterangan Domisili, Rekomendasi BWI Perwakilan, Rekomendasi LKSPWU, STBPN sebelumnya, Sertifikat Kompetensi, Surat Permohonan; *Tanah:* Surat Pengesahan Nazhir, Sertifikat Wakaf, AIW/APAIW, KTP (NIK) Nazhir, Surat Permohonan KUA, Surat Pengantar KUA. Nilai disimpan di `pendaftaran_nazhir_bwi.nomorBerkas` (`{ key: nomor }`; berlaku juga untuk pendaftaran tambahan); setelah **Ajukan Verifikasi** nomor bersifat read‑only. Nomor **ditampilkan** pada checklist verifikasi Pusat (`pusat-pendaftaran.html`, `pusat-pendaftaran-detail.html`) & Sekretaris (`sekretaris-pendaftaran.html`) sebagai baris "No: …".
 
 ### 5.2 Nazhir — Dashboard NIB
 Ringkasan NIB lembaga, jumlah Sub‑ID/portofolio aktif, status verifikasi, dan (untuk hasil graduasi) **kartu akses SK** + banner "Selamat, akun aktif" (satu kali). Mode **Calon** menampilkan banner status kontekstual + CTA dinamis (Lanjutkan Pendaftaran / Perbaiki Berkas / Daftar Ulang / Lihat Detail).
@@ -185,21 +194,36 @@ Mengelola **template pesan broadcast** ke Nazhir yang mengingatkan *"sudah saatn
 Pipeline verifikasi pendaftaran (tab **Histori / Verifikasi Dokumen / Jadwal / Hasil / Persetujuan**) + **filter status** + search. **Detail** dibuka di halaman (`pusat-pendaftaran-detail.html`), bukan modal — dengan aksi per tahap; setelah aksi → **toast + kembali ke tab semula**. Layout detail: Info Pemohon + Keputusan di atas, **Kelengkapan Berkas full‑width** di bawah.
 - **Wewenang Admin Pusat dibatasi s.d. input hasil wawancara.** Admin beraksi pada tahap **Verifikasi Dokumen → Jadwal → Input Hasil** saja. Saat hasil **Lulus** → status `persetujuan`. **Admin tidak lagi bisa menyetujui/menerbitkan SK** — tombol "Setujui" dihapus. Persetujuan menjadi wewenang **Sekretaris & Ketua BWI**.
 - **Tab "Persetujuan & Pengesahan" (pantau progres).** Tab ini menampilkan status `persetujuan` → `ttd` → `aktif` sebagai **read‑only** agar Admin tahu progres sampai mana. Saat sudah `aktif`, Admin dapat **Preview SK** (sertifikat ber‑QR terverifikasi).
+- **Validasi catatan tolak/revisi.** Aksi **Tolak** atau **Minta Revisi** wajib mengisi kolom catatan alasan; bila kosong, muncul **toast warning** (ikon peringatan amber) *"Isi catatan alasan terlebih dahulu."* dan aksi dibatalkan. `showToast(pesan, type)` mendukung `type: 'warning'` (default sukses/hijau).
+- **Pesan/catatan tersampaikan ke calon (termasuk saat disetujui).** Catatan yang ditulis Admin pada textarea keputusan kini **disimpan untuk semua aksi**, bukan hanya tolak/revisi. Saat **Verifikasi Dokumen**, catatan (opsional) disimpan ke `catatanPusat` dan **ditampilkan ke calon** pada banner *"Dokumen terverifikasi"* (di `nazhir-pendaftaran.html` & `nazhir-dashboard.html`); catatan hasil presentasi (`catatanHasil`) tampil pada banner status `persetujuan`. Label textarea diperjelas ("akan tampil ke calon nazhir").
+- **Kelengkapan Berkas dikelompokkan + navigasi (halaman detail).** Panel berkas full‑width kini **dikelompokkan per seksi** dengan **navigasi seksi** (kiri: daftar seksi A/B/C/D + indikator kelengkapan "x/total"; kanan: dokumen seksi aktif) — mengikuti pengalaman sisi calon nazhir, agar verifikasi tidak melelahkan. Tiap kartu dokumen menampilkan nama file, **Nomor Dokumen** (bila ada), dan badge Ada/Tidak ada. Pemetaan seksi sinkron dengan `nazhir-pendaftaran.html`.
 
 ### 5.11 Wilayah — read‑only
 Dashboard & inbox, buku induk nazhir daerah, rekapitulasi, dan tinjauan dokumen pelaporan — **tanpa aksi (read‑only)**.
 
-### 5.12 Sekretaris BWI — Pendaftaran Nazhir (`sekretaris-pendaftaran.html`)
-- **Memantau setiap pendaftaran** nazhir dengan **informasi lengkap** (kartu ringkasan: Perlu Diteruskan / Sudah Diteruskan / Sudah Disahkan / Total) + search + **filter status**.
-- **Teruskan ke Ketua BWI:** untuk pendaftaran yang **lulus wawancara** (status `persetujuan`), tombol **"Teruskan ke Ketua BWI"** (dengan konfirmasi) → status `ttd`, mencatat `diteruskanOleh` + `tglTeruskan`.
-- **Detail (read‑only):** info pemohon, riwayat (presentasi/wawancara → hasil → diteruskan → ditandatangani), dan kelengkapan berkas.
-- **Lihat Sertifikat:** setelah `aktif`, Sekretaris dapat membuka **sertifikat/SK ber‑QR terverifikasi** (progres pengesahan ikut terlihat di sisinya).
+### 5.12 Sekretaris BWI — Dashboard & Pendaftaran Nazhir
+**Menu sidebar Sekretaris:** Dashboard · Pendaftaran Nazhir · Keluar. *(Sengaja lean: TIDAK ada daftar HBW se‑Indonesia — pengawasan portofolio HBW adalah ranah Admin Pusat/NIB Nazhir & BWI Perwakilan, bukan tupoksi Sekretaris; menampilkannya hanya membebani & tumpang tindih.)* Login Sekretaris mendarat di Dashboard.
 
-### 5.13 Ketua BWI — Pengesahan Nazhir (`ketua-pendaftaran.html`)
-- **Antrean pengesahan:** kartu **Menunggu Tanda Tangan** (`ttd`) & **Sudah Ditandatangani** (`aktif`), search + filter. Melihat pendaftaran yang **telah diteruskan Sekretaris** beserta informasi lengkap.
-- **Tanda Tangan Digital / e‑Sign (passphrase):** untuk status `ttd`, tombol **"Tandatangani"** membuka modal passphrase (demo: `bwi2026`). Passphrase benar → status `aktif`, terbit **NIB** + **SK/Sertifikat** dengan **QR Code terverifikasi** + metadata tanda tangan elektronik (`ttdOleh`, `tglTtd`, `ttdId`). **Preview SK** menampilkan QR terverifikasi + tanda tangan Ketua — dan versi **Draf** (QR "terbit setelah TTD") saat masih `ttd`.
-- SK dapat **dicetak/PDF**.
-- **Sertifikat muncul di semua sisi:** setelah ditandatangani, SK ber‑QR yang sama tampil di **Admin Pusat** (Preview SK), **Sekretaris** (Lihat Sertifikat), dan **Calon/Nazhir** (`nazhir-sk.html`).
+- **Dashboard (`sekretaris-dashboard.html`):** sapaan + kartu statistik kompak (Perlu Diteruskan / TTD Ketua / Aktif / Total) + daftar **antrean "Perlu Diteruskan ke Ketua BWI"** dengan tautan ke halaman detail.
+- **Memantau pendaftaran** nazhir (`sekretaris-pendaftaran.html`) dengan **informasi lengkap** (kartu ringkasan) + search + **filter status**. **Hanya menampilkan pendaftaran yang telah lolos Admin Pusat** (status `persetujuan`/`sekretariat`/`ttd`/`aktif`); yang **masih diproses Pusat** (diajukan/revisi/diverifikasi/terjadwal) maupun **ditolak Pusat disembunyikan** — opsi filter "Diproses Pusat" dihapus. Ringkasan (termasuk Total) mengikuti cakupan ini.
+- **Label status disederhanakan** agar lebih enak dibaca: `persetujuan`/`sekretariat` → **"Perlu Diteruskan"**, `ttd` → **"TTD Ketua"**, `aktif` → **"Aktif"**. Filter: Semua Status / Perlu Diteruskan / TTD Ketua / Aktif / **Diproses Pusat**. Kartu ringkasan selaras ("TTD Ketua", "Aktif").
+- **Detail = halaman tersendiri (bukan modal).** Tombol **"Lihat"** pada baris tabel menuju `sekretaris-pendaftaran-detail.html?id=<idAttr>` (`REAL`/`REAL2`/id dummy). Halaman detail memakai **rail kiri sempit** (Info Pemohon + kartu **Tindakan Sekretariat** + **Riwayat Proses**) dan **kolom kanan lebar** untuk **Kelengkapan Berkas dikelompokkan + navigasi seksi** (indikator "x/total" tanpa kata "ada", panel dokumen per seksi, menampilkan nama file + Nomor Dokumen + badge). Panel Tindakan saat `aktif` berupa kartu status ringkas (NIB, Tanggal SK, Penandatangan) + tombol Lihat Sertifikat. Modal detail read‑only lama dihapus.
+- **Teruskan ke Ketua BWI (modal konfirmasi custom).** Untuk status `persetujuan`, tombol **"Teruskan ke Ketua BWI"** membuka **modal informatif** (bukan `window.confirm`): ringkasan pemohon (badan hukum/PIC/jenis), penjelasan konsekuensi (status → TTD Ketua; NIB & SK terbit setelah Ketua menandatangani), catatan Sekretaris, tombol Batal + **"Ya, Teruskan ke Ketua"** → status `ttd`, mencatat `diteruskanOleh` + `tglTeruskan`, toast, re‑render.
+- **Lihat Sertifikat:** setelah `aktif`, Sekretaris dapat membuka **SK ber‑QR terverifikasi**.
+
+### 5.13 Ketua BWI — role penuh (Dashboard, Pengesahan, Studio e‑Sign, Riwayat, Atur PIN)
+**Menu sidebar Ketua:** Dashboard · Pengesahan Nazhir · Atur PIN e‑Sign · Keluar.
+
+- **Dashboard (`ketua-dashboard.html`):** sapaan + kartu statistik (Menunggu TTD / Aktif / Ditolak / Total) + antrean ringkas "Menunggu TTD" dengan tautan ke detail.
+- **Pengesahan Nazhir (`ketua-pendaftaran.html`):** antrean pendaftaran yang **telah diteruskan Sekretaris**, search + filter. **Label status:** `ttd` → **"Menunggu TTD"**, `aktif` → **"Aktif"**, `ditolak` → **"Ditolak"** (filter: Semua Status / Menunggu TTD / Aktif / Ditolak; "Semua Status" menampilkan ttd/aktif/ditolak). **Hanya pendaftaran yang benar‑benar diteruskan ke Ketua** yang tampil — "Ditolak" pun dibatasi pada yang ditolak Ketua (`diteruskanOleh` terisi); pendaftaran yang masih/hanya diproses Admin Pusat (termasuk ditolak Pusat) tidak muncul. **Aksi baris hanya "Lihat Detail"** (tombol Draft & Tandatangani dipindah ke halaman detail; modal passphrase di list dihapus).
+- **Detail pengesahan = Studio e‑Sign inline (`ketua-pendaftaran-detail.html?id=`):** layout ala studio — **preview dokumen di kolom kiri** (`skHTML(d,true)` untuk draf `ttd`, final untuk `aktif`; tombol "Perbesar" membuka modal SK), **Informasi Pemohon + kartu Tanda Tangan Elektronik di kolom kanan**, dan **Riwayat Proses** (kartu langkah) di bawah. **Kelengkapan berkas tidak ditampilkan** (Ketua tidak perlu meninjau unggahan berkas). 
+  - Status `ttd`: kartu kanan berisi **input PIN e‑Sign** (divalidasi terhadap `esign_pin_bwi`, default demo `bwi2026`) + tombol **"Tandatangani & Sahkan"** + tombol **"Tolak Pengajuan"** (modal alasan → status `ditolak`, alasan ke `catatanPusat`). PIN benar → jalankan kontrak TTD (`status='aktif'`, `nib`, `tglSertifikat`, `ttdOleh`, `tglTtd`, `ttdId`; `tambahJenisAktif` utk REAL2) → **modal animasi sukses** (CSS keyframes, sadar `prefers-reduced-motion`) dengan NIB/`ttdId` + link Verifikasi Dokumen + Lihat SK, lalu panel diperbarui.
+  - Status `aktif`: input PIN + tombol e‑Sign **berubah menjadi teks tautan bergaris bawah "Verifikasi Digital"** (→ `verifikasi-dokumen.html`) + info tanda tangan + tautan Lihat SK.
+- **Studio e‑Sign standalone (`ketua-esign.html?id=`):** halaman studio terpisah (tetap tersedia) dengan alur & kontrak TTD yang sama; kini penandatanganan utama dilakukan **inline** di halaman detail.
+- **Atur PIN e‑Sign (`ketua-pin.html`):** layout **dua kolom ala dashboard** — kartu status (badge Aktif, "Terakhir diperbarui" dari `esign_pin_tglubah`) + kartu tips di kiri, **form Ganti PIN** di kanan (input PIN saat ini/baru/konfirmasi dengan **toggle lihat**, tombol Batalkan + Simpan). Simpan → tulis `esign_pin_bwi` (validasi PIN lama, min 6 karakter, cocok, ≠ lama) + stempel `esign_pin_tglubah`.
+- **Verifikasi Dokumen (`verifikasi-dokumen.html?id=`):** halaman verifikasi publik (tanpa sidebar, target hasil pindai QR) — bila `aktif` menampilkan **status "Dokumen Terverifikasi"** + detail ringkas + QR. **Isi lengkap SK tidak ditampilkan** demi keamanan (halaman ini bisa diakses siapa pun yang memindai QR); selain `aktif` → **"Dokumen Tidak Terverifikasi"**.
+- **Preview SK ala PDF viewer:** modal preview SK di seluruh halaman Ketua kini menyediakan tombol **Unduh** (ikon unduh → menyimpan SK sebagai berkas HTML standalone) & **Cetak** (ikon printer → membuka jendela cetak berisi SK saja, siap dicetak/Save‑as‑PDF).
+- **Sertifikat muncul di semua sisi:** setelah ditandatangani, SK ber‑QR yang sama tampil di **Admin Pusat** (Preview SK), **Sekretaris** (Lihat Sertifikat), dan **Calon/Nazhir** (`nazhir-sk.html`). SK dapat **dicetak/diunduh**.
 
 ### 5.14 Pusat — Master Pengguna (`pusat-master-pengguna.html`)
 Pengelolaan akun pengguna oleh Admin Pusat — terutama saat Nazhir lupa email/ID atau kata sandi.
