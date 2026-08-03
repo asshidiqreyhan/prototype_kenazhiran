@@ -4,6 +4,99 @@ Ringkasan perubahan yang diterapkan pada `PRD-FLOW-DESIGN-KENAZHIRAN.md` beserta
 
 ---
 
+## 2026‑07‑31 — Master Pengguna: filter status, form detail=edit, & fix autofill
+
+**Bagian PRD terdampak:** §5.14 (Master Pengguna).
+
+- **Filter status** ditambah (Semua / **Aktif** / **Nonaktif**) — status baris ditentukan dari pembekuan akun (`status_nazhir_bwi`); badge Aktif (brand) / Nonaktif (rose).
+- **Kolom "Terdaftar" dihapus** dari tabel.
+- **Fix autofill:** search bar diberi `autocomplete="off"` (+`name`), field sandi `autocomplete="new-password"`, agar password‑manager browser tidak lagi mengisi otomatis kotak pencarian saat modal (yang berisi input sandi) dibuka.
+- **Detail = Edit disatukan:** modal "Detail Pengguna" kini berupa **form yang bisa diedit** (Nama, Email/ID) + bagian **Ubah Kata Sandi** (opsional) dengan satu tombol **Simpan Perubahan**. Modal Edit terpisah & tombol Edit di baris dihapus (kolom Aksi: **Lihat Detail** + Hapus).
+- **Peran** hanya **Nazhir / Akun Internal** (label "Nazhir (Mandiri)" & tanda "Mandiri" di baris dihapus).
+- **NIB read-only:** NIB terbit otomatis, ditampilkan sebagai teks (bukan input) dan **tidak dapat diubah** dari form.
+
+**File tersentuh:** `pusat-master-pengguna.html`.
+
+---
+
+## 2026‑07‑31 — Direktori NIB Nazhir menampilkan nazhir baru aktif + kartu ringkas
+
+**Bagian PRD terdampak:** §5 (Pusat — NIB Nazhir).
+
+- **`pusat-master.html`:** tabel **Direktori NIB Tunggal** kini **menggabungkan seed statis dengan nazhir yang sudah aktif dari data pendaftaran** (`pendaftaran_nazhir_bwi` real + `pendaftaran_dummy_bwi_v2` yang berstatus `aktif`) — jadi nazhir yang baru disahkan (mis. Lenovo Corp) langsung muncul. Provinsi diturunkan dari kode NIB, jumlah portofolio dari `data_portofolio_bwi`.
+- Kartu ringkasan (Total Nazhir / Sub-Portofolio / Lisensi Baru) dibuat **compact** (ikon+angka+label), tidak lagi kotak besar.
+
+**File tersentuh:** `pusat-master.html`.
+
+---
+
+## 2026‑07‑31 — Riwayat SK Nazhir (read-only) & proporsi detail Pusat
+
+**Bagian PRD terdampak:** §5.3 (Riwayat SK), §5.10 (detail Pusat) — kosmetik.
+
+- **`nazhir-aset-sk.html`:** tombol **nonaktifkan/aktifkan SK dihapus** dari kolom Aksi (kini hanya **Lihat SK**) — SK bersifat arsip read-only. Kartu ringkasan (Total/Aktif/Nonaktif) dibuat **compact** (ikon+angka+label). Catatan kaki disesuaikan.
+- **`pusat-pendaftaran-detail.html`:** kolom kanan dijadikan flex‑column dan kartu **Kelengkapan Berkas** `flex-1` sehingga **tingginya mengikuti kolom Informasi Pemohon** (proporsional saat Info lebih tinggi).
+
+**File tersentuh:** `nazhir-aset-sk.html`, `pusat-pendaftaran-detail.html`.
+
+---
+
+## 2026‑07‑31 — Kartu akses SK di Dashboard Nazhir
+
+**Bagian PRD terdampak:** §5.2 (Dashboard Nazhir) — kosmetik.
+
+- Kartu **"Sertifikat Keputusan (SK) Nazhir"** (muncul pasca‑aktivasi di `nazhir-dashboard.html`): tombol **Preview / Download SK** diubah dari primary → **secondary** (outline brand); posisinya dipindah dari paling atas ke **bawah kartu ringkasan** (setelah kartu identitas NIB & metrik).
+
+**File tersentuh:** `nazhir-dashboard.html`.
+
+---
+
+## 2026‑07‑31 — Penyesuaian Dokumen Legalitas & kartu Status Periode
+
+**Bagian PRD terdampak:** §5 (Nazhir — Dokumen & Buka Kunci) — kosmetik.
+
+- **`nazhir-dokumen.html`:** kartu **Dokumen Legalitas** dibuat **grid 2 kolom (berjejer horizontal, tinggi setara)** — E‑Sertifikat Nazhir & area placeholder dokumen berikutnya masing‑masing mengisi setengah lebar kontainer, dan bertambah ke samping saat ada dokumen baru.
+- **`nazhir-buka-kunci.html`:** kartu ringkasan **Status Periode** kini menampilkan **rentang periode aktif** (mis. "Januari – Juni 2025") dengan **ikon kalender** (bukan gembok). Alert hijau "Periode terbuka" memakai **ikon centang** (gembok dihilangkan; ikon `kotakInfo` kini kontekstual per warna: hijau/brand=centang, amber=jam, merah=gembok).
+
+**File tersentuh:** `nazhir-dokumen.html`, `nazhir-buka-kunci.html`.
+
+---
+
+## 2026‑07‑31 — Nazhir: revamp Permohonan Buka Kunci & Log Aktivitas otomatis
+
+**Bagian PRD terdampak:** §5 (Nazhir — Buka Kunci & Dokumen).
+
+1. **Permohonan Buka Kunci (`nazhir-buka-kunci.html`) dirombak:** kartu "Status Periode Pelaporan" di atas dihapus, diganti **kartu ringkasan** (Status Periode, Menunggu Keputusan, Disetujui, Ditolak). Di bawahnya **section "Periode Pelaporan Aktif"** + area aksi (Ajukan Buka Kunci). Tabel **Riwayat Permohonan Saya** kini punya **filter status** (Semua / Disetujui / Menunggu Keputusan / Ditolak) + **pagination bernomor default 5**.
+2. **Log Aktivitas otomatis:** aksi Nazhir kini terekam ke `log_aktivitas_bwi` dan tampil di tabel Log Aktivitas (`nazhir-dokumen.html`, digabung dengan event sistem cut-off, terbaru dulu, pagination default 5): **Tambah Aset HBW** (`nazhir-aset-tambah.html`), **Pendaftaran HBW Baru** (`nazhir-aset.html`), **Laporan HBW dikirim** (`nazhir-laporan-program.html`). Helper seragam `catatAktivitas()`.
+
+**File tersentuh:** `nazhir-buka-kunci.html`, `nazhir-dokumen.html`, `nazhir-aset.html`, `nazhir-aset-tambah.html`, `nazhir-laporan-program.html`.
+
+---
+
+## 2026‑07‑31 — Perbaikan layout detail (Pusat & Sekretaris) + bersih-bersih data demo Nazhir
+
+**Bagian PRD terdampak:** §5.10, §5.12 (kosmetik/data awal).
+
+1. **Detail Admin Pusat (`pusat-pendaftaran-detail.html`):** **Kelengkapan Berkas dipindah ke kolom kanan** (di bawah Tindakan/Keputusan) agar mengisi ruang kosong — tidak lagi menggantung sendiri di paling bawah.
+2. **Detail Sekretaris (`sekretaris-pendaftaran-detail.html`):** susunan diubah — **Info Pemohon (kiri atas)**, **Tindakan Sekretariat + Riwayat Proses (kanan atas)**, lalu **Kelengkapan Berkas full‑width di bawah**.
+3. **Nazhir — Master HBW (`nazhir-aset.html`):** data portofolio bawaan **dikosongkan** + reset satu‑kali membersihkan data demo lama di `data_portofolio_bwi` (penambahan Sub‑ID baru tetap tersimpan).
+4. **Nazhir — Laporan Program (`nazhir-laporan-program.html`):** riwayat laporan **dikosongkan** + reset satu‑kali (`data_laporan_program_bwi`); tombol **"Kirim Laporan" → "Upload Laporan"** (ikon unggah).
+5. **Nazhir — Dokumen (`nazhir-dokumen.html`):** kartu legalitas "E‑Sertifikat NIB Tunggal" → **"E‑Sertifikat Nazhir"**; badge **Aktif dipindah ke kanan judul**; teks "PDF · 480 KB" dihapus; grid dokumen legalitas kini **mengalir horizontal** (sm:2 / lg:3 kolom) agar dokumen berikutnya berjejer.
+
+**File tersentuh:** `pusat-pendaftaran-detail.html`, `sekretaris-pendaftaran-detail.html`, `nazhir-aset.html`, `nazhir-laporan-program.html`, `nazhir-dokumen.html`.
+
+---
+
+## 2026‑07‑31 — Warna status "Perlu Diteruskan" (Sekretaris) jadi amber/warning
+
+**Bagian PRD terdampak:** §5.12 (kosmetik).
+
+- Badge status **"Perlu Diteruskan"** di Sekretaris diubah dari cyan (mirip hijau "Aktif" → membingungkan) menjadi **amber/warning** (`bg-amber-50 text-amber-700`) untuk menandai perlu aksi segera. Aksen kartu ringkasan "Perlu Diteruskan" (list & dashboard) ikut amber.
+
+**File tersentuh:** `sekretaris-pendaftaran.html`, `sekretaris-pendaftaran-detail.html`, `sekretaris-dashboard.html`.
+
+---
+
 ## 2026‑07‑31 — Sekretaris & Ketua tidak lagi melihat pendaftaran yang diproses Admin Pusat
 
 **Bagian PRD terdampak:** §5.12, §5.13.

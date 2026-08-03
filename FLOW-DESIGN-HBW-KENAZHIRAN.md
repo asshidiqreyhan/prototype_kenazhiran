@@ -162,9 +162,9 @@ Preview dokumen: modal img/PDF/kartu info. Tombol lanjut tampil untuk `draft`/`d
 Metrik: [Total SK] [SK Aktif] [SK Nonaktif]
 Toolbar: [Filter Jenis ▾]  [Filter Status ▾]
 Tabel: Nomor SK │ Sub-ID │ Kategori │ Nama/Lokasi │ Tgl Terbit │ Status │ Aksi
-Aksi: [Lihat SK] [Toggle Aktif/Nonaktif] [Cetak]
+Aksi: [Lihat SK]   (read-only — SK adalah arsip, tanpa aksi nonaktifkan)
 ```
-Hanya menampilkan Sub-ID aktif/nonaktif. Nomor SK: `SK-BWI/WKF/{tahun}/{suffix}`. Modal "Lihat SK" = dokumen SK ber-kop BWI + stempel.
+Hanya menampilkan Sub-ID aktif/nonaktif. **Read-only (arsip): SK tidak dapat dinonaktifkan dari sini** (aksi toggle dihapus). Kartu metrik dibuat compact. Nomor SK: `SK-BWI/WKF/{tahun}/{suffix}`. Modal "Lihat SK" = dokumen SK ber-kop BWI + stempel.
 
 ---
 
@@ -228,7 +228,7 @@ TOPBAR: "Pelaporan Wakaf {Uang/Tanah}"  / sub per jenis
 │                                                             │
 │  Catatan / Keterangan Progres   [ textarea ]               │
 │                                                             │
-│      [Kembali]      [Simpan Draft]   [Kirim Laporan]        │
+│      [Kembali]      [Simpan Draft]   [Upload Laporan]       │
 └──────────────────────────────────────────────────────────────┘
 ```
 
@@ -238,7 +238,7 @@ TOPBAR: "Pelaporan Wakaf {Uang/Tanah}"  / sub per jenis
 - **Imbal Hasil** = `(Nilai Terbaru − Nilai Terakhir) − Penghimpunan` (readonly, auto).
 - Peringatan bila total penyaluran > imbal hasil.
 - **Periode** auto-terisi & terkunci dari periode aktif.
-- Validasi simpan: UANG (Nilai Terbaru>0, Penghimpunan>0, total penyaluran ≤ imbal); TANAH (Penyaluran>0). `Simpan Draft` → status "Draft"; `Kirim Laporan` → "Sedang Direview".
+- Validasi simpan: UANG (Nilai Terbaru>0, Penghimpunan>0, total penyaluran ≤ imbal); TANAH (Penyaluran>0). `Simpan Draft` → status "Draft"; **`Upload Laporan`** (dulu "Kirim Laporan") → "Sedang Direview".
 
 ## B3. Modal Detail Laporan (`bukaModalDetail`)
 
@@ -298,7 +298,7 @@ Halaman Laporan (?jenis) ──[+ Tambah]──▶ Modal
         UANG: Nilai Terbaru + Penghimpunan → Imbal auto → penyaluran (≤ imbal)
         TANAH: Penyaluran + Jumlah Mauquf
         ├─[Simpan Draft]──▶ 'Draft' (bisa Edit/Hapus)
-        └─[Kirim Laporan]──▶ 'Sedang Direview' (read-only)
+        └─[Upload Laporan]──▶ 'Sedang Direview' (read-only)
    Baseline berikutnya = nilaiAkhir laporan non-draft terakhir (anti-duplikasi)
 ```
 
@@ -320,7 +320,7 @@ Cut-off terkunci ──▶ Banner merah + tombol Ajukan Buka Kunci
 - [ ] Zona upload multi-dokumen + pratinjau; peta Leaflet koordinat (fallback offline).
 - [ ] Aturan `bolehSimpan`; Draft vs Simpan & Aktifkan; MODE_UBAH.
 - [ ] Detail: timeline, rincian (termasuk detail tanah), preview dokumen; aksi lanjut per status.
-- [ ] Riwayat SK: filter, nomor SK deterministik, modal SK, toggle status.
+- [ ] Riwayat SK: filter, nomor SK deterministik, modal SK — **read-only (tanpa toggle nonaktif)**.
 
 **Laporan HBW**
 - [ ] Satu halaman dua jenis (`?jenis=`); toggle `blokUang`/`blokTanah`/`badgeSelisih`.

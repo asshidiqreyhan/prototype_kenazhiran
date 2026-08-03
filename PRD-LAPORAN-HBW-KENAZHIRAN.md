@@ -117,7 +117,7 @@ Judul `#judulModalTambah`: "Tambah Laporan Program" / "Edit Draft Laporan".
 | (hidden) Biaya Operasional | `inBiayaOperasional` | field kanonik |
 | Catatan / Keterangan Progres | `inCatatan` (textarea rows 3) | ph "Jelaskan penyebab kenaikan/penyusutan program..." |
 
-Tombol footer: **Kembali** (`tutupModalTambah()`) · **Simpan Draft** (`simpanLaporan('draft')`) · **Kirim Laporan** (`simpanLaporan('review')`).
+Tombol footer: **Kembali** (`tutupModalTambah()`) · **Simpan Draft** (`simpanLaporan('draft')`) · **Upload Laporan** (`simpanLaporan('review')`; label sebelumnya "Kirim Laporan").
 
 ### 3.2 WAKAF UANG — blok `#blokUang`
 | Label | id | tipe | placeholder |

@@ -109,21 +109,19 @@
                 <div id="dtCatatan"></div>
               </div>
 
-              <!-- Kolom kanan: keputusan -->
-              <div class="space-y-6 lg:col-span-2">
+              <!-- Kolom kanan: keputusan + kelengkapan berkas (tinggi mengikuti kolom kiri) -->
+              <div class="flex flex-col gap-6 lg:col-span-2">
                 <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
                   <div class="border-b border-gray-100 px-5 py-4 md:px-6"><h3 class="text-base font-bold text-gray-800">Tindakan / Keputusan</h3></div>
                   <div id="dtPanel" class="px-5 py-5 md:px-6"></div>
                 </div>
-              </div>
-            </div>
-
-            <!-- Kelengkapan berkas: full-width di bawah, dikelompokkan + navigasi seksi -->
-            <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
-              <div class="border-b border-gray-100 px-5 py-4 md:px-6"><h3 class="text-base font-bold text-gray-800">Kelengkapan Berkas <span id="dtBerkasCount" class="font-medium text-gray-400"></span></h3></div>
-              <div class="grid grid-cols-1 md:grid-cols-[240px_1fr]">
-                <div id="dtBerkasNav" class="flex gap-2 overflow-x-auto border-b border-gray-100 p-3 md:flex-col md:overflow-visible md:border-b-0 md:border-r"></div>
-                <div id="dtBerkasList" class="grid grid-cols-1 gap-1.5 p-4 sm:grid-cols-2"></div>
+                <div class="flex flex-1 flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+                  <div class="border-b border-gray-100 px-5 py-4 md:px-6"><h3 class="text-base font-bold text-gray-800">Kelengkapan Berkas <span id="dtBerkasCount" class="font-medium text-gray-400"></span></h3></div>
+                  <div class="grid flex-1 grid-cols-1 md:grid-cols-[240px_1fr]">
+                    <div id="dtBerkasNav" class="flex gap-2 overflow-x-auto border-b border-gray-100 p-3 md:flex-col md:overflow-visible md:border-b-0 md:border-r"></div>
+                    <div id="dtBerkasList" class="grid grid-cols-1 content-start gap-1.5 p-4 sm:grid-cols-2"></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

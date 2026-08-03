@@ -357,11 +357,11 @@
               <p class="text-xs text-gray-400">Arsip resmi yang diterbitkan oleh BWI untuk lembaga Anda.</p>
             </div>
 
-            <div class="grid grid-cols-1 gap-4 p-5 md:grid-cols-2 md:p-6">
+            <div class="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 md:p-6">
 
-              <!-- Dokumen 1: E-Sertifikat NIB Tunggal -->
+              <!-- Dokumen 1: E-Sertifikat Nazhir -->
               <div
-                class="flex items-start justify-between gap-4 rounded-xl border border-gray-200 p-4 transition hover:border-brand-300 hover:bg-brand-50/40">
+                class="flex h-full flex-col justify-between gap-3 rounded-xl border border-gray-200 p-4 transition hover:border-brand-300 hover:bg-brand-50/40">
                 <div class="flex items-start gap-3">
                   <span
                     class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
@@ -371,16 +371,15 @@
                     </svg>
                   </span>
                   <div class="min-w-0">
-                    <p class="font-semibold text-gray-800">E-Sertifikat NIB Tunggal</p>
-                    <p class="text-xs text-gray-400">Terbit: 12 Jan 2025 &middot; PDF &middot; 480 KB</p>
-                    <span
-                      class="mt-2 inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-semibold text-brand-700">
-                      <span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> Aktif
-                    </span>
+                    <div class="flex flex-wrap items-center gap-2">
+                      <p class="font-semibold text-gray-800">E-Sertifikat Nazhir</p>
+                      <span class="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-semibold text-brand-700"><span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> Aktif</span>
+                    </div>
+                    <p class="mt-1 text-xs text-gray-400">Terbit: 12 Jan 2025</p>
                   </div>
                 </div>
-                <button type="button" onclick="unduhDokumen('E-Sertifikat NIB Tunggal')"
-                  class="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-brand-600 px-3.5 py-2 text-xs font-semibold text-brand-700 transition hover:bg-brand-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-brand-200">
+                <button type="button" onclick="unduhDokumen('E-Sertifikat Nazhir')"
+                  class="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-brand-600 px-3.5 py-2 text-xs font-semibold text-brand-700 transition hover:bg-brand-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-brand-200">
                   <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round"
                       d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5 7.5 12M12 2.25V16.5" />
@@ -562,6 +561,35 @@
       { tanggal: '31 Juli 2025', warna: 'amber', ikon: 'kunci', label: 'Penguncian Data Periode', ket: 'Sistem mengunci data Semester 1 - 2025 (Cut-Off).' }
     ];
 
+    // Sumber gabungan: entri aksi Nazhir (localStorage) + entri sistem default.
+    const BULAN_LOG = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    function nilaiTanggalLog(s) {
+      const bagian = String(s || '').trim().split(/\s+/);
+      if (bagian.length < 3) return 0;
+      const hari = parseInt(bagian[0], 10) || 0;
+      const bln = BULAN_LOG.indexOf(bagian[1]);
+      const thn = parseInt(bagian[2], 10) || 0;
+      if (bln < 0) return 0;
+      return thn * 10000 + (bln + 1) * 100 + hari;
+    }
+    // Gabungkan log aksi Nazhir (log_aktivitas_bwi) dengan LOG_AKTIVITAS default,
+    // lalu urutkan terbaru dulu (sort stabil -> aksi terbaru unggul saat tanggal sama).
+    function ambilLogGabungan() {
+      let tersimpan = [];
+      try {
+        const arr = JSON.parse(localStorage.getItem('log_aktivitas_bwi'));
+        if (Array.isArray(arr)) {
+          tersimpan = arr.map(o => ({
+            tanggal: o.tanggal, warna: 'brand', ikon: 'pensil',
+            label: o.aktivitas, ket: o.keterangan
+          }));
+        }
+      } catch (e) { }
+      const gabung = tersimpan.concat(LOG_AKTIVITAS);
+      gabung.sort((a, b) => nilaiTanggalLog(b.tanggal) - nilaiTanggalLog(a.tanggal));
+      return gabung;
+    }
+
     const PER_HAL = 5;
     let halLog = 1;
 
@@ -593,11 +621,12 @@
     function renderLog() {
       const body = document.getElementById('logBody');
       if (!body) return;
-      const total = LOG_AKTIVITAS.length;
+      const DATA = ambilLogGabungan();
+      const total = DATA.length;
       const maxHal = Math.max(1, Math.ceil(total / PER_HAL));
       if (halLog > maxHal) halLog = maxHal;
       if (halLog < 1) halLog = 1;
-      const irisan = LOG_AKTIVITAS.slice((halLog - 1) * PER_HAL, halLog * PER_HAL);
+      const irisan = DATA.slice((halLog - 1) * PER_HAL, halLog * PER_HAL);
 
       body.innerHTML = '';
       if (total === 0) {

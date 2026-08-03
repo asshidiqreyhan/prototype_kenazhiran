@@ -684,9 +684,9 @@
         <button type="button" onclick="simpanLaporan('review')"
           class="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">
           <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
           </svg>
-          Kirim Laporan
+          Upload Laporan
         </button>
       </div>
     </div>
@@ -1015,22 +1015,10 @@
     function bacaProgramAktif() { return bacaProgram().filter(p => p.status === 'aktif'); }
 
     /* ---------- Data laporan program ---------- */
-    const DEFAULT_LAPORAN = [
-      {
-        id: 'RPG-DEMO-1', kodeProgram: PREFIX_PROGRAM + '-001', namaProgram: 'Pembangunan Ruko Produktif Merdeka',
-        periode: 'Semester 1 - 2025', tanggal: '05 Juli 2025',
-        nilaiAwal: 1500000000, kenaikan: 120000000, penyusutan: 0, nilaiAkhir: 1620000000,
-        status: 'Disetujui Pusat',
-        catatan: 'Kenaikan nilai dari pendapatan sewa ruko dan apresiasi aset selama semester berjalan.'
-      },
-      {
-        id: 'RPG-DEMO-2', kodeProgram: PREFIX_PROGRAM + '-002', namaProgram: 'Klinik Wakaf Sehat',
-        periode: 'Semester 1 - 2025', tanggal: '06 Juli 2025',
-        nilaiAwal: 500000000, kenaikan: 0, penyusutan: 25000000, nilaiAkhir: 475000000,
-        status: 'Sedang Direview',
-        catatan: 'Penyusutan nilai peralatan medis dan pemeliharaan bangunan klinik.'
-      },
-    ];
+    // Riwayat laporan program dikosongkan (mulai dari nol). Terisi saat Nazhir mengunggah laporan.
+    const DEFAULT_LAPORAN = [];
+    // Reset satu-kali: bersihkan riwayat laporan demo lama di localStorage.
+    try { if (localStorage.getItem('reset_laporan_program_bwi_v1') !== '1') { localStorage.removeItem(KUNCI_LAPORAN); localStorage.setItem('reset_laporan_program_bwi_v1', '1'); } } catch (e) { }
 
     let daftarLaporan = [];
 
@@ -1530,6 +1518,21 @@
       return d.getDate() + ' ' + bulan[d.getMonth()] + ' ' + d.getFullYear();
     }
 
+    // --- Log aktivitas: helper pencatatan (kontrak seragam) ---
+    function tglHariIni() {
+      var b = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+      var d = new Date();
+      return d.getDate() + ' ' + b[d.getMonth()] + ' ' + d.getFullYear();
+    }
+    function catatAktivitas(aktivitas, keterangan) {
+      try {
+        var arr = JSON.parse(localStorage.getItem('log_aktivitas_bwi'));
+        if (!Array.isArray(arr)) arr = [];
+        arr.unshift({ tanggal: tglHariIni(), aktivitas: aktivitas, keterangan: keterangan });
+        localStorage.setItem('log_aktivitas_bwi', JSON.stringify(arr));
+      } catch (e) { }
+    }
+
     // mode: 'draft' -> status Draft; 'review' -> status Sedang Direview
     function simpanLaporan(mode) {
       const kode = document.getElementById('inProgram').value;
@@ -1609,6 +1612,10 @@
         list.unshift(baru);
       }
       try { localStorage.setItem(KUNCI_LAPORAN, JSON.stringify(list)); } catch (e) { }
+
+      if (mode === 'review') {
+        catatAktivitas('Laporan HBW', 'Laporan program ' + (p ? p.nama : kode) + ' (' + periode + ') dikirim.');
+      }
 
       tutupModalTambah();
       renderRiwayat();

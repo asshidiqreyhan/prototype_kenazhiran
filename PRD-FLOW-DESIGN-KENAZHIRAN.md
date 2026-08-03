@@ -166,7 +166,7 @@ Ringkasan NIB lembaga, jumlah Sub‑ID/portofolio aktif, status verifikasi, dan 
 
 ### 5.6 Pusat — Dashboard, Master NIB, Hierarki
 - **Dashboard Nasional:** metrik agregat nasional.
-- **Master NIB Tunggal:** buku induk NIB; termasuk **bekukan/aktifkan** lembaga. Tombol **"Lihat Hierarki"** membuka `pusat-hierarki.html`.
+- **NIB Nazhir (`pusat-master.html`):** buku induk NIB (kartu ringkasan compact). Tabel direktori **menggabungkan seed statis + nazhir yang SUDAH aktif dari data pendaftaran** (`pendaftaran_nazhir_bwi` real & `pendaftaran_dummy_bwi_v2` berstatus `aktif`) — sehingga nazhir yang baru disahkan Ketua langsung muncul (provinsi diturunkan dari kode NIB, jumlah portofolio dari `data_portofolio_bwi`). Termasuk **bekukan/aktifkan** lembaga. Tombol **"Lihat Detail"** membuka **Hierarki** (`pusat-hierarki.html`).
 - **Hierarki (`pusat-hierarki.html`):** peta relasi NIB → Sub‑ID → program. Tabel **"Daftar Sub‑ID Portofolio Aktif"** dipisah **tab** — **hanya Wakaf Uang & Wakaf Tanah** (tanpa tab "Semua"; portofolio selalu terpisah per jenis), badge jumlah per tab, default **Wakaf Uang**. Kolom nilai **tidak mencampur satuan**: header **"Saldo Terkini"** (Rp) di tab Wakaf Uang, **"Luas Terkini"** (M²) di tab Wakaf Tanah. Kolom tambahan: **"Jumlah Laporan"** (berapa kali HBW dilaporkan — live dari `data_laporan_program_bwi`, min. seed) & **"Mulai Dikelola"** (tanggal awal HBW dikelola). **Tanpa kolom "Status"** (penambahan HBW tidak divalidasi Pusat). Read‑only; dibedakan via field `kategori` (`'uang'`/`'tanah'`).
 
 ### 5.7 Pusat — Kelola Broadcast
@@ -227,10 +227,11 @@ Dashboard & inbox, buku induk nazhir daerah, rekapitulasi, dan tinjauan dokumen 
 
 ### 5.14 Pusat — Master Pengguna (`pusat-master-pengguna.html`)
 Pengelolaan akun pengguna oleh Admin Pusat — terutama saat Nazhir lupa email/ID atau kata sandi.
-- **Tanpa "Tambah Akun".** Nazhir hanya bisa masuk lewat pendaftaran mandiri; Admin **tidak dapat membuat akun Nazhir manual**. Aksi tersedia: **Lihat · Edit · Reset Password · Hapus**.
-- **Hanya akun AKTIF.** Berisi seluruh `akun_kenazhiran_bwi_v2` (akun bawaan) + Nazhir mandiri dari `pendaftaran_nazhir_bwi` **hanya bila `status === 'aktif'`** (dedupe bila email sama). **Calon yang masih mendaftar (draft/diajukan/…) TIDAK muncul di sini — mereka ada di menu "Pendaftaran Nazhir"** hingga disahkan Ketua. Kartu ringkasan: Total Pengguna / Nazhir / Akun Internal. Toolbar: search (nama/email/NIB) + filter peran (Semua/Nazhir/Internal).
-- **Tabel:** Nama · Email/ID · NIB · Peran · Status · **Terdaftar** (`tglDaftar` → fallback `tglAjukan` → "—") · Aksi.
-- **Reset Password (di dalam Detail):** kolom Aksi hanya **Lihat · Edit · Hapus** (tanpa tombol Reset di kolom). Reset sandi ada **di dalam modal Detail** — isi **Kata Sandi Baru + Konfirmasi** (min. 6 karakter, harus cocok) lalu **Simpan Sandi Baru** → ditulis ke `sandi` akun bawaan **atau** `pendaftaran_nazhir_bwi.sandi`; **langsung berlaku untuk login**.
+- **Tanpa "Tambah Akun".** Nazhir hanya bisa masuk lewat pendaftaran mandiri; Admin **tidak dapat membuat akun Nazhir manual**. Kolom Aksi: **Lihat Detail · Hapus** (Edit disatukan ke dalam Detail).
+- **Hanya akun AKTIF.** Berisi seluruh `akun_kenazhiran_bwi_v2` (akun bawaan) + Nazhir dari `pendaftaran_nazhir_bwi` **hanya bila `status === 'aktif'`** (dedupe bila email sama). **Calon yang masih mendaftar TIDAK muncul di sini** — ada di menu "Pendaftaran Nazhir" hingga disahkan Ketua. Kartu ringkasan (compact): Total Pengguna / Nazhir / Akun Internal. Toolbar: search (nama/email/NIB, **`autocomplete=off`** agar tak diisi otomatis oleh password‑manager) + **filter peran** (Semua / Nazhir / Akun Internal) + **filter status** (Semua / **Aktif** / **Nonaktif**).
+- **Peran** hanya **Nazhir** atau **Akun Internal** (tanpa label "Mandiri"). **Status** = Aktif, atau **Nonaktif** bila lembaga/NIB dibekukan (`status_nazhir_bwi`).
+- **Tabel:** Nama · Email/ID · NIB · Peran · Status · Aksi. *(Kolom "Terdaftar" dihapus.)*
+- **Detail = Edit (satu form).** Modal **Detail Pengguna** menampilkan Peran & Status (read‑only) + **field yang bisa diubah**: Nama, Email/ID, dan **Ubah Kata Sandi** (opsional; Kata Sandi Baru + Konfirmasi, min. 6 karakter & cocok). **NIB read‑only** (terbit otomatis, tidak dapat diubah). Tombol **Simpan Perubahan** menulis data + (bila diisi) sandi ke akun bawaan **atau** `pendaftaran_nazhir_bwi`; langsung berlaku untuk login. Modal Edit terpisah dihapus.
 - **Hapus:** akun `adminpusat@bwi.go.id` **dilindungi** (tak bisa dihapus agar tak terkunci); Nazhir mandiri → `removeItem` pendaftaran; akun bawaan → dikeluarkan dari array. Akun internal lain diberi peringatan hati‑hati.
 - **Timestamp pendaftaran:** `kenazhiran-daftar.html` menstempel `tglDaftar` (format "D Bulan YYYY") saat pendaftaran dibuat.
 

@@ -87,31 +87,35 @@
             <a href="sekretaris-pendaftaran.html" class="mt-4 inline-flex rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700">Kembali ke Daftar Pendaftaran</a>
           </div>
 
-          <div id="dtKonten" class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <!-- Rail kiri (sempit): Info + Tindakan + Riwayat -->
-            <div class="space-y-6 lg:col-span-1">
-              <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-card">
-                <h3 class="mb-4 text-base font-bold text-gray-800">Informasi Pemohon</h3>
-                <div id="dtInfo" class="grid grid-cols-1 gap-3.5 text-sm"></div>
+          <div id="dtKonten" class="space-y-6">
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+              <!-- Kiri atas: Informasi Pemohon -->
+              <div class="lg:col-span-1">
+                <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-card md:p-6">
+                  <h3 class="mb-4 text-base font-bold text-gray-800">Informasi Pemohon</h3>
+                  <div id="dtInfo" class="grid grid-cols-1 gap-3.5 text-sm"></div>
+                </div>
               </div>
-              <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
-                <div class="border-b border-gray-100 px-5 py-3.5"><h3 class="text-sm font-bold text-gray-800">Tindakan Sekretariat</h3></div>
-                <div id="dtPanel" class="px-5 py-4"></div>
-              </div>
-              <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
-                <div class="border-b border-gray-100 px-5 py-3.5"><h3 class="text-sm font-bold text-gray-800">Riwayat Proses</h3></div>
-                <div id="dtTimeline" class="px-5 py-4"></div>
+
+              <!-- Kanan atas: Tindakan Sekretariat + Riwayat Proses -->
+              <div class="space-y-6 lg:col-span-2">
+                <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+                  <div class="border-b border-gray-100 px-5 py-4 md:px-6"><h3 class="text-base font-bold text-gray-800">Tindakan Sekretariat</h3></div>
+                  <div id="dtPanel" class="px-5 py-5 md:px-6"></div>
+                </div>
+                <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+                  <div class="border-b border-gray-100 px-5 py-4 md:px-6"><h3 class="text-base font-bold text-gray-800">Riwayat Proses</h3></div>
+                  <div id="dtTimeline" class="px-5 py-5 md:px-6"></div>
+                </div>
               </div>
             </div>
 
-            <!-- Kanan (lebar): Kelengkapan Berkas dikelompokkan + navigasi -->
-            <div class="lg:col-span-2">
-              <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
-                <div class="border-b border-gray-100 px-5 py-4 md:px-6"><h3 class="text-base font-bold text-gray-800">Kelengkapan Berkas <span id="dtBerkasHitung" class="font-medium text-gray-400"></span></h3></div>
-                <div class="flex flex-col lg:flex-row">
-                  <div id="dtSeksiNav" class="no-scrollbar flex shrink-0 gap-2 overflow-x-auto border-b border-gray-100 p-4 lg:w-64 lg:flex-col lg:border-b-0 lg:border-r"></div>
-                  <div id="dtSeksiPanel" class="grid flex-1 grid-cols-1 gap-1.5 p-4 sm:grid-cols-2"></div>
-                </div>
+            <!-- Bawah: Kelengkapan Berkas full-width, dikelompokkan + navigasi -->
+            <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+              <div class="border-b border-gray-100 px-5 py-4 md:px-6"><h3 class="text-base font-bold text-gray-800">Kelengkapan Berkas <span id="dtBerkasHitung" class="font-medium text-gray-400"></span></h3></div>
+              <div class="flex flex-col lg:flex-row">
+                <div id="dtSeksiNav" class="no-scrollbar flex shrink-0 gap-2 overflow-x-auto border-b border-gray-100 p-4 lg:w-72 lg:flex-col lg:border-b-0 lg:border-r"></div>
+                <div id="dtSeksiPanel" class="grid flex-1 grid-cols-1 gap-1.5 p-4 sm:grid-cols-2 lg:grid-cols-3"></div>
               </div>
             </div>
           </div>
@@ -232,8 +236,8 @@
       ditolak: ['Ditolak', 'bg-red-50 text-red-600'],
       diverifikasi: ['Sudah Diverifikasi', 'bg-emerald-50 text-emerald-700'],
       terjadwal: ['Jadwal Wawancara', 'bg-blue-50 text-blue-700'],
-      persetujuan: ['Perlu Diteruskan', 'bg-cyan-50 text-cyan-700'],
-      sekretariat: ['Perlu Diteruskan', 'bg-cyan-50 text-cyan-700'],
+      persetujuan: ['Perlu Diteruskan', 'bg-amber-50 text-amber-700'],
+      sekretariat: ['Perlu Diteruskan', 'bg-amber-50 text-amber-700'],
       ttd: ['TTD Ketua', 'bg-indigo-50 text-indigo-700'],
       aktif: ['Aktif', 'bg-brand-50 text-brand-700'],
     };

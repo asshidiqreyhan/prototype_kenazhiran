@@ -293,6 +293,23 @@
     };
 
     /* =========================================================
+       LOG AKTIVITAS — helper pencatatan (kontrak seragam)
+       ========================================================= */
+    function tglHariIni() {
+      var b = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+      var d = new Date();
+      return d.getDate() + ' ' + b[d.getMonth()] + ' ' + d.getFullYear();
+    }
+    function catatAktivitas(aktivitas, keterangan) {
+      try {
+        var arr = JSON.parse(localStorage.getItem('log_aktivitas_bwi'));
+        if (!Array.isArray(arr)) arr = [];
+        arr.unshift({ tanggal: tglHariIni(), aktivitas: aktivitas, keterangan: keterangan });
+        localStorage.setItem('log_aktivitas_bwi', JSON.stringify(arr));
+      } catch (e) { }
+    }
+
+    /* =========================================================
        KOMPONEN: Sidebar (layout TailAdmin — dipertahankan)
        ========================================================= */
     const Sidebar = ({ terbuka, tutup }) => {
@@ -904,6 +921,7 @@
         setSentuh(true);
         if (!bolehSimpan) return;
         tulisRecord('aktif');
+        catatAktivitas('Tambah Aset HBW', 'Sub-ID ' + SUB_ID_BARU + ' (' + (kategoriAktif ? kategoriAktif.nama : JENIS_LABEL) + ') ditambahkan.');
         setToast(`Sub-ID ${SUB_ID_BARU} berhasil ditambahkan & langsung aktif.`);
         setTimeout(() => { window.location.href = 'nazhir-aset.html?jenis=' + JENIS_HBW; }, 1400);
       };

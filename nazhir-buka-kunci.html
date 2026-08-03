@@ -186,46 +186,48 @@
       <main>
         <div class="mx-auto max-w-screen-2xl space-y-6 p-4 md:p-6">
 
-          <!-- Kartu status cut-off -->
-          <div class="rounded-2xl border border-gray-200 bg-white shadow-card">
-            <div class="border-b border-gray-100 px-5 py-4 md:px-6">
-              <h3 class="text-base font-bold text-gray-800">Status Periode Pelaporan</h3>
-              <p class="text-xs text-gray-400">Ringkasan cut-off periode aktif dan status permohonan Anda.</p>
+          <!-- Kartu ringkasan -->
+          <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+            <div class="flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-card">
+              <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg></span>
+              <div class="min-w-0"><div id="scKunci" class="truncate text-sm font-bold text-gray-800">&mdash;</div><p class="mt-1.5 text-xs font-medium text-gray-500">Status Periode</p></div>
             </div>
-            <div class="grid grid-cols-1 gap-x-8 gap-y-5 p-5 sm:grid-cols-3 md:p-6">
-              <div>
-                <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Periode Aktif</p>
-                <p id="scPeriode" class="mt-1 text-sm font-semibold text-gray-800">&mdash;</p>
-              </div>
-              <div>
-                <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Status Kunci</p>
-                <div id="scKunci" class="mt-1.5"></div>
-              </div>
-              <div>
-                <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Status Permohonan</p>
-                <div id="scPermohonan" class="mt-1.5"></div>
-              </div>
+            <div class="flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-card">
+              <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-600"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg></span>
+              <div><p id="cMenunggu" class="text-2xl font-bold leading-none text-gray-800">0</p><p class="mt-1.5 text-xs font-medium text-gray-500">Menunggu Keputusan</p></div>
             </div>
-            <!-- Area aksi (dinamis) -->
-            <div id="areaAksi" class="border-t border-gray-100 px-5 py-4 md:px-6"></div>
+            <div class="flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-card">
+              <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg></span>
+              <div><p id="cSetuju" class="text-2xl font-bold leading-none text-gray-800">0</p><p class="mt-1.5 text-xs font-medium text-gray-500">Disetujui</p></div>
+            </div>
+            <div class="flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-card">
+              <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-500"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg></span>
+              <div><p id="cTolak" class="text-2xl font-bold leading-none text-gray-800">0</p><p class="mt-1.5 text-xs font-medium text-gray-500">Ditolak</p></div>
+            </div>
           </div>
 
-          <!-- Info periode aktif (kontekstual) -->
-          <div class="flex items-start gap-3 rounded-2xl border border-brand-100 bg-brand-50/50 p-5 md:p-6">
-            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-100 text-brand-700">
-              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" /></svg>
-            </span>
-            <div>
-              <p class="text-sm font-bold text-gray-800">Periode pelaporan aktif: <span id="infoPeriode" class="text-brand-700">—</span></p>
-              <p class="mt-0.5 text-xs text-gray-500">Rentang: <span id="infoRentang" class="font-semibold text-gray-700">—</span>. Lengkapi seluruh laporan pada periode ini. Bila periode terkunci (cut-off), ajukan pembukaan akses di bawah.</p>
-            </div>
+          <!-- Aksi periode (kontekstual: status terbuka / terkunci) -->
+          <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
+            <div id="areaAksi" class="px-5 py-4 md:px-6"></div>
           </div>
 
           <!-- Riwayat permohonan saya -->
           <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-card">
-            <div class="border-b border-gray-100 px-5 py-4 md:px-6">
-              <h3 class="text-base font-bold text-gray-800">Riwayat Permohonan Saya</h3>
-              <p class="text-xs text-gray-400">Seluruh pengajuan buka kunci yang pernah Anda kirim ke BWI Pusat.</p>
+            <div class="flex flex-col gap-3 border-b border-gray-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
+              <div>
+                <h3 class="text-base font-bold text-gray-800">Riwayat Permohonan Saya</h3>
+                <p class="text-xs text-gray-400">Seluruh pengajuan buka kunci yang pernah Anda kirim ke BWI Pusat.</p>
+              </div>
+              <div class="relative w-full sm:w-56">
+                <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" /></svg></span>
+                <select id="filterStatus" onchange="halBuka=1;renderRiwayat()" class="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pl-11 pr-9 text-sm text-gray-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+                  <option value="">Semua Status</option>
+                  <option value="disetujui">Disetujui</option>
+                  <option value="menunggu">Menunggu Keputusan</option>
+                  <option value="ditolak">Ditolak</option>
+                </select>
+                <span class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400"><svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg></span>
+              </div>
             </div>
             <div class="overflow-x-auto">
               <table class="w-full min-w-[720px] text-sm">
@@ -407,16 +409,19 @@
 
     function render() {
       const c = bacaCutoff();
-      document.getElementById('scPeriode').textContent = c.periode || '—';
-      document.getElementById('scKunci').innerHTML = c.terkunci ? badge('red', 'Terkunci') : badge('emerald', 'Terbuka');
+      document.getElementById('scKunci').textContent = rentangPeriode(c.periode);
       // Kartu info kontekstual
       const setTxt = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
       setTxt('infoPeriode', c.periode || '—');
       setTxt('infoRentang', rentangPeriode(c.periode));
 
+      // Ringkasan jumlah permohonan saya (seluruh periode)
+      const mine = permohonanSaya();
+      setTxt('cMenunggu', mine.filter(p => p.status === 'menunggu').length);
+      setTxt('cSetuju', mine.filter(p => p.status === 'disetujui').length);
+      setTxt('cTolak', mine.filter(p => p.status === 'ditolak').length);
+
       const st = statusBukaSaya(c.periode);
-      const petaStatus = { disetujui: ['brand', 'Disetujui'], menunggu: ['amber', 'Menunggu'], ditolak: ['red', 'Ditolak'] };
-      document.getElementById('scPermohonan').innerHTML = st ? badge(petaStatus[st][0], petaStatus[st][1]) : badge('gray', 'Belum Ada');
 
       // Area aksi
       const area = document.getElementById('areaAksi');
@@ -445,9 +450,16 @@
       const tombol = adaTombol
         ? '<button type="button" onclick="bukaModalBukaKunci()" class="shrink-0 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700">Ajukan Buka Kunci</button>'
         : '';
+      // Ikon kontekstual: hijau/brand = centang, amber = jam, merah = gembok
+      const ikonPath = {
+        emerald: 'M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+        brand: 'M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+        amber: 'M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+        red: 'M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z'
+      }[warna] || 'M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z';
       return '<div class="flex flex-wrap items-center justify-between gap-3">' +
         '<div class="flex items-start gap-3">' +
-        '<svg class="mt-0.5 h-5 w-5 shrink-0 ' + skema[0] + '" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>' +
+        '<svg class="mt-0.5 h-5 w-5 shrink-0 ' + skema[0] + '" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="' + ikonPath + '" /></svg>' +
         '<div><p class="text-sm font-bold ' + skema[1] + '">' + amankan(judul) + '</p><p class="mt-0.5 text-xs ' + skema[1] + '">' + amankan(teks) + '</p></div>' +
         '</div>' + tombol + '</div>';
     }
@@ -481,10 +493,12 @@
     function renderRiwayat() {
       const body = document.getElementById('riwayatBody');
       if (!body) return;
-      const list = permohonanSaya();
+      const f = (document.getElementById('filterStatus') || {}).value || '';
+      let list = permohonanSaya();
+      if (f) list = list.filter(p => p.status === f);
       body.innerHTML = '';
       if (list.length === 0) {
-        body.innerHTML = '<tr><td colspan="4" class="px-6 py-10 text-center text-sm text-gray-400">Belum ada permohonan buka kunci.</td></tr>';
+        body.innerHTML = '<tr><td colspan="4" class="px-6 py-10 text-center text-sm text-gray-400">' + (f ? 'Tidak ada permohonan dengan status tersebut.' : 'Belum ada permohonan buka kunci.') + '</td></tr>';
         setFooterBuka(0, 1);
         return;
       }

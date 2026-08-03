@@ -659,6 +659,9 @@
     const NIB_LEMBAGA = 'NZHR-BDG-170';
     const PREFIX_NIB = NIB_LEMBAGA.replace(/-\d+$/, '');   // 'NZHR-BDG'
     const KUNCI_PORTOFOLIO = 'data_portofolio_bwi';
+    // Reset satu-kali: bersihkan data portofolio demo lama yang menumpuk di localStorage.
+    // Setelah dijalankan sekali, penambahan Sub-ID baru oleh Nazhir tetap tersimpan.
+    try { if (localStorage.getItem('reset_portofolio_bwi_v1') !== '1') { localStorage.removeItem(KUNCI_PORTOFOLIO); localStorage.setItem('reset_portofolio_bwi_v1', '1'); } } catch (e) { }
 
     // Pagination tabel portofolio (5 baris per halaman)
     const PER_HAL = 5;
@@ -703,28 +706,8 @@
     // CATATAN: Master Aset kini KHUSUS aset tidak bergerak (Wakaf Tanah).
     // Wakaf Uang tidak lagi didaftarkan di sini — pelaporannya lewat menu
     // "Pelaporan Mutasi Aset" (tab Penerimaan), sesuai keputusan BWI.
-    const DEFAULT_PORTOFOLIO = [
-      {
-        subId: PREFIX_NIB + '-001', kategoriId: 'tanah', kategori: 'Wakaf Tanah',
-        nama: 'Tanah Jl. Merdeka', lokasi: 'Semarang, Jawa Tengah',
-        satuan: 'M²', nilai: 500, status: 'aktif',
-        dokumen: 2, totalDokumen: 2, tanggal: '12 Januari 2025',
-        dokumenList: [
-          { key: 'bpn', label: 'Sertifikat BPN', nama: 'Sertifikat-BPN-Merdeka.pdf', ukuran: '420 KB', tipe: 'application/pdf' },
-          { key: 'aiw', label: 'AIW (Akta Ikrar Wakaf)', nama: 'AIW-Tanah-Merdeka.pdf', ukuran: '310 KB', tipe: 'application/pdf' },
-        ]
-      },
-      {
-        subId: PREFIX_NIB + '-002', jenis: 'uang', kategoriId: 'uang', kategori: 'Wakaf Uang',
-        nama: 'BSI KCP Sudirman', lokasi: 'Rek. Wakaf Produktif',
-        satuan: 'Rp', nilai: 250000000, status: 'aktif',
-        dokumen: 2, totalDokumen: 2, tanggal: '20 Februari 2025',
-        dokumenList: [
-          { key: 'lkspwu', label: 'Dokumen Rekomendasi LKS PWU', nama: 'Rekomendasi-LKSPWU-BSI.pdf', ukuran: '280 KB', tipe: 'application/pdf' },
-          { key: 'operasional', label: 'Surat Pernyataan Biaya Operasional', nama: 'Pernyataan-Operasional.pdf', ukuran: '190 KB', tipe: 'application/pdf' },
-        ]
-      },
-    ];
+    // Data portofolio bawaan dikosongkan (mulai dari nol). Sub-ID baru ditambahkan Nazhir via "Tambah Portofolio".
+    const DEFAULT_PORTOFOLIO = [];
 
     let daftarPortofolio = [];
 
@@ -1229,6 +1212,21 @@
   function labelJenis(x) { return x === 'tanah' ? 'Tanah' : 'Uang'; }
   var STATUS_LABEL = { draft: 'Draft', diajukan: 'Menunggu Verifikasi', revisi: 'Revisi', ditolak: 'Ditolak', diverifikasi: 'Sudah Diverifikasi', terjadwal: 'Jadwal Wawancara', persetujuan: 'Menunggu Persetujuan', sekretariat: 'Menunggu Sekretaris', ttd: 'Menunggu TTD Ketua', aktif: 'Aktif' };
 
+  // --- Log aktivitas: helper pencatatan (kontrak seragam) ---
+  function tglHariIni() {
+    var b = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    var d = new Date();
+    return d.getDate() + ' ' + b[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  function catatAktivitas(aktivitas, keterangan) {
+    try {
+      var arr = JSON.parse(localStorage.getItem('log_aktivitas_bwi'));
+      if (!Array.isArray(arr)) arr = [];
+      arr.unshift({ tanggal: tglHariIni(), aktivitas: aktivitas, keterangan: keterangan });
+      localStorage.setItem('log_aktivitas_bwi', JSON.stringify(arr));
+    } catch (e) { }
+  }
+
   // jenisAktifSet = daftar jenis HBW yang SUDAH disetujui untuk nazhir ini.
   function jenisAktifSet(r) {
     var arr = [];
@@ -1252,6 +1250,7 @@
       jenisNazhir: x, jenis: 'Wakaf ' + labelJenis(x), status: 'draft', berkas: {}, tglDaftar: tgl
     };
     try { localStorage.setItem('pendaftaran_tambahan_bwi', JSON.stringify(rec)); } catch (e) { }
+    catatAktivitas('Pendaftaran HBW Baru', 'Mengajukan pengelolaan HBW Wakaf ' + labelJenis(x) + '.');
     location.href = 'nazhir-pendaftaran.html?tambah=1';
   };
 

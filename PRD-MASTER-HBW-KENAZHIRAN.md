@@ -14,7 +14,7 @@ Dokumen ini memerinci fitur **Master HBW** sampai level field, id, opsi, validas
 - **Wakaf Tanah** (`?jenis=tanah`) — aset tidak bergerak; satuan **M²**; wajib legalitas (BPN/AIW/STBPN).
 - **Wakaf Uang** (`?jenis=uang`) — dana/instrumen; satuan **Rp**; wajib rekomendasi LKS-PWU.
 
-**Prinsip kunci:** penambahan HBW **langsung Aktif tanpa persetujuan BWI Pusat** (Draft → Aktif). Nazhir menambah, mengedit draft, mengaktifkan, menonaktifkan, dan membatalkan Sub-ID sendiri.
+**Prinsip kunci:** penambahan HBW **langsung Aktif tanpa persetujuan BWI Pusat** (Draft → Aktif). Nazhir menambah, mengedit draft, mengaktifkan, dan membatalkan Sub-ID sendiri. *(Status `nonaktif` bukan aksi pengguna — lihat §Riwayat SK/status.)*
 
 ### 1.1 Peta Halaman
 | Halaman | File | Peran |
@@ -22,7 +22,7 @@ Dokumen ini memerinci fitur **Master HBW** sampai level field, id, opsi, validas
 | Daftar Master HBW | `nazhir-aset.html` | List Sub-ID (per jenis via `?jenis=`), filter, cari, aksi baris |
 | Tambah/Ubah HBW | `nazhir-aset-tambah.html` | Form pendaftaran Sub-ID (React/JSX in-browser) |
 | Detail Sub-ID | `nazhir-aset-detail.html` | Rincian aset, timeline, dokumen, aksi lanjut |
-| Riwayat SK | `nazhir-aset-sk.html` | SK per Sub-ID aktif/nonaktif, cetak, toggle status |
+| Riwayat SK | `nazhir-aset-sk.html` | SK per Sub-ID (aktif/nonaktif), Lihat SK, cetak — **read-only (tanpa toggle status)** |
 
 ### 1.2 Navigasi
 - Sidebar submenu **Master HBW** → **Wakaf Tanah** (`nazhir-aset.html?jenis=tanah`) / **Wakaf Uang** (`nazhir-aset.html?jenis=uang`).
@@ -224,7 +224,7 @@ Catatan kaki: *"Draft tersimpan tanpa masuk antrean dan masih bisa diedit. Simpa
 | `aktif` | Aktif | brand/teal |
 | `nonaktif` | Nonaktif | slate |
 
-Transisi via UI: `draft → aktif` (Simpan & Aktifkan), `draft →` hapus (Batalkan), `aktif ↔ nonaktif` (toggle di Riwayat SK). Status `review/revisi/ditolak` hanya muncul bila record disuntik langsung ke localStorage — **tidak** dihasilkan alur normal.
+Transisi via UI: `draft → aktif` (Simpan & Aktifkan), `draft →` hapus (Batalkan). Status `nonaktif` serta `review/revisi/ditolak` hanya muncul bila record disuntik langsung ke localStorage — **tidak** dihasilkan alur normal (Riwayat SK kini **read-only**, aksi toggle nonaktif dihapus).
 
 > **Catatan konsistensi (untuk perbaikan):** (1) Model 2-status form vs 6-status tampilan hidup berdampingan; timeline Detail masih memuat "Verifikasi Sekretariat / E-Sign Pimpinan / SK Terbit". (2) Footer `nazhir-aset.html` masih memuat teks usang ("Wakaf uang tidak didaftarkan di sini", "berstatus Verifikasi Pusat"). (3) Seed nilai NZHR-BDG-002 berbeda antar file (250 jt vs 1 M). (4) `nomorRegister` & `bwiPenerbit` disimpan tapi belum ditampilkan di Detail.
 
@@ -260,7 +260,7 @@ Membaca `active_nazhir_aset_view`; `uang = (kategoriId === 'uang')`.
 - Menampilkan hanya Sub-ID **aktif/nonaktif**. Filter Jenis (Semua/Tanah/Uang) & Status (Semua/Aktif/Nonaktif). Metrik: Total SK · SK Aktif · SK Nonaktif.
 - **Kolom:** `Nomor SK` · `Sub-ID` · `Kategori` · `Nama / Lokasi Aset` · `Tgl Terbit` · `Status` · `Aksi`.
 - **Nomor SK** (`nomorSK`): `SK-BWI/WKF/{tahun}/{suffix}` (suffix = segmen akhir subId; tahun dari `tanggal` atau 2026). Contoh `SK-BWI/WKF/2025/001`.
-- **Aksi:** Lihat SK (modal dokumen) · Toggle Aktif/Nonaktif (konfirmasi → update `status`) · Cetak (dummy toast).
+- **Aksi:** **Lihat SK** (modal dokumen) saja — **read-only (arsip)**; aksi Toggle Aktif/Nonaktif **dihapus** (SK terbit tidak dapat dinonaktifkan dari sini). Metrik dibuat compact.
 - **Isi SK** (modal): kop BWI, "Surat Keputusan Nomor {nomorSK}", "Pengesahan Portofolio Aset Wakaf (Sub-ID) di bawah NIB NZHR-BDG-170", tabel aset, stempel "Aktif & Sah"/"Nonaktif", TTD "Administrator BWI Pusat — Mas Raji".
 
 ---
