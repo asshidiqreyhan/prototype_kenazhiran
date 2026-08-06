@@ -4,6 +4,83 @@ Ringkasan perubahan yang diterapkan pada `PRD-FLOW-DESIGN-KENAZHIRAN.md` beserta
 
 ---
 
+## 2026‑08‑02 — Link register di login diringkas + layout NIK/Foto KTP horizontal
+
+**Bagian PRD terdampak:** §5.1 (kosmetik).
+
+- **Login (`kenazhiran-login.html`):** tombol sekunder **"Daftar sebagai Nazhir" dihapus**, diganti tautan teks **"Belum punya akun? Daftar sekarang"** (konsisten dengan pola di halaman Daftar).
+- **Daftar (`kenazhiran-daftar.html`):** field **Nomor KTP (NIK)** & **Upload Foto KTP** dibuat **berjejer horizontal** (grid 2 kolom), tidak lagi menumpuk ke bawah.
+
+**File tersentuh:** `kenazhiran-login.html`, `kenazhiran-daftar.html`.
+
+---
+
+## 2026‑08‑02 — Form Daftar selaras e-service + hapus tombol "Riwayat SK" di Master HBW
+
+**Bagian PRD terdampak:** §5.1, §5.3.
+
+1. **Halaman Daftar (`kenazhiran-daftar.html`)** diselaraskan dengan e-service eksisting: ditambah **Nomor KTP (NIK, wajib 16 digit)**, **Upload Foto KTP** (JPG/PNG maks 2MB, wajib), dan **Konfirmasi Kata Sandi** (harus cocok). Field disimpan ke `pendaftaran_nazhir_bwi` (`nik`, `fotoKTP`). Link ke login diringkas menjadi **"Sudah punya akun? Masuk sekarang"**. *(Pemilihan jenis nazhir tetap di dashboard, bukan di form daftar.)*
+2. **Master HBW (`nazhir-aset.html`)**: tombol **"Riwayat SK" dihapus** dari baris aksi — informasi SK sudah tercakup di menu **Riwayat & Dokumen** (kartu E‑Sertifikat Nazhir). Halaman `nazhir-aset-sk.html` menjadi tidak tertaut.
+
+**File tersentuh:** `kenazhiran-daftar.html`, `nazhir-aset.html`.
+
+---
+
+## 2026‑08‑02 — Grafik Dashboard Nazhir: filter waktu (ganti tombol CTA)
+
+**Bagian PRD terdampak:** §5.2 (Dashboard Nazhir).
+
+- Pada kartu **"Pertumbuhan Aset Berkesinambungan"**, tombol **"Buat Laporan Mutasi Baru"** dihapus (kurang relevan di dashboard) dan diganti **filter waktu segmented**: **Per 3 Bulan** (Triwulan I–IV) · **Per 6 Bulan** (Semester I–II) · **Tahunan** (Tahun Penuh). Memilih filter **mengubah grafik** (bar 2024 vs 2025 dirender ulang & dinormalisasi via `renderChart`/`setFilterWaktu`).
+
+**File tersentuh:** `nazhir-dashboard.html`.
+
+---
+
+## 2026‑08‑02 — Kartu SK dihapus dari Dashboard Nazhir
+
+**Bagian PRD terdampak:** §5.2 (Dashboard Nazhir).
+
+- Kartu **"Sertifikat Keputusan (SK) Nazhir"** (tombol Preview/Download SK) **dihapus dari dashboard** karena redundan dengan menu **Riwayat & Dokumen** (yang sudah memuat akses SK). Banner satu‑kali "Selamat! Akun aktif" tetap dipertahankan.
+
+**File tersentuh:** `nazhir-dashboard.html`.
+
+---
+
+## 2026‑08‑02 — Identitas Nazhir mengikuti akun yang login
+
+**Bagian PRD terdampak:** §5.1/§5.2.
+
+- **Masalah:** login sudah mengenali email **maupun** NIB nazhir mandiri (mis. `lenovo@gmail.com` / `NZHR-JKT-366`), tetapi halaman Nazhir menampilkan identitas **hardcoded** "Yayasan Wakaf Nusantara / NZHR‑BDG‑170" → terlihat seolah masuk ke dashboard yang salah.
+- **Perbaikan:** ditambahkan skrip sinkron identitas (idempotent, penanda `id-sync-nazhir`) di **semua halaman Nazhir vanilla** yang membaca `sesi_kenazhiran` (+`pendaftaran_nazhir_bwi`) lalu memperbarui **nama, inisial avatar, dan NIB** yang ditampilkan sesuai akun yang login. Akun demo bawaan tetap tampil "Yayasan Wakaf Nusantara" (nilai sama = no‑op).
+
+**File tersentuh:** 14 `nazhir-*.html` (kecuali `nazhir-aset-tambah.html` yang berbasis React), `PRD-FLOW-DESIGN-KENAZHIRAN.md`.
+
+---
+
+## 2026‑08‑02 — Menu "Permohonan Buka Periode" (Admin Pusat) dipisah dari Periode Laporan
+
+**Bagian PRD terdampak:** §3.4 (menu Pusat), §5.8 & §5.8b.
+
+- Tabel **Permohonan Buka Kunci** dikeluarkan dari halaman **Periode Laporan** (`pusat-periode.html`) — yang sebelumnya bias/melenceng dari tujuan halaman — menjadi **menu & halaman tersendiri**: **"Permohonan Buka Periode"** (`pusat-buka-periode.html`).
+- Halaman baru: kartu ringkasan (Menunggu/Disetujui/Ditolak) + tabel + filter status + pagination bernomor 5; aksi **Tolak** / **Setujui & Buka** (per‑Nazhir, sumber `buka_kunci_bwi`). `pusat-periode.html` kini hanya "Daftar Periode Laporan" (JS buka‑kunci & referensinya dibersihkan).
+- Menu "Permohonan Buka Periode" (ikon gembok‑terbuka) dipasang di sidebar **semua halaman Pusat** (13 file), tepat setelah "Periode Laporan".
+
+**File tersentuh:** `pusat-buka-periode.html` (baru), `pusat-periode.html`, + 12 halaman `pusat-*.html` (sidebar), `PRD-FLOW-DESIGN-KENAZHIRAN.md`.
+
+---
+
+## 2026‑08‑02 — Laporan tanpa "review" + menu Laporan Nazhir (Pusat/Sekretaris/Ketua) + halaman Daftar split
+
+**Bagian PRD terdampak:** §3.4/§3.5/§3.6 (menu), §5.1, §5.4, §6.2, dokumen HBW.
+
+1. **Status laporan bukan lagi "review".** Saat Nazhir mengunggah laporan (Wakaf Uang, Wakaf Tanah, atau Mutasi), status langsung **"Dilaporkan"** (final) — bukan "Sedang Direview" (laporan tidak dinilai). Badge brand/teal, filter & kartu ringkasan disesuaikan di `nazhir-laporan-program.html`, `nazhir-laporan.html`, `nazhir-laporan-isi.html`, `nazhir-laporan-baru.html`. Status **Draft** tetap.
+2. **Menu "Laporan Nazhir" baru** untuk **Admin Pusat, Sekretaris, dan Ketua** — halaman `pusat-laporan.html`, `sekretaris-laporan.html`, `ketua-laporan.html`: **tab Wakaf Uang / Wakaf Tanah** + tabel (kolom: No · Nazhir · Jenis Laporan [Program/Mutasi] · Program/Aset · Periode · Nilai/Saldo Akhir · Tanggal · Status) + search + pagination bernomor default 5. Sumber: `data_laporan_program_bwi` + `data_mutasi_bwi` (Draft dikecualikan). Read‑only. Menu dipasang di sidebar semua halaman ketiga role.
+3. **Halaman Daftar (`kenazhiran-daftar.html`)** diubah ke **layout split‑screen** seperti login (panel brand teal + ornamen islami di kiri, form di kanan) + tombol **"Kembali ke Halaman Masuk"**.
+
+**File tersentuh:** `nazhir-laporan-program.html`, `nazhir-laporan.html`, `nazhir-laporan-isi.html`, `nazhir-laporan-baru.html`, `pusat-laporan.html` (baru), `sekretaris-laporan.html` (baru), `ketua-laporan.html` (baru), seluruh `pusat-*.html`/`sekretaris-*.html`/`ketua-*.html` (sidebar), `kenazhiran-daftar.html`, dokumen PRD/FLOW.
+
+---
+
 ## 2026‑07‑31 — Master Pengguna: filter status, form detail=edit, & fix autofill
 
 **Bagian PRD terdampak:** §5.14 (Master Pengguna).

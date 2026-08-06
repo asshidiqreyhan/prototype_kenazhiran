@@ -10,7 +10,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
 
   <script>
     tailwind.config = {
@@ -30,71 +31,182 @@
     }
   </script>
   <style>
-    body, html { font-family: 'Outfit', sans-serif !important; }
-    .pola-titik { background-image: radial-gradient(rgba(255, 255, 255, .07) 1px, transparent 1px); background-size: 24px 24px; }
+    body,
+    html {
+      font-family: 'Outfit', sans-serif !important;
+    }
+
+    /* Ornamen geometris islami (bintang delapan) — nuansa teal untuk panel brand */
+    .pola-islamic {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.13' stroke-width='1.1'%3E%3Cpolygon points='45,6 50.9,29.3 73.7,17 61.4,39.8 84.7,45 61.4,50.2 73.7,73 50.9,60.7 45,84 39.1,60.7 16.3,73 28.6,50.2 5.3,45 28.6,39.8 16.3,17 39.1,29.3'/%3E%3Crect x='30' y='30' width='30' height='30' transform='rotate(45 45 45)'/%3E%3Ccircle cx='45' cy='45' r='6'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 90px 90px;
+    }
+
+    .pola-islamic-terang {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cg fill='none' stroke='%230d9488' stroke-opacity='0.06' stroke-width='1.1'%3E%3Cpolygon points='45,6 50.9,29.3 73.7,17 61.4,39.8 84.7,45 61.4,50.2 73.7,73 50.9,60.7 45,84 39.1,60.7 16.3,73 28.6,50.2 5.3,45 28.6,39.8 16.3,17 39.1,29.3'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 90px 90px;
+    }
   </style>
 </head>
 
-<body class="min-h-screen bg-slate-900 text-slate-100 antialiased">
-  <div class="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-slate-900 to-brand-950 px-4 py-10">
-    <div class="pola-titik absolute inset-0"></div>
-    <div class="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-brand-600/20 blur-3xl"></div>
-    <div class="absolute -bottom-40 -left-24 h-96 w-96 rounded-full bg-brand-500/10 blur-3xl"></div>
+<body class="min-h-screen bg-white text-slate-800 antialiased">
 
-    <div class="relative z-10 w-full max-w-md animate-fadeIn">
-      <div class="mb-6 flex flex-col items-center text-center">
-        <span class="flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-600 shadow-lg shadow-brand-900/50 ring-1 ring-white/10">
-          <svg class="h-9 w-9 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.6" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
-          </svg>
+  <div class="flex min-h-screen">
+
+    <!-- ============ KIRI: Panel Brand (desktop) ============ -->
+    <aside
+      class="relative hidden w-1/2 flex-col justify-between overflow-hidden bg-gradient-to-br from-brand-800 via-brand-900 to-slate-900 p-10 text-white lg:flex xl:p-14">
+      <div class="pola-islamic absolute inset-0"></div>
+      <div class="absolute -right-24 -top-24 h-80 w-80 rounded-full bg-brand-500/20 blur-3xl"></div>
+      <div class="absolute -bottom-32 -left-16 h-96 w-96 rounded-full bg-brand-400/10 blur-3xl"></div>
+
+      <!-- Logo lockup -->
+      <div class="relative z-10 flex items-center gap-3">
+        <span
+          class="flex h-14 w-14 items-center justify-center rounded-xl bg-white p-1.5 shadow-sm ring-1 ring-white/20">
+          <img src="Logo_Badan_Wakaf_Indonesia-Bawah.png" alt="Logo Badan Wakaf Indonesia"
+            class="h-full w-full object-contain">
         </span>
-        <h1 id="judulJenis" class="mt-4 text-2xl font-bold text-white">Buat Akun Nazhir</h1>
-        <p class="mt-1 text-sm font-medium text-brand-300">Badan Wakaf Indonesia</p>
+        <span class="leading-tight"><span class="block text-base font-bold">BWI Superapps</span><span
+            class="block text-xs font-medium text-brand-300">Modul Kenazhiran</span></span>
       </div>
 
-      <div class="rounded-2xl border border-white/10 bg-white p-7 shadow-2xl md:p-8">
-        <span class="inline-flex items-center gap-1.5 rounded-full border border-brand-100 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
+      <!-- Heading + fitur -->
+      <div class="relative z-10 max-w-md animate-fadeIn">
+        <h1 class="text-3xl font-bold leading-tight xl:text-[2.5rem]">Bergabung sebagai Nazhir Wakaf</h1>
+        <p class="mt-3 text-sm leading-relaxed text-brand-100/80">Daftarkan lembaga Anda untuk mengelola dan melaporkan
+          harta benda wakaf secara terpadu dalam satu platform Badan Wakaf Indonesia.</p>
+        <ul class="mt-8 space-y-3.5">
+          <li class="flex items-start gap-3">
+            <svg class="mt-0.5 h-5 w-5 shrink-0 text-brand-300" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <span class="text-sm text-white/90">Buat akun cukup dengan data dasar lembaga</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg class="mt-0.5 h-5 w-5 shrink-0 text-brand-300" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <span class="text-sm text-white/90">Pilih jenis nazhir (Wakaf Tanah / Uang) setelah masuk</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg class="mt-0.5 h-5 w-5 shrink-0 text-brand-300" fill="none" viewBox="0 0 24 24" stroke-width="1.8"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <span class="text-sm text-white/90">Lengkapi berkas persyaratan &amp; ajukan verifikasi</span>
+          </li>
+        </ul>
+      </div>
+
+      <p class="relative z-10 text-xs text-white/50">&copy; 2026 Badan Wakaf Indonesia &middot; Titik Terang OS</p>
+    </aside>
+
+    <!-- ============ KANAN: Form Daftar ============ -->
+    <main
+      class="pola-islamic-terang relative flex w-full flex-col justify-center bg-white px-6 py-10 sm:px-10 lg:w-1/2 xl:px-16">
+      <div class="mx-auto w-full max-w-md animate-fadeIn">
+
+        <!-- Logo (mobile) -->
+        <div class="mb-8 flex items-center gap-3 lg:hidden">
+          <span
+            class="flex h-12 w-12 items-center justify-center rounded-xl bg-white p-1 shadow-sm ring-1 ring-slate-200">
+            <img src="Logo_Badan_Wakaf_Indonesia-Bawah.png" alt="Logo Badan Wakaf Indonesia"
+              class="h-full w-full object-contain">
+          </span>
+          <span class="leading-tight"><span class="block text-base font-bold text-slate-800">BWI Superapps</span><span
+              class="block text-xs font-medium text-brand-600">Modul Kenazhiran</span></span>
+        </div>
+
+        <span
+          class="inline-flex items-center gap-1.5 rounded-full border border-brand-100 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
           <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
           </svg>
           Langkah 1 dari 2 &middot; Buat Akun
         </span>
 
-        <h2 class="mt-5 text-xl font-bold text-slate-800">Buat Akun Calon Nazhir</h2>
-        <p id="teksBerkas" class="mt-1 text-sm text-slate-500">Cukup isi data dasar dulu. Setelah masuk, Anda memilih jenis nazhir (Wakaf Tanah / Wakaf Uang) lalu melengkapi berkas persyaratannya.</p>
+        <h2 class="mt-5 text-2xl font-bold text-slate-800">Buat Akun Calon Nazhir</h2>
+        <p class="mt-1.5 text-sm text-slate-500">Cukup isi data dasar dulu. Setelah masuk, Anda memilih jenis nazhir
+          (Wakaf Tanah / Wakaf Uang) lalu melengkapi berkas persyaratannya.</p>
 
         <form id="formDaftar" class="mt-6 space-y-4" novalidate>
           <div>
-            <label for="namaBH" class="mb-1.5 block text-sm font-medium text-slate-700">Nama Badan Hukum / Yayasan <span class="text-red-500">*</span></label>
+            <label for="namaBH" class="mb-1.5 block text-sm font-medium text-slate-700">Nama Badan Hukum / Yayasan <span
+                class="text-red-500">*</span></label>
             <input id="namaBH" type="text" placeholder="mis. PT Telkom Group"
               class="w-full rounded-lg border border-slate-300 bg-white py-3 px-4 text-sm text-slate-800 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
           </div>
           <div>
-            <label for="email" class="mb-1.5 block text-sm font-medium text-slate-700">Email <span class="text-red-500">*</span></label>
+            <label for="email" class="mb-1.5 block text-sm font-medium text-slate-700">Email <span
+                class="text-red-500">*</span></label>
             <input id="email" type="email" placeholder="nama@lembaga.or.id"
               class="w-full rounded-lg border border-slate-300 bg-white py-3 px-4 text-sm text-slate-800 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
           </div>
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label for="pic" class="mb-1.5 block text-sm font-medium text-slate-700">Nama PIC <span class="text-red-500">*</span></label>
+              <label for="pic" class="mb-1.5 block text-sm font-medium text-slate-700">Nama PIC <span
+                  class="text-red-500">*</span></label>
               <input id="pic" type="text" placeholder="Contact person"
                 class="w-full rounded-lg border border-slate-300 bg-white py-3 px-4 text-sm text-slate-800 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
             </div>
             <div>
-              <label for="hp" class="mb-1.5 block text-sm font-medium text-slate-700">No. HP <span class="text-red-500">*</span></label>
+              <label for="hp" class="mb-1.5 block text-sm font-medium text-slate-700">No. HP <span
+                  class="text-red-500">*</span></label>
               <input id="hp" type="tel" placeholder="08xxxxxxxxxx"
                 class="w-full rounded-lg border border-slate-300 bg-white py-3 px-4 text-sm text-slate-800 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
             </div>
           </div>
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <label for="nik" class="mb-1.5 block text-sm font-medium text-slate-700">Nomor KTP (NIK) <span
+                  class="text-red-500">*</span></label>
+              <input id="nik" type="text" inputmode="numeric" placeholder="16 digit NIK"
+                class="w-full rounded-lg border border-slate-300 bg-white py-3 px-4 text-sm text-slate-800 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+            </div>
+            <div>
+              <label class="mb-1.5 block text-sm font-medium text-slate-700">Upload Foto KTP <span
+                  class="text-red-500">*</span></label>
+              <label for="fotoKTP"
+                class="flex h-[46px] cursor-pointer items-center gap-2.5 rounded-lg border border-dashed border-slate-300 bg-slate-50 px-3 transition hover:border-brand-400 hover:bg-brand-50/40">
+                <span
+                  class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white text-brand-600 ring-1 ring-slate-200"><svg
+                    class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                  </svg></span>
+                <span class="min-w-0"><span id="fotoKTPNama"
+                    class="block truncate text-xs font-medium text-slate-700">Pilih berkas…</span><span
+                    class="block text-[11px] text-slate-400">JPG/PNG, maks. 2MB</span></span>
+              </label>
+              <input id="fotoKTP" type="file" accept="image/png,image/jpeg,image/jpg" class="hidden"
+                onchange="pilihFotoKTP(this)">
+            </div>
+          </div>
           <div>
-            <label for="sandi" class="mb-1.5 block text-sm font-medium text-slate-700">Kata Sandi <span class="text-red-500">*</span></label>
+            <label for="sandi" class="mb-1.5 block text-sm font-medium text-slate-700">Kata Sandi <span
+                class="text-red-500">*</span></label>
             <input id="sandi" type="password" placeholder="Minimal 6 karakter"
+              class="w-full rounded-lg border border-slate-300 bg-white py-3 px-4 text-sm text-slate-800 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
+          </div>
+          <div>
+            <label for="konfirmasi" class="mb-1.5 block text-sm font-medium text-slate-700">Konfirmasi Kata Sandi
+              <span class="text-red-500">*</span></label>
+            <input id="konfirmasi" type="password" placeholder="Ulangi kata sandi"
               class="w-full rounded-lg border border-slate-300 bg-white py-3 px-4 text-sm text-slate-800 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100">
           </div>
 
           <label class="flex cursor-pointer items-start gap-2.5 text-sm text-slate-600">
-            <input id="setuju" type="checkbox" class="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500">
-            <span id="teksSetuju">Saya menyatakan data yang diisi benar dan menyetujui ketentuan pendaftaran Nazhir BWI.</span>
+            <input id="setuju" type="checkbox"
+              class="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500">
+            <span id="teksSetuju">Saya menyatakan data yang diisi benar dan menyetujui ketentuan pendaftaran Nazhir
+              BWI.</span>
           </label>
 
           <p id="pesanError" class="hidden text-sm font-medium text-red-600"></p>
@@ -105,18 +217,19 @@
           </button>
         </form>
 
-        <div class="mt-5 flex items-start gap-2.5 rounded-lg border border-brand-100 bg-brand-50 p-3.5">
-          <svg class="mt-0.5 h-4 w-4 shrink-0 text-brand-600" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
-          </svg>
+        <!-- <div class="mt-5 flex items-start gap-2.5 rounded-lg border border-brand-100 bg-brand-50 p-3.5">
+          <svg class="mt-0.5 h-4 w-4 shrink-0 text-brand-600" fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>
           <p id="teksCatatan" class="text-xs text-brand-800">Setelah membuat akun &amp; masuk, di dashboard Anda memilih <span class="font-semibold">jenis nazhir</span> (Wakaf Tanah / Wakaf Uang). Pilihan tersebut menentukan berkas persyaratan &amp; menu yang tersedia.</p>
+        </div> -->
+
+        <!-- Ke halaman login -->
+        <div class="mt-6 border-t border-slate-100 pt-5 text-center">
+          <p class="text-sm text-slate-600">Sudah punya akun? <a href="kenazhiran-login.html"
+              class="font-semibold text-brand-700 underline decoration-brand-300 underline-offset-2 transition hover:text-brand-800">Masuk
+              sekarang</a></p>
         </div>
       </div>
-
-      <p class="mt-6 text-center text-sm text-slate-400">
-        Sudah punya akun? <a href="kenazhiran-login.html" class="font-semibold text-brand-300 hover:text-brand-200">Masuk di sini</a>
-      </p>
-    </div>
+    </main>
   </div>
 
   <script>
@@ -130,23 +243,33 @@
       const email = document.getElementById('email').value.trim();
       const pic = document.getElementById('pic').value.trim();
       const hp = document.getElementById('hp').value.trim();
+      const nik = document.getElementById('nik').value.trim();
       const sandi = document.getElementById('sandi').value;
-      const setuju = document.getElementById('setuju').checked;
+      const konfirmasi = document.getElementById('konfirmasi').value;
       const err = document.getElementById('pesanError');
 
-      function gagal(msg) { err.textContent = msg; err.classList.remove('hidden'); }
-
-      if (!namaBH || !email || !pic || !hp) return gagal('Mohon lengkapi seluruh isian bertanda *.');
-      if (sandi.length < 6) return gagal('Kata sandi minimal 6 karakter.');
-      if (!setuju) return gagal('Mohon setujui ketentuan pendaftaran terlebih dahulu.');
-
-      // Pertahankan berkas bila akun sudah pernah dibuat sebelumnya
+      // Pertahankan data bila akun sudah pernah dibuat sebelumnya
       let lama = {};
       try { lama = JSON.parse(localStorage.getItem(KUNCI_DAFTAR)) || {}; } catch (e2) { lama = {}; }
 
+      const fInput = document.getElementById('fotoKTP');
+      const fFile = fInput && fInput.files && fInput.files[0] ? fInput.files[0] : null;
+      const fotoNama = fFile ? fFile.name : (lama.fotoKTP || '');
+      const setuju = document.getElementById('setuju').checked;
+
+      function gagal(msg) { err.textContent = msg; err.classList.remove('hidden'); }
+
+      if (!namaBH || !email || !pic || !hp || !nik) return gagal('Mohon lengkapi seluruh isian bertanda *.');
+      if (!/^\d{16}$/.test(nik)) return gagal('Nomor KTP (NIK) harus 16 digit angka.');
+      if (fFile && fFile.size > 2 * 1024 * 1024) return gagal('Ukuran foto KTP maksimal 2MB.');
+      if (!fotoNama) return gagal('Mohon unggah foto KTP (JPG/PNG, maks. 2MB).');
+      if (sandi.length < 6) return gagal('Kata sandi minimal 6 karakter.');
+      if (sandi !== konfirmasi) return gagal('Konfirmasi kata sandi tidak cocok.');
+      if (!setuju) return gagal('Mohon setujui ketentuan pendaftaran terlebih dahulu.');
+
       const rec = {
         namaBadanHukum: namaBH,
-        email: email, pic: pic, hp: hp,
+        email: email, pic: pic, hp: hp, nik: nik, fotoKTP: fotoNama,
         sandi: sandi,                              // simulasi (mockup) — untuk login akun terdaftar
         jenis: lama.jenis || '',                   // 'Wakaf Tanah'/'Wakaf Uang' — diisi saat pilih jenis di dashboard
         jenisNazhir: lama.jenisNazhir || '',       // '' = belum pilih; 'tanah' | 'uang' setelah dipilih di dashboard
@@ -161,6 +284,12 @@
       } catch (e3) { /* mode privat */ }
       window.location.href = 'nazhir-dashboard.html';
     });
+
+    function pilihFotoKTP(input) {
+      var el = document.getElementById('fotoKTPNama');
+      if (el) el.textContent = (input.files && input.files[0]) ? input.files[0].name : 'Pilih berkas…';
+      var err = document.getElementById('pesanError'); if (err) err.classList.add('hidden');
+    }
 
     function tanggalHariIni() {
       const b = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];

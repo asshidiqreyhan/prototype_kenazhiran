@@ -65,7 +65,7 @@ biayaOperasional,   // uang: dari Operasional; tanah: '0'
 kenaikan,           // selisih>0 ? selisih : 0
 penyusutan,         // selisih<0 ? -selisih : 0
 nilaiAkhir,         // = nilaiAktual
-status,             // 'Draft' | 'Sedang Direview'
+status,             // 'Draft' | 'Dilaporkan' (final, laporan tidak direview)
 catatan
 ```
 **Khusus WAKAF UANG (`jenis:'uang'`):**
@@ -235,9 +235,10 @@ Footer: **Edit Draft** (`#btnEditLaporan`, draft saja) + **Tutup**.
 
 ## 7. Siklus Status Laporan
 
-Nilai yang dibuat: `'Draft'` (mode draft) & `'Sedang Direview'` (mode review). Seed juga `'Disetujui Pusat'`.
-- `statusKategori(s)`: mengandung "draft"→'draft'; "disetujui|selesai"→'setuju'; else 'review'.
-- `badgeStatus`: draft = abu, setuju = brand/teal, review = amber.
+Nilai yang dibuat: `'Draft'` (mode draft) & **`'Dilaporkan'`** (mode unggah — final, laporan tidak direview). Data lama `'Sedang Direview'` tetap kompatibel.
+- `statusKategori(s)`: mengandung "draft"→'draft'; "dilaporkan"→'lapor'; "disetujui|selesai"→'setuju'; kompat "direview"→'review'.
+- `badgeStatus`: draft = abu, **dilaporkan/setuju = brand/teal** (final).
+- Laporan berstatus 'Dilaporkan' otomatis tampil di menu **Laporan Nazhir** (Pusat/Sekretaris/Ketua), read-only.
 
 **Penguncian:**
 1. **Status draft** = satu-satunya yang bisa Edit/Hapus; non-draft hanya Lihat Detail.

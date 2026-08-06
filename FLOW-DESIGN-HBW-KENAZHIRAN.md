@@ -36,7 +36,7 @@ Panduan tampilan & interaksi agar developer dapat membangun halaman **Master HBW
 **Konvensi warna badge:**
 - Kategori: **Wakaf Uang = biru** (`bg-blue-50 text-blue-700`), **Wakaf Tanah = ungu** (`bg-purple-50 text-purple-700`) — sengaja bukan teal agar tak tertukar status "Aktif".
 - Status portofolio: draft=abu · review=amber · revisi=oranye · ditolak=merah · aktif=teal · nonaktif=slate.
-- Status laporan: draft=abu · review=amber · setuju/disetujui=teal.
+- Status laporan: draft=abu · **dilaporkan=teal/brand** (final, laporan tidak direview).
 - Perubahan nilai: naik=emerald · turun=merah · tetap=abu.
 
 **Guard visual (semua halaman):** akun dibekukan → banner merah + semua tombol CUD nonaktif; mode calon → konten diganti empty-state read-only.
@@ -182,7 +182,7 @@ TOPBAR: "Pelaporan Wakaf {Uang/Tanah}"  / sub per jenis
 └──────────────────────────────────────────────────────────────┘
 
 ┌─ Metrik ─────────────────────────────────────────────────────┐
-│ [Draft: n]     [Sedang Direview: n]     [Total/Terkirim: n]  │
+│ [Draft: n]        [Dilaporkan: n]        [Total: n]         │
 └──────────────────────────────────────────────────────────────┘
 
 ┌─ Baris aksi + toolbar ──────────────────────────────────────┐
@@ -238,7 +238,7 @@ TOPBAR: "Pelaporan Wakaf {Uang/Tanah}"  / sub per jenis
 - **Imbal Hasil** = `(Nilai Terbaru − Nilai Terakhir) − Penghimpunan` (readonly, auto).
 - Peringatan bila total penyaluran > imbal hasil.
 - **Periode** auto-terisi & terkunci dari periode aktif.
-- Validasi simpan: UANG (Nilai Terbaru>0, Penghimpunan>0, total penyaluran ≤ imbal); TANAH (Penyaluran>0). `Simpan Draft` → status "Draft"; **`Upload Laporan`** (dulu "Kirim Laporan") → "Sedang Direview".
+- Validasi simpan: UANG (Nilai Terbaru>0, Penghimpunan>0, total penyaluran ≤ imbal); TANAH (Penyaluran>0). `Simpan Draft` → status "Draft"; **`Upload Laporan`** (dulu "Kirim Laporan") → **"Dilaporkan"** (final, tanpa review).
 
 ## B3. Modal Detail Laporan (`bukaModalDetail`)
 
@@ -298,7 +298,7 @@ Halaman Laporan (?jenis) ──[+ Tambah]──▶ Modal
         UANG: Nilai Terbaru + Penghimpunan → Imbal auto → penyaluran (≤ imbal)
         TANAH: Penyaluran + Jumlah Mauquf
         ├─[Simpan Draft]──▶ 'Draft' (bisa Edit/Hapus)
-        └─[Upload Laporan]──▶ 'Sedang Direview' (read-only)
+        └─[Upload Laporan]──▶ 'Dilaporkan' (final, tanpa review)
    Baseline berikutnya = nilaiAkhir laporan non-draft terakhir (anti-duplikasi)
 ```
 

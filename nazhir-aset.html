@@ -412,15 +412,8 @@
             </div>
           </div>
 
-          <!-- ============ BARIS AKSI: Riwayat SK + Tambah Portofolio ============ -->
+          <!-- ============ BARIS AKSI: Tambah Portofolio ============ -->
           <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
-            <a href="nazhir-aset-sk.html"
-              class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-600 shadow-sm transition hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-100">
-              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-              </svg>
-              Riwayat SK
-            </a>
             <button type="button" onclick="tambahPortofolio()"
               class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-200">
               <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -1302,6 +1295,31 @@
 })();
   </script>
 
+  <!-- Sinkron identitas Nazhir yang login (dari sesi) [id-sync-nazhir] -->
+  <script>
+    (function () {
+      var sesi = {}; try { sesi = JSON.parse(localStorage.getItem('sesi_kenazhiran')) || {}; } catch (e) { }
+      if (!sesi || (sesi.peran !== 'nazhir' && sesi.mode !== 'aktif' && sesi.mode !== 'calon')) return;
+      var reg = {}; try { reg = JSON.parse(localStorage.getItem('pendaftaran_nazhir_bwi')) || {}; } catch (e) { }
+      var nama = sesi.nama || (reg && reg.namaBadanHukum) || 'Yayasan Wakaf Nusantara';
+      function inisial(n) { var p = String(n || '').trim().split(/\s+/); return ((((p[0] || '')[0]) || '') + (((p[1] || '')[0]) || '')).toUpperCase() || 'NZ'; }
+      var ini = inisial(nama);
+      var nib = 'NZHR-BDG-170';
+      if (reg && reg.status === 'aktif' && reg.namaBadanHukum && reg.namaBadanHukum === sesi.nama && reg.nib) nib = reg.nib;
+      var diDashboard = (location.pathname.split('/').pop() || '').toLowerCase() === 'nazhir-dashboard.html';
+      function apply() {
+        document.querySelectorAll('span,p,h2,h3').forEach(function (el) {
+          if (el.children.length) return;
+          var t = (el.textContent || '').trim();
+          if (t === 'Yayasan Wakaf Nusantara') el.textContent = nama;
+          else if (t === 'YN') el.textContent = ini;
+          else if (diDashboard && t === 'NZHR-BDG-170') el.textContent = nib;
+        });
+      }
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { setTimeout(apply, 0); });
+      else setTimeout(apply, 0);
+    })();
+  </script>
 </body>
 
 </html>
